@@ -40,6 +40,7 @@ class SocketGuideServicer(server_pb2_grpc.SocketGuideServicer):
                 yield server_pb2.SocketType(name=socketType._name_, value=socketType._value_)
             except OSError as msg:                                                         
                 sock = None
+                continue
 
     def GetSocketProtocolList(self, request_iterator, context):
         logging.info("Entering GetSocketProtocolList")
