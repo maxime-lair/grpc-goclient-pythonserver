@@ -25,14 +25,20 @@ def socket_get_family_list(stub):
 
 def socket_get_type_list(socketFamilyChoice, stub):
     logging.info("GetSocketTypeList")
-    socketTypeList = stub.GetSocketTypeList(server_pb2.SocketFamily(
-        name=socketFamilyChoice.name,
-        value=socketFamilyChoice.value
-    ))
+    
+    if(socketFamilyChoice is not None):
+        socketTypeList = stub.GetSocketTypeList(server_pb2.SocketFamily(
+            name=socketFamilyChoice.name,
+            value=socketFamilyChoice.value
+        ))
 
-    for socketType in socketTypeList:
-        logging.info("[GetSocketTypeList] %s -> %s" % (socketType.name, socketType.value))
-        return socketType
+        for socketType in socketTypeList:
+            logging.info("[GetSocketTypeList] %s -> %s" % (socketType.name, socketType.value))
+            return socketType
+    else:
+        logging.error("[GetSocketTypeList] Received NoneType in socketFamilyChoice")
+
+
 
 def socket_get_protocol_list(socketTypeChoice, stub):
     logging.info("GetSocketProtocolList")
