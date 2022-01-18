@@ -24,13 +24,11 @@ class SocketGuideServicer(server_pb2_grpc.SocketGuideServicer):
     def GetSocketFamilyList(self, request_iterator, context):
         logging.info("Entering GetSocketFamilyList")
         
-        logging.info("Received value: %s" % (request_iterator))
+        logging.info("Client wishes to receive socket family list for : %s" % (request_iterator.choice))
 
-        found_name="test"
-        found_value=4
-
-        yield server_pb2.SocketFamily(name=found_name,
-                                                value=int(found_value))
+        for socketFamily in socket.AddressFamily:
+            yield server_pb2.SocketFamily(name=socketFamily._name_,
+                                                value=int(socketFamily._value_))
 
     def GetSocketTypeList(self, request_iterator, context):
         logging.info("Entering GetSocketTypeList")
