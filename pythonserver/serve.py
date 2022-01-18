@@ -32,11 +32,11 @@ class SocketGuideServicer(server_pb2_grpc.SocketGuideServicer):
 
     def GetSocketTypeList(self, request_iterator, context):
         logging.info("Entering GetSocketTypeList")
-
+        logging.info("Testing possible type for %s" % (request_iterator.name))
         for socketType in socket.SocketKind:                                     
             try:                                                                           
-                sock = socket.socket(request_iterator._value_, socketType._value_)             
-                logging.debug('Sending possible socketType %s for %s' % (socketType._name_, request_iterator._name_))
+                sock = socket.socket(request_iterator.value, socketType._value_)             
+                logging.debug('Sending possible socketType %s for %s' % (socketType._name_, request_iterator.name))
                 yield server_pb2.SocketType(name=socketType._name_, value=socketType._value_)
             except OSError as msg:                                                         
                 sock = None
