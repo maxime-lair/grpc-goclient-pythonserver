@@ -32,8 +32,8 @@ python3 -m grpc_tools.protoc -Iprotos/ --python_out=pythonserver/ --grpc_python_
 
 printf "Starting python server\n"
 # Start server
-./pythonserver/serve.py &
-server_pid=$!
+server_pid=$(./pythonserver/serve.py)
+#server_pid=$!
 printf "Server started with PID %s\n" "$server_pid"
 
 printf "Returning to previous working directory from %s to %s\n" "$cwd" "$pwd"
