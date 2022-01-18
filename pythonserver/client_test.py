@@ -19,15 +19,31 @@ def socket_get_family_list(stub):
     socketFamilyList = stub.GetSocketFamilyList(server_pb2.SocketTree(choice="Alpha"))
     
     for socketFamily in socketFamilyList:
-        logging.info("socket family received: %s : %s" % (socketFamily.name, socketFamily.value))
-
-
-def socket_get_type_list(stub):
-    logging.info("GetSocketTypeList")
+        logging.info("[GetSocketFamilyList] %s -> %s" % (socketFamily.name, socketFamily.value))
+        return socketFamily
     
 
-def socket_get_protocol_list(stub):
+def socket_get_type_list(socketFamilyChoice, stub):
+    logging.info("GetSocketTypeList")
+    socketTypeList = stub.GetSocketTypeList(server_pb2.SocketFamily(
+        name=socketFamilyChoice.name,
+        value=socketFamilyChoice.value
+    ))
+
+    for socketType in socketTypeList:
+        logging.info("[GetSocketTypeList] %s -> %s" % (socketType.name, socketType.value))
+        return socketType
+
+def socket_get_protocol_list(socketTypeChoice, stub):
     logging.info("GetSocketProtocolList")
+    socketProtocolList = stub.GetSocketProtocolList(server_pb2.SocketType(
+        name=socketTypeChoice.name,
+        value=socketTypeChoice.value
+    ))
+
+    for socketProtocol in socketProtocolList:
+        logging.info("[GetSocketProtocolList] %s -> %s" % (socketProtocol.name, socketProtocol.value))
+        
 
 
 def run():
@@ -35,11 +51,11 @@ def run():
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = server_pb2_grpc.SocketGuideStub(channel)
         logging.info("-------------- SendSocketTree --------------")
-        socket_get_family_list(stub)
+        socketFamilyChoice = socket_get_family_list(stub)
         logging.info("-------------- GetSocketTypeList --------------")
-        socket_get_type_list(stub)
+        socketTypeChoice = socket_get_type_list(socketFamilyChoice, stub)
         logging.info("-------------- GetSocketProtocolList --------------")
-        socket_get_protocol_list(stub)
+        socket_get_protocol_list(socketTypeChoice, stub)
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
