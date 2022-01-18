@@ -16,7 +16,7 @@ import server_pb2_grpc
 
 
 def serve():
-    printf("hello")
+    print("hello")
 
 if __name__ == "__main__":
     logging.basicConfig()
