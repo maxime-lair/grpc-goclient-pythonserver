@@ -14,6 +14,7 @@ import server_pb2_grpc
 #  python3 -m pip install grpcio-tools
 #  python3 -m grpc_tools.protoc -Iprotos/ --python_out=pythonserver/ --grpc_python_out=pythonserver/ protos/server.proto
 
+table = {num:name[8:] for name,num in vars(socket).items() if name.startswith("IPPROTO")}
 
 class SocketGuideServicer(server_pb2_grpc.SocketGuideServicer):
     """ Provides methods that implement functionality of route guide server """
@@ -45,14 +46,17 @@ class SocketGuideServicer(server_pb2_grpc.SocketGuideServicer):
 
     def GetSocketProtocolList(self, request_iterator, context):
         logging.info("Entering GetSocketProtocolList")
+        logging.info("Testing possible type for %s" % (request_iterator.name))
+        # TODO: Amend server.proto definition to add familysocket
+        for i in range(144):                                                               
+            try:                                                                           
+                sock = socket.socket(socketFamily._value_, socketType._value_, i)          
+                yield server_pb2.SocketProtocol(name=table[i], value=int(i))                                           
+            except (KeyError, OSError) as msg:                                             
+                sock = None                                                                
+                continue            
 
-        found_name="test"
-        found_value=4
-
-        yield server_pb2.SocketProtocol(name=found_name,
-                                                value=int(found_value))
-
-
+    
 def serve():
     logging.info("Starting to serve")
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
