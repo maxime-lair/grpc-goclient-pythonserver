@@ -14,13 +14,25 @@ else
 fi
 
 printf "Getting dependencies..\n"
-python3 -m pip install grpcio
-python3 -m pip install grpcio-tools
+
+if pip3 check grpcio >/dev/null; then
+    printf "grpcio already installed\n"
+else
+    python3 -m pip install grpcio
+fi
+
+if pip3 check grpcio-tools >/dev/null; then
+    printf "grpcio-tools already installed\n"
+else
+    python3 -m pip install grpcio-tools
+fi
+
+printf "Compiling protos files\n"
 python3 -m grpc_tools.protoc -Iprotos/ --python_out=pythonserver/ --grpc_python_out=pythonserver/ protos/server.proto
 
 printf "Starting python server\n"
 # Start server
-./pythonserver/server.py &
+./pythonserver/server.py
 server_pid=$!
 printf "Server started with PID %s\n" "$server_pid"
 
