@@ -24,6 +24,8 @@ class SocketGuideServicer(server_pb2_grpc.SocketGuideServicer):
     def GetSocketFamilyList(self, request_iterator, context):
         logging.info("Entering GetSocketFamilyList")
         
+        logging.info("Received value: %s" % (request_iterator))
+
         found_name="test"
         found_value=4
 
@@ -59,5 +61,5 @@ def serve():
     server.wait_for_termination()
 
 if __name__ == "__main__":
-    logging.basicConfig()
+    logging.basicConfig(level=logging.DEBUG)
     serve()
