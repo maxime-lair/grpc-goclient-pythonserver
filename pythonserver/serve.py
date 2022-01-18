@@ -15,8 +15,48 @@ import server_pb2_grpc
 #  python3 -m grpc_tools.protoc -Iprotos/ --python_out=pythonserver/ --grpc_python_out=pythonserver/ protos/server.proto
 
 
+class SocketGuideServicer(server_pb2_grpc.SocketGuideServicer):
+    """ Provides methods that implement functionality of route guide server """
+
+    def __init__(self):
+        logging.DEBUG("Creating SocketGuideServicer")
+    
+    def GetSocketFamilyList(self, request_iterator, context):
+        logging.DEBUG("Entering GetSocketFamilyList")
+        
+        found_name="test"
+        found_value=4
+
+        return server_pb2_grpc.SocketFamily(name=found_name,
+                                                value=int(found_value))
+
+    def GetSocketTypeList(self, request_iterator, context):
+        logging.DEBUG("Entering GetSocketTypeList")
+
+        found_name="test"
+        found_value=4
+
+        return server_pb2_grpc.SocketType(name=found_name,
+                                                value=int(found_value))
+
+    def GetSocketProtocolList(self, request_iterator, context):
+        logging.DEBUG("Entering GetSocketProtocolList")
+
+        found_name="test"
+        found_value=4
+
+        return server_pb2_grpc.SocketProtocol(name=found_name,
+                                                value=int(found_value))
+
+
 def serve():
-    print("hello")
+    logging.DEBUG("Starting to serve")
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    server_pb2_grpc.add_SocketGuideServicer_to_server(
+        SocketGuideServicer(), server)
+    server.add_insecure_port('[::]:50051')
+    server.start()
+    server.wait_for_termination()
 
 if __name__ == "__main__":
     logging.basicConfig()
