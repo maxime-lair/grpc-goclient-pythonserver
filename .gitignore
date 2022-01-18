@@ -13,4 +13,4 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
-pythonserver/__pycache__/
+pythonserver/__pycache__/*
