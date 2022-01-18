@@ -19,10 +19,10 @@ class SocketGuideServicer(server_pb2_grpc.SocketGuideServicer):
     """ Provides methods that implement functionality of route guide server """
 
     def __init__(self):
-        logging.DEBUG("Creating SocketGuideServicer")
+        logging.debug("Creating SocketGuideServicer")
     
     def GetSocketFamilyList(self, request_iterator, context):
-        logging.DEBUG("Entering GetSocketFamilyList")
+        logging.debug("Entering GetSocketFamilyList")
         
         found_name="test"
         found_value=4
@@ -31,7 +31,7 @@ class SocketGuideServicer(server_pb2_grpc.SocketGuideServicer):
                                                 value=int(found_value))
 
     def GetSocketTypeList(self, request_iterator, context):
-        logging.DEBUG("Entering GetSocketTypeList")
+        logging.debug("Entering GetSocketTypeList")
 
         found_name="test"
         found_value=4
@@ -40,7 +40,7 @@ class SocketGuideServicer(server_pb2_grpc.SocketGuideServicer):
                                                 value=int(found_value))
 
     def GetSocketProtocolList(self, request_iterator, context):
-        logging.DEBUG("Entering GetSocketProtocolList")
+        logging.debug("Entering GetSocketProtocolList")
 
         found_name="test"
         found_value=4
@@ -50,7 +50,7 @@ class SocketGuideServicer(server_pb2_grpc.SocketGuideServicer):
 
 
 def serve():
-    logging.DEBUG("Starting to serve")
+    logging.debug("Starting to serve")
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     server_pb2_grpc.add_SocketGuideServicer_to_server(
         SocketGuideServicer(), server)

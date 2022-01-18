@@ -15,7 +15,7 @@ import server_pb2_grpc
 #  python3 -m grpc_tools.protoc -Iprotos/ --python_out=pythonserver/ --grpc_python_out=pythonserver/ protos/server.proto
 
 def socket_get_family_list(stub):
-    logging.DEBUG("SendSocketTree")
+    logging.debug("SendSocketTree")
     socketFamilyList = stub.GetSocketFamilyList(server_pb2.SocketTree(choice="Alpha"))
 
     for socketFamily in socketFamilyList:
@@ -23,22 +23,22 @@ def socket_get_family_list(stub):
 
 
 def socket_get_type_list(stub):
-    logging.DEBUG("GetSocketTypeList")
+    logging.debug("GetSocketTypeList")
     
 
 def socket_get_protocol_list(stub):
-    logging.DEBUG("GetSocketProtocolList")
+    logging.debug("GetSocketProtocolList")
 
 
 def run():
     logging.debug("Starting to run client")
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = server_pb2_grpc.SocketGuideStub(channel)
-        logging.DEBUG("-------------- SendSocketTree --------------")
+        logging.debug("-------------- SendSocketTree --------------")
         socket_get_family_list(stub)
-        logging.DEBUG("-------------- GetSocketTypeList --------------")
+        logging.debug("-------------- GetSocketTypeList --------------")
         socket_get_type_list(stub)
-        logging.DEBUG("-------------- GetSocketProtocolList --------------")
+        logging.debug("-------------- GetSocketProtocolList --------------")
         socket_get_protocol_list(stub)
 
 if __name__ == "__main__":
