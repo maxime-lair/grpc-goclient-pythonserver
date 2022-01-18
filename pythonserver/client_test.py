@@ -36,14 +36,16 @@ def socket_get_type_list(socketFamilyChoice, stub):
 
 def socket_get_protocol_list(socketTypeChoice, stub):
     logging.info("GetSocketProtocolList")
-    socketProtocolList = stub.GetSocketProtocolList(server_pb2.SocketType(
+
+    if(socketTypeChoice is not None):
+        socketProtocolList = stub.GetSocketProtocolList(server_pb2.SocketType(
         name=socketTypeChoice.name,
         value=socketTypeChoice.value
     ))
-
-    for socketProtocol in socketProtocolList:
-        logging.info("[GetSocketProtocolList] %s -> %s" % (socketProtocol.name, socketProtocol.value))
-        
+        for socketProtocol in socketProtocolList:
+            logging.info("[GetSocketProtocolList] %s -> %s" % (socketProtocol.name, socketProtocol.value))
+    else:
+        logging.error("[GetSocketProtocolList] Received NoneType in socketTypeChoice")
 
 
 def run():
