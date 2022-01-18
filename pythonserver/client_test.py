@@ -23,22 +23,22 @@ def socket_get_family_list(stub):
 
 
 def socket_get_type_list(stub):
-    logging.debug("GetSocketTypeList")
+    logging.info("GetSocketTypeList")
     
 
 def socket_get_protocol_list(stub):
-    logging.debug("GetSocketProtocolList")
+    logging.info("GetSocketProtocolList")
 
 
 def run():
-    logging.debug("Starting to run client")
+    logging.info("Starting to run client")
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = server_pb2_grpc.SocketGuideStub(channel)
-        logging.debug("-------------- SendSocketTree --------------")
+        logging.info("-------------- SendSocketTree --------------")
         socket_get_family_list(stub)
-        logging.debug("-------------- GetSocketTypeList --------------")
+        logging.info("-------------- GetSocketTypeList --------------")
         socket_get_type_list(stub)
-        logging.debug("-------------- GetSocketProtocolList --------------")
+        logging.info("-------------- GetSocketProtocolList --------------")
         socket_get_protocol_list(stub)
 
 if __name__ == "__main__":
