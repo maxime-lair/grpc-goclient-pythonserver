@@ -19,7 +19,7 @@ def socket_get_family_list(stub):
     socketFamilyList = stub.GetSocketFamilyList(server_pb2.SocketTree(choice="Alpha"))
     
     for socketFamily in socketFamilyList:
-        logging.INFO("socket family received: %s : %s" % (socketFamily.name, socketFamily.value))
+        logging.info("socket family received: %s : %s" % (socketFamily.name, socketFamily.value))
 
 
 def socket_get_type_list(stub):
