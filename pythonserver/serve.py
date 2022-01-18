@@ -33,7 +33,8 @@ class SocketGuideServicer(server_pb2_grpc.SocketGuideServicer):
     def GetSocketTypeList(self, request_iterator, context):
         logging.info("Entering GetSocketTypeList")
         logging.info("Testing possible type for %s" % (request_iterator.name))
-        for socketType in socket.SocketKind:                                     
+        for socketType in socket.SocketKind:
+            logging.debug('Testing out [%s] %s' % (socketType._value_,socketType._name_))                               
             try:                                                                      
                 sock = socket.socket(request_iterator.value, socketType._value_)             
                 logging.debug('Sending possible socketType %s for %s' % (socketType._name_, request_iterator.name))
