@@ -27,7 +27,7 @@ class SocketGuideServicer(server_pb2_grpc.SocketGuideServicer):
         found_name="test"
         found_value=4
 
-        return server_pb2.SocketFamily(name=found_name,
+        yield server_pb2.SocketFamily(name=found_name,
                                                 value=int(found_value))
 
     def GetSocketTypeList(self, request_iterator, context):

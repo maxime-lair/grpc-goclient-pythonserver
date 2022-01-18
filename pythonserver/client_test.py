@@ -17,7 +17,7 @@ import server_pb2_grpc
 def socket_get_family_list(stub):
     logging.debug("SendSocketTree")
     socketFamilyList = stub.GetSocketFamilyList(server_pb2.SocketTree(choice="Alpha"))
-
+    
     for socketFamily in socketFamilyList:
         logging.INFO("socket family received: %s : %s" % (socketFamily.name, socketFamily.value))
 
@@ -42,5 +42,5 @@ def run():
         socket_get_protocol_list(stub)
 
 if __name__ == "__main__":
-    logging.basicConfig()
+    logging.basicConfig(level=logging.DEBUG)
     run()
