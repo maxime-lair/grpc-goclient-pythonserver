@@ -36,7 +36,7 @@ class SocketGuideServicer(server_pb2_grpc.SocketGuideServicer):
         found_name="test"
         found_value=4
 
-        return server_pb2.SocketType(name=found_name,
+        yield server_pb2.SocketType(name=found_name,
                                                 value=int(found_value))
 
     def GetSocketProtocolList(self, request_iterator, context):
@@ -45,7 +45,7 @@ class SocketGuideServicer(server_pb2_grpc.SocketGuideServicer):
         found_name="test"
         found_value=4
 
-        return server_pb2.SocketProtocol(name=found_name,
+        yield server_pb2.SocketProtocol(name=found_name,
                                                 value=int(found_value))
 
 
