@@ -13,9 +13,12 @@ else
     cd "$cwd"
 fi
 
-rm go.*
-go mod init main
-go mod tidy
+if [ -f "go.mod" ]; then
+    printf "Go module already initialized\n"
+else
+    go mod init main
+    go mod tidy
+fi
 
 printf "Getting dependencies..\n"
 
