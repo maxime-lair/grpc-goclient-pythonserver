@@ -15,3 +15,4 @@
 # vendor/
 pythonserver/__pycache__/*
 __pycache__/
+goclient/go.*
