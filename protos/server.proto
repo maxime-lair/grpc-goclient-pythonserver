@@ -2,7 +2,7 @@
 
 
 syntax = "proto3";
-option go_package = "github.com/maxime-lair/grpc-goclient-pythonserver/go_client";
+option go_package = "github.com/maxime-lair/grpc-goclient-pythonserver/goclient";
 
 package main;
 
