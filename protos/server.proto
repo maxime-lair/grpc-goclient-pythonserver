@@ -15,7 +15,7 @@ service SocketGuide {
 }
 
 message SocketTree {
-    string name = 1 [default = "NotDefined"];
+    string name = 1;
 }
 
 message SocketFamily {
