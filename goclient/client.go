@@ -4,7 +4,8 @@ import (
 	"flag"
 	"log"
 
-	pb "github.com/maxime-lair/grpc-goclient-pythonserver/goclient/pb_server"
+	pb "main/pb_server"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
