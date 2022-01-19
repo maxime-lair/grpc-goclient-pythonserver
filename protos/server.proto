@@ -2,9 +2,9 @@
 
 
 syntax = "proto3";
-option go_package = "github.com/maxime-lair/grpc-goclient-pythonserver/goclient/main";
+option go_package = "github.com/maxime-lair/grpc-goclient-pythonserver/goclient/pb_server";
 
-package main;
+package pb_server;
 
 service SocketGuide {
 

@@ -49,7 +49,7 @@ printf "Compiling protos files\n"
 # sudo unzip -o $PROTOC_ZIP -d /usr/local bin/protoc
 # sudo unzip -o $PROTOC_ZIP -d /usr/local 'include/*'
 # rm -f $PROTOC_ZIP
-protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative -I=../protos/ server.proto
+protoc --go_out=pb_server/ --go_opt=paths=source_relative --go-grpc_out=pb_server/ --go-grpc_opt=paths=source_relative -I=../protos/ server.proto
 
 printf "Starting go client\n"
 printf "###########\n"
