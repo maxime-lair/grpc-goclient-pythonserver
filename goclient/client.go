@@ -1,4 +1,4 @@
-package main
+package goclient
 
 import (
 	"flag"
@@ -12,7 +12,7 @@ var (
 	serverAddr = flag.String("addr", "localhost:50051", "The server address in the format of host:port")
 )
 
-func main() {
+func goclient() {
 	flag.Parse()
 	var opts []grpc.DialOption
 
