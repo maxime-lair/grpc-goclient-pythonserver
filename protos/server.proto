@@ -1,6 +1,8 @@
 // python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. pythonserver/protos/server.proto
 
+
 syntax = "proto3";
+option go_package = "github.com/maxime-lair/grpc-goclient-pythonserver/goclient;goclient";
 
 package server;
 
