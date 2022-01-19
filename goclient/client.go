@@ -4,7 +4,8 @@ import (
 	"flag"
 	"log"
 
-	pb "github.com/maxime-lair/grpc-goclient-pythonserver/server"
+	pb "main/server_pb"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -28,6 +29,8 @@ func main() {
 	log.Printf("Connected to server, proceeding..")
 
 	client := pb.NewSocketGuideClient(conn)
+
+	log.Printf("Created client %s", client)
 
 	defer conn.Close()
 
