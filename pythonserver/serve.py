@@ -23,34 +23,33 @@ class SocketGuideServicer(server_pb2_grpc.SocketGuideServicer):
         logging.info("Creating SocketGuideServicer")
     
     def GetSocketFamilyList(self, request_iterator, context):
-        logging.info("Entering GetSocketFamilyList")
+        logging.info("[%s] Entering GetSocketFamilyList" % (request_iterator.name))
         
-        logging.info("Client wishes to receive socket family list for : %s" % (request_iterator.choice))
+        logging.info("[%s] Client wishes to receive socket family list for : %s" % (request_iterator.name, request_iterator.name))
 
         for socketFamily in socket.AddressFamily:
             yield server_pb2.SocketFamily(name=socketFamily._name_,
                                                 value=int(socketFamily._value_))
 
     def GetSocketTypeList(self, request_iterator, context):
-        logging.info("Entering GetSocketTypeList")
-        logging.info("Testing possible type for %s" % (request_iterator.name))
+        logging.info("[%s] Entering GetSocketTypeList" % (request_iterator.client_id.name))
+        logging.info("[%s] Testing possible type for %s" % (request_iterator.client_id.name, request_iterator.name))
         for socketType in socket.SocketKind:
-            logging.debug('Testing out [%s] %s' % (socketType._value_,socketType._name_))                               
+            logging.debug('[%s] Testing out [%s] %s' % (request_iterator.client_id.name, socketType._value_,socketType._name_))                               
             try:                                                                      
                 sock = socket.socket(request_iterator.value, socketType._value_)             
-                logging.debug('Sending possible socketType %s for %s' % (socketType._name_, request_iterator.name))
+                logging.debug('[%s] Sending possible socketType %s for %s' % (request_iterator.client_id.name, socketType._name_, request_iterator.name))
                 yield server_pb2.SocketType(name=socketType._name_, value=socketType._value_)
             except OSError as msg:                                                         
                 sock = None
                 continue
 
     def GetSocketProtocolList(self, request_iterator, context):
-        logging.info("Entering GetSocketProtocolList")
-        logging.info("Testing possible type for %s" % (request_iterator.name))
-        # TODO: Amend server.proto definition to add familysocket
+        logging.info("[%s] Entering GetSocketProtocolList" % (request_iterator.client_id.name))
+        logging.info("[%s] Testing possible type for %s - %s" % (request_iterator.client_id.name, request_iterator.family.name, request_iterator.type.name))
         for i in range(144):                                                               
             try:                                                                           
-                sock = socket.socket(socketFamily._value_, socketType._value_, i)          
+                sock = socket.socket(request_iterator.family.value, request_iterator.type.value, i)          
                 yield server_pb2.SocketProtocol(name=table[i], value=int(i))                                           
             except (KeyError, OSError) as msg:                                             
                 sock = None                                                                
