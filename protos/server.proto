@@ -10,7 +10,7 @@ service SocketGuide {
 
     rpc GetSocketTypeList(SocketFamily) returns (stream SocketType) {}
 
-    rpc GetSocketProtocolList(SocketType) returns (stream SocketProtocol) {}
+    rpc GetSocketProtocolList(SocketTypeAndFamily) returns (stream SocketProtocol) {}
 
 }
 

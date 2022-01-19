@@ -52,7 +52,7 @@ class SocketGuideServicer(server_pb2_grpc.SocketGuideServicer):
                 sock = socket.socket(request_iterator.family.value, request_iterator.type.value, i)          
                 yield server_pb2.SocketProtocol(name=table[i], value=int(i))                                           
             except (KeyError, OSError) as msg:                                             
-                sock = None                                                                
+                sock = None                              
                 continue            
 
     

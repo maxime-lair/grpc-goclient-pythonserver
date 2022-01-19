@@ -51,13 +51,14 @@ def socket_get_type_list(client_id, socketFamilyChoice, stub):
 
 
 
-def socket_get_protocol_list(client_id, socketTypeChoice, stub):
-    logging.info("[%s] GetSocketProtocolList" % (client_id.name))
+def socket_get_protocol_list(client_id, socketFamilyChoice, socketTypeChoice, stub):
+    logging.info("[%s] GetSocketProtocolList for %s : %s" % (client_id.name, socketFamilyChoice.name, socketTypeChoice.name))
 
     if(socketTypeChoice is not None):
-        socketProtocolList = stub.GetSocketProtocolList(server_pb2.SocketType(
-        name=socketTypeChoice.name,
-        value=socketTypeChoice.value,
+
+        socketProtocolList = stub.GetSocketProtocolList(server_pb2.SocketTypeAndFamily(
+        family=socketFamilyChoice,
+        type=socketTypeChoice,
         client_id=client_id
     ))
         for socketProtocol in socketProtocolList:
@@ -76,7 +77,7 @@ def run():
         logging.info("-------------- GetSocketTypeList --------------")
         socketTypeChoice = socket_get_type_list(client_id, socketFamilyChoice, stub)
         logging.info("-------------- GetSocketProtocolList --------------")
-        socket_get_protocol_list(client_id, socketTypeChoice, stub)
+        socket_get_protocol_list(client_id, socketFamilyChoice, socketTypeChoice, stub)
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
