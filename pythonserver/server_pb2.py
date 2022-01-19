@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0cserver.proto\x12\x06server\"\x1c\n\nSocketTree\x12\x0e\n\x06\x63hoice\x18\x01 \x01(\t\"+\n\x0cSocketFamily\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\")\n\nSocketType\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\"-\n\x0eSocketProtocol\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\x32\xde\x01\n\x0bSocketGuide\x12\x43\n\x13GetSocketFamilyList\x12\x12.server.SocketTree\x1a\x14.server.SocketFamily\"\x00\x30\x01\x12\x41\n\x11GetSocketTypeList\x12\x14.server.SocketFamily\x1a\x12.server.SocketType\"\x00\x30\x01\x12G\n\x15GetSocketProtocolList\x12\x12.server.SocketType\x1a\x16.server.SocketProtocol\"\x00\x30\x01\x62\x06proto3'
+  serialized_pb=b'\n\x0cserver.proto\x12\x06server\"\x1a\n\nSocketTree\x12\x0c\n\x04name\x18\x01 \x01(\t\"R\n\x0cSocketFamily\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\x12%\n\tclient_id\x18\x03 \x01(\x0b\x32\x12.server.SocketTree\"P\n\nSocketType\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\x12%\n\tclient_id\x18\x03 \x01(\x0b\x32\x12.server.SocketTree\"\x84\x01\n\x13SocketTypeAndFamily\x12$\n\x06\x66\x61mily\x18\x01 \x01(\x0b\x32\x14.server.SocketFamily\x12 \n\x04type\x18\x02 \x01(\x0b\x32\x12.server.SocketType\x12%\n\tclient_id\x18\x03 \x01(\x0b\x32\x12.server.SocketTree\"T\n\x0eSocketProtocol\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\x12%\n\tclient_id\x18\x03 \x01(\x0b\x32\x12.server.SocketTree2\xde\x01\n\x0bSocketGuide\x12\x43\n\x13GetSocketFamilyList\x12\x12.server.SocketTree\x1a\x14.server.SocketFamily\"\x00\x30\x01\x12\x41\n\x11GetSocketTypeList\x12\x14.server.SocketFamily\x1a\x12.server.SocketType\"\x00\x30\x01\x12G\n\x15GetSocketProtocolList\x12\x12.server.SocketType\x1a\x16.server.SocketProtocol\"\x00\x30\x01\x62\x06proto3'
 )
 
 
@@ -34,7 +34,7 @@ _SOCKETTREE = _descriptor.Descriptor(
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='choice', full_name='server.SocketTree.choice', index=0,
+      name='name', full_name='server.SocketTree.name', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -53,7 +53,7 @@ _SOCKETTREE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=24,
-  serialized_end=52,
+  serialized_end=50,
 )
 
 
@@ -79,6 +79,13 @@ _SOCKETFAMILY = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='client_id', full_name='server.SocketFamily.client_id', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -91,8 +98,8 @@ _SOCKETFAMILY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=54,
-  serialized_end=97,
+  serialized_start=52,
+  serialized_end=134,
 )
 
 
@@ -118,6 +125,13 @@ _SOCKETTYPE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='client_id', full_name='server.SocketType.client_id', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -130,8 +144,54 @@ _SOCKETTYPE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=99,
-  serialized_end=140,
+  serialized_start=136,
+  serialized_end=216,
+)
+
+
+_SOCKETTYPEANDFAMILY = _descriptor.Descriptor(
+  name='SocketTypeAndFamily',
+  full_name='server.SocketTypeAndFamily',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='family', full_name='server.SocketTypeAndFamily.family', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='type', full_name='server.SocketTypeAndFamily.type', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='client_id', full_name='server.SocketTypeAndFamily.client_id', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=219,
+  serialized_end=351,
 )
 
 
@@ -157,6 +217,13 @@ _SOCKETPROTOCOL = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='client_id', full_name='server.SocketProtocol.client_id', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -169,13 +236,20 @@ _SOCKETPROTOCOL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=142,
-  serialized_end=187,
+  serialized_start=353,
+  serialized_end=437,
 )
 
+_SOCKETFAMILY.fields_by_name['client_id'].message_type = _SOCKETTREE
+_SOCKETTYPE.fields_by_name['client_id'].message_type = _SOCKETTREE
+_SOCKETTYPEANDFAMILY.fields_by_name['family'].message_type = _SOCKETFAMILY
+_SOCKETTYPEANDFAMILY.fields_by_name['type'].message_type = _SOCKETTYPE
+_SOCKETTYPEANDFAMILY.fields_by_name['client_id'].message_type = _SOCKETTREE
+_SOCKETPROTOCOL.fields_by_name['client_id'].message_type = _SOCKETTREE
 DESCRIPTOR.message_types_by_name['SocketTree'] = _SOCKETTREE
 DESCRIPTOR.message_types_by_name['SocketFamily'] = _SOCKETFAMILY
 DESCRIPTOR.message_types_by_name['SocketType'] = _SOCKETTYPE
+DESCRIPTOR.message_types_by_name['SocketTypeAndFamily'] = _SOCKETTYPEANDFAMILY
 DESCRIPTOR.message_types_by_name['SocketProtocol'] = _SOCKETPROTOCOL
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -200,6 +274,13 @@ SocketType = _reflection.GeneratedProtocolMessageType('SocketType', (_message.Me
   })
 _sym_db.RegisterMessage(SocketType)
 
+SocketTypeAndFamily = _reflection.GeneratedProtocolMessageType('SocketTypeAndFamily', (_message.Message,), {
+  'DESCRIPTOR' : _SOCKETTYPEANDFAMILY,
+  '__module__' : 'server_pb2'
+  # @@protoc_insertion_point(class_scope:server.SocketTypeAndFamily)
+  })
+_sym_db.RegisterMessage(SocketTypeAndFamily)
+
 SocketProtocol = _reflection.GeneratedProtocolMessageType('SocketProtocol', (_message.Message,), {
   'DESCRIPTOR' : _SOCKETPROTOCOL,
   '__module__' : 'server_pb2'
@@ -216,8 +297,8 @@ _SOCKETGUIDE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=190,
-  serialized_end=412,
+  serialized_start=440,
+  serialized_end=662,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetSocketFamilyList',

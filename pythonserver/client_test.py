@@ -16,8 +16,9 @@ import server_pb2_grpc
 #  python3 -m grpc_tools.protoc -Iprotos/ --python_out=pythonserver/ --grpc_python_out=pythonserver/ protos/server.proto
 
 def define_client_id():
-    color_picked = random.choice(list(open('../wordlist/color.txt')))
-    animal_picked = random.choice(list(open('../wordlist/animal.txt')))
+    color_picked = random.choice(list(open('wordlist/color.txt'))).strip()
+    animal_picked = random.choice(list(open('wordlist/animal.txt'))).strip()
+    logging.debug("[%s] color [%s] animal" % (color_picked, animal_picked))
     return color_picked+"_"+animal_picked
 
 def socket_get_family_list(client_id, stub):
@@ -63,7 +64,7 @@ def socket_get_protocol_list(client_id, socketTypeChoice, stub):
 
 
 def run():
-    client_id = server_pb2.SocketTree(client_id=define_client_id())
+    client_id = server_pb2.SocketTree(name=define_client_id())
     logging.info("Starting to run client id:%s" % (client_id.name))
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = server_pb2_grpc.SocketGuideStub(channel)
