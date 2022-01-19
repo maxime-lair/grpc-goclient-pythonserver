@@ -27,7 +27,10 @@ def socket_get_family_list(client_id, stub):
     
     for socketFamily in socketFamilyList:
         logging.info("[%s][GetSocketFamilyList] %s -> %s" % (client_id.name, socketFamily.name, socketFamily.value))
-        return socketFamily
+        if(socketFamily.value >= 1):
+            return socketFamily
+        else:
+            logging.debug("[%s] Skipping %s" % (client_id.name, socketFamily.name))
     
 
 def socket_get_type_list(client_id, socketFamilyChoice, stub):
