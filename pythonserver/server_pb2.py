@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0cserver.proto\x12\x06server\"\x1a\n\nSocketTree\x12\x0c\n\x04name\x18\x01 \x01(\t\"R\n\x0cSocketFamily\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\x12%\n\tclient_id\x18\x03 \x01(\x0b\x32\x12.server.SocketTree\"P\n\nSocketType\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\x12%\n\tclient_id\x18\x03 \x01(\x0b\x32\x12.server.SocketTree\"\x84\x01\n\x13SocketTypeAndFamily\x12$\n\x06\x66\x61mily\x18\x01 \x01(\x0b\x32\x14.server.SocketFamily\x12 \n\x04type\x18\x02 \x01(\x0b\x32\x12.server.SocketType\x12%\n\tclient_id\x18\x03 \x01(\x0b\x32\x12.server.SocketTree\"T\n\x0eSocketProtocol\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\x12%\n\tclient_id\x18\x03 \x01(\x0b\x32\x12.server.SocketTree2\xde\x01\n\x0bSocketGuide\x12\x43\n\x13GetSocketFamilyList\x12\x12.server.SocketTree\x1a\x14.server.SocketFamily\"\x00\x30\x01\x12\x41\n\x11GetSocketTypeList\x12\x14.server.SocketFamily\x1a\x12.server.SocketType\"\x00\x30\x01\x12G\n\x15GetSocketProtocolList\x12\x12.server.SocketType\x1a\x16.server.SocketProtocol\"\x00\x30\x01\x62\x06proto3'
+  serialized_pb=b'\n\x0cserver.proto\x12\x06server\"\x1a\n\nSocketTree\x12\x0c\n\x04name\x18\x01 \x01(\t\"R\n\x0cSocketFamily\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\x12%\n\tclient_id\x18\x03 \x01(\x0b\x32\x12.server.SocketTree\"P\n\nSocketType\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\x12%\n\tclient_id\x18\x03 \x01(\x0b\x32\x12.server.SocketTree\"\x84\x01\n\x13SocketTypeAndFamily\x12$\n\x06\x66\x61mily\x18\x01 \x01(\x0b\x32\x14.server.SocketFamily\x12 \n\x04type\x18\x02 \x01(\x0b\x32\x12.server.SocketType\x12%\n\tclient_id\x18\x03 \x01(\x0b\x32\x12.server.SocketTree\"T\n\x0eSocketProtocol\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\x12%\n\tclient_id\x18\x03 \x01(\x0b\x32\x12.server.SocketTree2\xe7\x01\n\x0bSocketGuide\x12\x43\n\x13GetSocketFamilyList\x12\x12.server.SocketTree\x1a\x14.server.SocketFamily\"\x00\x30\x01\x12\x41\n\x11GetSocketTypeList\x12\x14.server.SocketFamily\x1a\x12.server.SocketType\"\x00\x30\x01\x12P\n\x15GetSocketProtocolList\x12\x1b.server.SocketTypeAndFamily\x1a\x16.server.SocketProtocol\"\x00\x30\x01\x62\x06proto3'
 )
 
 
@@ -298,7 +298,7 @@ _SOCKETGUIDE = _descriptor.ServiceDescriptor(
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
   serialized_start=440,
-  serialized_end=662,
+  serialized_end=671,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetSocketFamilyList',
@@ -325,7 +325,7 @@ _SOCKETGUIDE = _descriptor.ServiceDescriptor(
     full_name='server.SocketGuide.GetSocketProtocolList',
     index=2,
     containing_service=None,
-    input_type=_SOCKETTYPE,
+    input_type=_SOCKETTYPEANDFAMILY,
     output_type=_SOCKETPROTOCOL,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,

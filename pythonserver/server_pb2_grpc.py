@@ -26,7 +26,7 @@ class SocketGuideStub(object):
                 )
         self.GetSocketProtocolList = channel.unary_stream(
                 '/server.SocketGuide/GetSocketProtocolList',
-                request_serializer=server__pb2.SocketType.SerializeToString,
+                request_serializer=server__pb2.SocketTypeAndFamily.SerializeToString,
                 response_deserializer=server__pb2.SocketProtocol.FromString,
                 )
 
@@ -67,7 +67,7 @@ def add_SocketGuideServicer_to_server(servicer, server):
             ),
             'GetSocketProtocolList': grpc.unary_stream_rpc_method_handler(
                     servicer.GetSocketProtocolList,
-                    request_deserializer=server__pb2.SocketType.FromString,
+                    request_deserializer=server__pb2.SocketTypeAndFamily.FromString,
                     response_serializer=server__pb2.SocketProtocol.SerializeToString,
             ),
     }
@@ -126,7 +126,7 @@ class SocketGuide(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_stream(request, target, '/server.SocketGuide/GetSocketProtocolList',
-            server__pb2.SocketType.SerializeToString,
+            server__pb2.SocketTypeAndFamily.SerializeToString,
             server__pb2.SocketProtocol.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
