@@ -15,29 +15,29 @@ service SocketGuide {
 }
 
 message SocketTree {
-    optional string name = 1 [default = "NotDefined"];
+    string name = 1 [default = "NotDefined"];
 }
 
 message SocketFamily {
-    required string name = 1;
-    required int32 value = 2;
-    optional SocketTree client_id = 3;
+    string name = 1;
+    int32 value = 2;
+    SocketTree client_id = 3;
 }
 
 message SocketType {
-    required string name = 1;
-    required int32 value = 2;
-    optional SocketTree client_id = 3;
+    string name = 1;
+    int32 value = 2;
+    SocketTree client_id = 3;
 }
 
 message SocketTypeAndFamily {
-    required SocketFamily family = 1;
-    required SocketType type = 2;
-    optional SocketTree client_id = 3;
+    SocketFamily family = 1;
+    SocketType type = 2;
+    SocketTree client_id = 3;
 }
 
 message SocketProtocol {
-    required string name = 1;
-    required int32 value = 2;
-    optional SocketTree client_id = 3;
+    string name = 1;
+    int32 value = 2;
+    SocketTree client_id = 3;
 }
