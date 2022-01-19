@@ -22,7 +22,7 @@ def define_client_id():
     return color_picked+"_"+animal_picked
 
 def socket_get_family_list(client_id, stub):
-    logging.debug("[%s] SendSocketTree" % (client_id.name))
+    logging.debug("[%s][SendSocketTree]" % (client_id.name))
     socketFamilyList = stub.GetSocketFamilyList(client_id)
     
     for socketFamily in socketFamilyList:
@@ -34,7 +34,7 @@ def socket_get_family_list(client_id, stub):
     
 
 def socket_get_type_list(client_id, socketFamilyChoice, stub):
-    logging.info("[%s] GetSocketTypeList" % (client_id.name))
+    logging.info("[%s][GetSocketTypeList]" % (client_id.name))
     
     if(socketFamilyChoice is not None):
         socketTypeList = stub.GetSocketTypeList(server_pb2.SocketFamily(
@@ -52,7 +52,7 @@ def socket_get_type_list(client_id, socketFamilyChoice, stub):
 
 
 def socket_get_protocol_list(client_id, socketFamilyChoice, socketTypeChoice, stub):
-    logging.info("[%s] GetSocketProtocolList for %s : %s" % (client_id.name, socketFamilyChoice.name, socketTypeChoice.name))
+    logging.info("[%s][GetSocketProtocolList] for %s : %s" % (client_id.name, socketFamilyChoice.name, socketTypeChoice.name))
 
     if(socketTypeChoice is not None):
 

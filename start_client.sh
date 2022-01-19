@@ -4,7 +4,7 @@
 set -eu
 
 pwd="$(pwd)"
-cwd="$(dirname "$0")"
+cwd="$(dirname "$0")/goclient"
 
 if [ "$pwd" == "$cwd" ]; then
     printf "Current working directory is the bash script, perfect.\n"
@@ -13,29 +13,38 @@ else
     cd "$cwd"
 fi
 
+go mod init main
+go mod tidy
+
 printf "Getting dependencies..\n"
 
-if pip3 check grpcio >/dev/null; then
-    printf "grpcio already installed\n"
+if go list ./... | grep -i "protoc-gen-go@" >/dev/null; then
+    printf "protoc-gen-go already installed\n"
 else
-    python3 -m pip install grpcio
+    go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.26
 fi
 
-if pip3 check grpcio-tools >/dev/null; then
-    printf "grpcio-tools already installed\n"
+if go list ./... | grep -i "protoc-gen-go-grpc@" >/dev/null; then
+    printf "protoc-gen-go-grpc already installed\n"
 else
-    python3 -m pip install grpcio-tools
+    go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
+fi
+
+# Export go path to include GOPATH
+if [[ *"$(go env GOPATH)/bin"* == "$PATH" ]]; then
+    printf "PATH already have GOPATH defined\n"
+else
+    printf "PATH does NOT have GOPATH defined, adding $(go env GOPATH) to $PATH \n"
+    export PATH="$PATH:$(go env GOPATH)/bin"
 fi
 
 printf "Compiling protos files\n"
-python3 -m grpc_tools.protoc -Iprotos/ --python_out=pythonserver/ --grpc_python_out=pythonserver/ protos/server.proto
+protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative ../protos/server.proto
 
-printf "Starting python client\n"
+printf "Starting go client\n"
 printf "###########\n"
-# Start server
-./pythonserver/client_test.py
-#server_pid=$!
-#printf "Server started with PID %s\n" "$server_pid"
+# Start client
+go run goclient/client.go
 printf "###########\n"
 printf "Returning to previous working directory from %s to %s\n" "$cwd" "$pwd"
 cd "$pwd"

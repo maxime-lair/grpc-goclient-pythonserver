@@ -11,7 +11,7 @@ blue
 bronze
 brown
 buff
-burnt umber
+burntumber
 cardinal
 carmine
 celadon
@@ -30,26 +30,26 @@ crimson
 cyan
 dark
 denim
-desert sand
+desertsand
 ebony
 ecru
 eggplant
 emerald
-forest green
+forestgreen
 fuchsia
 gold
 goldenrod
 gray
 green
 grey
-hot pink
+hotpink
 hue
 indigo
 ivory
 jade
 jet
-jungle green
-kelly green
+junglegreen
+kellygreen
 khaki
 lavender
 lemon
@@ -61,7 +61,7 @@ mahogany
 maroon
 mauve
 mustard
-navy blue
+navyblue
 ocher
 olive
 orange
@@ -87,7 +87,7 @@ saffron
 salmon
 sapphire
 scarlet
-sea green
+seagreen
 secondary
 sepia
 shade
@@ -96,7 +96,7 @@ sienna
 silver
 slate
 spectrum
-steel blue
+steelblue
 tan
 tangerine
 taupe
