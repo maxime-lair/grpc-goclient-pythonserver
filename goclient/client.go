@@ -18,6 +18,8 @@ func main() {
 
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
+	log.Printf("Connecting to: %s", *serverAddr)
+
 	conn, err := grpc.Dial(*serverAddr, opts...)
 	if err != nil {
 		log.Fatalf("fail to dial: %v", err)
