@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 
+	pb "github.com/maxime-lair/grpc-goclient-pythonserver/goclient/pb_server"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -24,12 +25,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("fail to dial: %v", err)
 	}
+	defer conn.Close()
 	log.Printf("Connected to server, proceeding..")
 
-	client := NewSocketGuideClient(conn)
+	client := pb.NewSocketGuideClient(conn)
 
 	log.Printf("Created client %s", client)
-
-	defer conn.Close()
 
 }
