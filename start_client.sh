@@ -13,6 +13,7 @@ else
     cd "$cwd"
 fi
 
+rm go.*
 go mod init main
 go mod tidy
 
