@@ -15,17 +15,17 @@ class SocketGuideStub(object):
             channel: A grpc.Channel.
         """
         self.GetSocketFamilyList = channel.unary_stream(
-                '/server.SocketGuide/GetSocketFamilyList',
+                '/main.SocketGuide/GetSocketFamilyList',
                 request_serializer=server__pb2.SocketTree.SerializeToString,
                 response_deserializer=server__pb2.SocketFamily.FromString,
                 )
         self.GetSocketTypeList = channel.unary_stream(
-                '/server.SocketGuide/GetSocketTypeList',
+                '/main.SocketGuide/GetSocketTypeList',
                 request_serializer=server__pb2.SocketFamily.SerializeToString,
                 response_deserializer=server__pb2.SocketType.FromString,
                 )
         self.GetSocketProtocolList = channel.unary_stream(
-                '/server.SocketGuide/GetSocketProtocolList',
+                '/main.SocketGuide/GetSocketProtocolList',
                 request_serializer=server__pb2.SocketTypeAndFamily.SerializeToString,
                 response_deserializer=server__pb2.SocketProtocol.FromString,
                 )
@@ -72,7 +72,7 @@ def add_SocketGuideServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'server.SocketGuide', rpc_method_handlers)
+            'main.SocketGuide', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -91,7 +91,7 @@ class SocketGuide(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/server.SocketGuide/GetSocketFamilyList',
+        return grpc.experimental.unary_stream(request, target, '/main.SocketGuide/GetSocketFamilyList',
             server__pb2.SocketTree.SerializeToString,
             server__pb2.SocketFamily.FromString,
             options, channel_credentials,
@@ -108,7 +108,7 @@ class SocketGuide(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/server.SocketGuide/GetSocketTypeList',
+        return grpc.experimental.unary_stream(request, target, '/main.SocketGuide/GetSocketTypeList',
             server__pb2.SocketFamily.SerializeToString,
             server__pb2.SocketType.FromString,
             options, channel_credentials,
@@ -125,7 +125,7 @@ class SocketGuide(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/server.SocketGuide/GetSocketProtocolList',
+        return grpc.experimental.unary_stream(request, target, '/main.SocketGuide/GetSocketProtocolList',
             server__pb2.SocketTypeAndFamily.SerializeToString,
             server__pb2.SocketProtocol.FromString,
             options, channel_credentials,

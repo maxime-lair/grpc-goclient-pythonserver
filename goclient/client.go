@@ -26,7 +26,7 @@ func main() {
 	}
 	log.Printf("Connected to server, proceeding..")
 
-	client := pb.NewSocketGuideClient(conn)
+	client := NewSocketGuideClient(conn)
 
 	log.Printf("Created client %s", client)
 
