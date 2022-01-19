@@ -54,7 +54,7 @@ protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=p
 printf "Starting go client\n"
 printf "###########\n"
 # Start client
-go run client.go
+go run .
 printf "###########\n"
 printf "Returning to previous working directory from %s to %s\n" "$cwd" "$pwd"
 cd "$pwd"
