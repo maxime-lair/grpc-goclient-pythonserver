@@ -26,6 +26,8 @@ func check(e error) {
 
 func get_random_line(open_file *os.File) string {
 
+	// Load it all into memory,
+	// a better way would be to have the same byte count on each line and just get a multiple
 	var lines []string
 	scanner := bufio.NewScanner(open_file)
 	for scanner.Scan() {
