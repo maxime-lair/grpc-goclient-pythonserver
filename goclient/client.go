@@ -6,6 +6,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"time"
 
 	pb "main/pb_server"
 
@@ -31,7 +32,9 @@ func get_random_line(open_file *os.File) string {
 		lines = append(lines, scanner.Text())
 	}
 
-	line_number := rand.Intn(len(lines))
+	random_seed := rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	line_number := random_seed.Intn(len(lines))
 
 	log.Printf("Picking line %s at line %d among total %d\n", lines[line_number], line_number, len(lines))
 
