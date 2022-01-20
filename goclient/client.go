@@ -79,6 +79,6 @@ func main() {
 
 	client_id := &pb.SocketTree{Name: define_client_id()}
 
-	log.Printf("Created client %v with id %s", &client, client_id)
+	log.Printf("Created client %v with id %s", &client, client_id.Name)
 
 }
