@@ -25,8 +25,6 @@ func check(e error) {
 
 func get_random_line(open_file *os.File) string {
 
-	random_line := ""
-
 	var lines []string
 	scanner := bufio.NewScanner(open_file)
 	for scanner.Scan() {
@@ -35,9 +33,9 @@ func get_random_line(open_file *os.File) string {
 
 	line_number := rand.Intn(len(lines))
 
-	log.Printf("Picking line random %d among total %d\n", line_number, len(lines))
+	log.Printf("Picking line %s at line %d among total %d\n", lines[line_number], line_number, len(lines))
 
-	return random_line
+	return lines[line_number]
 }
 
 func define_client_id() string {
@@ -76,6 +74,6 @@ func main() {
 
 	client_id := &pb.SocketTree{Name: define_client_id()}
 
-	log.Printf("Created client %v with id %s", client, client_id)
+	log.Printf("Created client %v with id %s", &client, client_id)
 
 }
