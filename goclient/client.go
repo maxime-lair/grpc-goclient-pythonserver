@@ -42,12 +42,12 @@ func get_random_line(open_file *os.File) string {
 
 func define_client_id() string {
 	// Get random line from a color wordlist
-	color_file, color_err := os.Open("../worldlist/color.txt")
+	color_file, color_err := os.Open("../wordlist/color.txt")
 	check(color_err)
 	defer color_file.Close()
 	color_picked := get_random_line(color_file)
 	// Get random line from an animal wordlist
-	animal_file, animal_err := os.Open("../worldlist/animal.txt")
+	animal_file, animal_err := os.Open("../wordlist/animal.txt")
 	check(animal_err)
 	defer animal_file.Close()
 	animal_picked := get_random_line(animal_file)
