@@ -60,6 +60,28 @@ func define_client_id() string {
 	return color_picked + "_" + animal_picked
 }
 
+func socket_get_family_list(client_id *pb.SocketTree, client pb.SocketGuideClient) *pb.SocketFamily {
+
+	var socketFamilyChoice pb.SocketFamily
+
+	return &socketFamilyChoice
+}
+
+func socket_get_type_list(client_id *pb.SocketTree, socketFamilyChoice *pb.SocketFamily, client pb.SocketGuideClient) *pb.SocketType {
+
+	var socketTypeChoice pb.SocketType
+
+	return &socketTypeChoice
+}
+
+func socket_get_protocol_list(socketTypeAndFamilyChoice *pb.SocketTypeAndFamily, client pb.SocketGuideClient) *pb.SocketProtocol {
+
+	var socketProtocolChoice pb.SocketProtocol
+
+	return &socketProtocolChoice
+
+}
+
 func main() {
 	flag.Parse()
 	var opts []grpc.DialOption
@@ -81,4 +103,24 @@ func main() {
 
 	log.Printf("Created client %v with id %s", &client, client_id.Name)
 
+	log.Printf("-------------- SendSocketTree --------------\n")
+	socketFamilyChoice := socket_get_family_list(client_id, client)
+	log.Printf("-------------- GetSocketTypeList --------------\n")
+	socketTypeChoice := socket_get_type_list(client_id, socketFamilyChoice, client)
+	log.Printf("-------------- GetSocketProtocolList --------------\n")
+	if socketTypeChoice.Name != "" {
+		log.Printf("Socket type choice is not empty, choosing protocol\n")
+		socketTypeAndFamilyChoice := &pb.SocketTypeAndFamily{
+			Family:   socketFamilyChoice,
+			Type:     socketTypeChoice,
+			ClientId: client_id,
+		}
+		socketProtocolChoice := socket_get_protocol_list(socketTypeAndFamilyChoice, client)
+
+		log.Printf("[%s] Chosen socket: %s - %s - %s", client_id.Name, socketFamilyChoice.Name, socketTypeChoice.Name, socketProtocolChoice.Name)
+
+	} else {
+		log.Printf("Socket type choice is empty, no protocols available\n")
+	}
+	log.Printf("Finished requesting socket family, type and protocol\n")
 }
