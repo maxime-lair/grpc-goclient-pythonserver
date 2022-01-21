@@ -58,7 +58,7 @@ func define_client_id() string {
 	animal_picked := get_random_line(animal_file)
 
 	// return both string concat
-	log.Printf("Created new client id : %s - %s\n", color_picked, animal_picked)
+	log.Printf("Created new client id : %s_%s\n", color_picked, animal_picked)
 	return color_picked + "_" + animal_picked
 }
 
@@ -79,22 +79,43 @@ func socket_get_family_list(client_id *pb.SocketTree, client pb.SocketGuideClien
 			break
 		}
 		check(stream_err)
-		log.Printf("Received family: %s\n", family)
+		log.Printf("[%s][GetFamilyList] Received family: %s\n", client_id.Name, family)
 		socketFamilyList = append(socketFamilyList, pb.SocketFamily{
 			Name:     family.Name,
 			Value:    family.Value,
 			ClientId: client_id})
 	}
-	log.Printf("len=%d cap=%d\n", len(socketFamilyList), cap(socketFamilyList))
+	log.Printf("[%s][GetFamilyList] len=%d cap=%d\n", client_id.Name, len(socketFamilyList), cap(socketFamilyList))
+	// Get choice from TUI
 	return &socketFamilyList[1]
 }
 
 func socket_get_type_list(client_id *pb.SocketTree, socketFamilyChoice *pb.SocketFamily, client pb.SocketGuideClient) *pb.SocketType {
 
-	log.Printf("[%s][GetTypeList] Entering with family: %d %s\n", client_id.Name, socketFamilyChoice.Value, socketFamilyChoice.Name)
+	log.Printf("[%s][GetTypeList] Entering with family: %d --> %s\n", client_id.Name, socketFamilyChoice.Value, socketFamilyChoice.Name)
 
-	var socketTypeChoice pb.SocketType
-	return &socketTypeChoice
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	socketTypeStream, req_err := client.GetSocketTypeList(ctx, socketFamilyChoice)
+	check(req_err)
+
+	var socketTypeList []pb.SocketType
+	for {
+		socketType, stream_err := socketTypeStream.Recv()
+		if stream_err == io.EOF {
+			break
+		}
+		check(stream_err)
+		log.Printf("[%s][GetTypeList] Received family: %s\n", client_id.Name, socketType)
+		socketTypeList = append(socketTypeList, pb.SocketType{
+			Name:     socketType.Name,
+			Value:    socketType.Value,
+			ClientId: client_id})
+	}
+	log.Printf("[%s][GetTypeList] len=%d cap=%d\n", client_id.Name, len(socketTypeList), cap(socketTypeList))
+
+	return &socketTypeList[0]
 }
 
 func socket_get_protocol_list(socketTypeAndFamilyChoice *pb.SocketTypeAndFamily, client pb.SocketGuideClient) *pb.SocketProtocol {
