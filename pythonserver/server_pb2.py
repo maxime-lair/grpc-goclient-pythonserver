@@ -15,11 +15,11 @@ _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='server.proto',
-  package='main',
+  package='pb_server',
   syntax='proto3',
-  serialized_options=b'Z?github.com/maxime-lair/grpc-goclient-pythonserver/goclient/main',
+  serialized_options=b'ZDgithub.com/maxime-lair/grpc-goclient-pythonserver/goclient/pb_server',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0cserver.proto\x12\x04main\"\x1a\n\nSocketTree\x12\x0c\n\x04name\x18\x01 \x01(\t\"P\n\x0cSocketFamily\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\x12#\n\tclient_id\x18\x03 \x01(\x0b\x32\x10.main.SocketTree\"N\n\nSocketType\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\x12#\n\tclient_id\x18\x03 \x01(\x0b\x32\x10.main.SocketTree\"~\n\x13SocketTypeAndFamily\x12\"\n\x06\x66\x61mily\x18\x01 \x01(\x0b\x32\x12.main.SocketFamily\x12\x1e\n\x04type\x18\x02 \x01(\x0b\x32\x10.main.SocketType\x12#\n\tclient_id\x18\x03 \x01(\x0b\x32\x10.main.SocketTree\"R\n\x0eSocketProtocol\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\x12#\n\tclient_id\x18\x03 \x01(\x0b\x32\x10.main.SocketTree2\xdb\x01\n\x0bSocketGuide\x12?\n\x13GetSocketFamilyList\x12\x10.main.SocketTree\x1a\x12.main.SocketFamily\"\x00\x30\x01\x12=\n\x11GetSocketTypeList\x12\x12.main.SocketFamily\x1a\x10.main.SocketType\"\x00\x30\x01\x12L\n\x15GetSocketProtocolList\x12\x19.main.SocketTypeAndFamily\x1a\x14.main.SocketProtocol\"\x00\x30\x01\x42\x41Z?github.com/maxime-lair/grpc-goclient-pythonserver/goclient/mainb\x06proto3'
+  serialized_pb=b'\n\x0cserver.proto\x12\tpb_server\"\x1a\n\nSocketTree\x12\x0c\n\x04name\x18\x01 \x01(\t\"U\n\x0cSocketFamily\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\x12(\n\tclient_id\x18\x03 \x01(\x0b\x32\x15.pb_server.SocketTree\"S\n\nSocketType\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\x12(\n\tclient_id\x18\x03 \x01(\x0b\x32\x15.pb_server.SocketTree\"\x8d\x01\n\x13SocketTypeAndFamily\x12\'\n\x06\x66\x61mily\x18\x01 \x01(\x0b\x32\x17.pb_server.SocketFamily\x12#\n\x04type\x18\x02 \x01(\x0b\x32\x15.pb_server.SocketType\x12(\n\tclient_id\x18\x03 \x01(\x0b\x32\x15.pb_server.SocketTree\"W\n\x0eSocketProtocol\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x05\x12(\n\tclient_id\x18\x03 \x01(\x0b\x32\x15.pb_server.SocketTree2\xf9\x01\n\x0bSocketGuide\x12I\n\x13GetSocketFamilyList\x12\x15.pb_server.SocketTree\x1a\x17.pb_server.SocketFamily\"\x00\x30\x01\x12G\n\x11GetSocketTypeList\x12\x17.pb_server.SocketFamily\x1a\x15.pb_server.SocketType\"\x00\x30\x01\x12V\n\x15GetSocketProtocolList\x12\x1e.pb_server.SocketTypeAndFamily\x1a\x19.pb_server.SocketProtocol\"\x00\x30\x01\x42\x46ZDgithub.com/maxime-lair/grpc-goclient-pythonserver/goclient/pb_serverb\x06proto3'
 )
 
 
@@ -27,14 +27,14 @@ DESCRIPTOR = _descriptor.FileDescriptor(
 
 _SOCKETTREE = _descriptor.Descriptor(
   name='SocketTree',
-  full_name='main.SocketTree',
+  full_name='pb_server.SocketTree',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='name', full_name='main.SocketTree.name', index=0,
+      name='name', full_name='pb_server.SocketTree.name', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -52,35 +52,35 @@ _SOCKETTREE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=22,
-  serialized_end=48,
+  serialized_start=27,
+  serialized_end=53,
 )
 
 
 _SOCKETFAMILY = _descriptor.Descriptor(
   name='SocketFamily',
-  full_name='main.SocketFamily',
+  full_name='pb_server.SocketFamily',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='name', full_name='main.SocketFamily.name', index=0,
+      name='name', full_name='pb_server.SocketFamily.name', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='value', full_name='main.SocketFamily.value', index=1,
+      name='value', full_name='pb_server.SocketFamily.value', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='client_id', full_name='main.SocketFamily.client_id', index=2,
+      name='client_id', full_name='pb_server.SocketFamily.client_id', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -98,35 +98,35 @@ _SOCKETFAMILY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=50,
-  serialized_end=130,
+  serialized_start=55,
+  serialized_end=140,
 )
 
 
 _SOCKETTYPE = _descriptor.Descriptor(
   name='SocketType',
-  full_name='main.SocketType',
+  full_name='pb_server.SocketType',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='name', full_name='main.SocketType.name', index=0,
+      name='name', full_name='pb_server.SocketType.name', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='value', full_name='main.SocketType.value', index=1,
+      name='value', full_name='pb_server.SocketType.value', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='client_id', full_name='main.SocketType.client_id', index=2,
+      name='client_id', full_name='pb_server.SocketType.client_id', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -144,35 +144,35 @@ _SOCKETTYPE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=132,
-  serialized_end=210,
+  serialized_start=142,
+  serialized_end=225,
 )
 
 
 _SOCKETTYPEANDFAMILY = _descriptor.Descriptor(
   name='SocketTypeAndFamily',
-  full_name='main.SocketTypeAndFamily',
+  full_name='pb_server.SocketTypeAndFamily',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='family', full_name='main.SocketTypeAndFamily.family', index=0,
+      name='family', full_name='pb_server.SocketTypeAndFamily.family', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='type', full_name='main.SocketTypeAndFamily.type', index=1,
+      name='type', full_name='pb_server.SocketTypeAndFamily.type', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='client_id', full_name='main.SocketTypeAndFamily.client_id', index=2,
+      name='client_id', full_name='pb_server.SocketTypeAndFamily.client_id', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -190,35 +190,35 @@ _SOCKETTYPEANDFAMILY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=212,
-  serialized_end=338,
+  serialized_start=228,
+  serialized_end=369,
 )
 
 
 _SOCKETPROTOCOL = _descriptor.Descriptor(
   name='SocketProtocol',
-  full_name='main.SocketProtocol',
+  full_name='pb_server.SocketProtocol',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='name', full_name='main.SocketProtocol.name', index=0,
+      name='name', full_name='pb_server.SocketProtocol.name', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='value', full_name='main.SocketProtocol.value', index=1,
+      name='value', full_name='pb_server.SocketProtocol.value', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='client_id', full_name='main.SocketProtocol.client_id', index=2,
+      name='client_id', full_name='pb_server.SocketProtocol.client_id', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -236,8 +236,8 @@ _SOCKETPROTOCOL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=340,
-  serialized_end=422,
+  serialized_start=371,
+  serialized_end=458,
 )
 
 _SOCKETFAMILY.fields_by_name['client_id'].message_type = _SOCKETTREE
@@ -256,35 +256,35 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 SocketTree = _reflection.GeneratedProtocolMessageType('SocketTree', (_message.Message,), {
   'DESCRIPTOR' : _SOCKETTREE,
   '__module__' : 'server_pb2'
-  # @@protoc_insertion_point(class_scope:main.SocketTree)
+  # @@protoc_insertion_point(class_scope:pb_server.SocketTree)
   })
 _sym_db.RegisterMessage(SocketTree)
 
 SocketFamily = _reflection.GeneratedProtocolMessageType('SocketFamily', (_message.Message,), {
   'DESCRIPTOR' : _SOCKETFAMILY,
   '__module__' : 'server_pb2'
-  # @@protoc_insertion_point(class_scope:main.SocketFamily)
+  # @@protoc_insertion_point(class_scope:pb_server.SocketFamily)
   })
 _sym_db.RegisterMessage(SocketFamily)
 
 SocketType = _reflection.GeneratedProtocolMessageType('SocketType', (_message.Message,), {
   'DESCRIPTOR' : _SOCKETTYPE,
   '__module__' : 'server_pb2'
-  # @@protoc_insertion_point(class_scope:main.SocketType)
+  # @@protoc_insertion_point(class_scope:pb_server.SocketType)
   })
 _sym_db.RegisterMessage(SocketType)
 
 SocketTypeAndFamily = _reflection.GeneratedProtocolMessageType('SocketTypeAndFamily', (_message.Message,), {
   'DESCRIPTOR' : _SOCKETTYPEANDFAMILY,
   '__module__' : 'server_pb2'
-  # @@protoc_insertion_point(class_scope:main.SocketTypeAndFamily)
+  # @@protoc_insertion_point(class_scope:pb_server.SocketTypeAndFamily)
   })
 _sym_db.RegisterMessage(SocketTypeAndFamily)
 
 SocketProtocol = _reflection.GeneratedProtocolMessageType('SocketProtocol', (_message.Message,), {
   'DESCRIPTOR' : _SOCKETPROTOCOL,
   '__module__' : 'server_pb2'
-  # @@protoc_insertion_point(class_scope:main.SocketProtocol)
+  # @@protoc_insertion_point(class_scope:pb_server.SocketProtocol)
   })
 _sym_db.RegisterMessage(SocketProtocol)
 
@@ -293,17 +293,17 @@ DESCRIPTOR._options = None
 
 _SOCKETGUIDE = _descriptor.ServiceDescriptor(
   name='SocketGuide',
-  full_name='main.SocketGuide',
+  full_name='pb_server.SocketGuide',
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=425,
-  serialized_end=644,
+  serialized_start=461,
+  serialized_end=710,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetSocketFamilyList',
-    full_name='main.SocketGuide.GetSocketFamilyList',
+    full_name='pb_server.SocketGuide.GetSocketFamilyList',
     index=0,
     containing_service=None,
     input_type=_SOCKETTREE,
@@ -313,7 +313,7 @@ _SOCKETGUIDE = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='GetSocketTypeList',
-    full_name='main.SocketGuide.GetSocketTypeList',
+    full_name='pb_server.SocketGuide.GetSocketTypeList',
     index=1,
     containing_service=None,
     input_type=_SOCKETFAMILY,
@@ -323,7 +323,7 @@ _SOCKETGUIDE = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='GetSocketProtocolList',
-    full_name='main.SocketGuide.GetSocketProtocolList',
+    full_name='pb_server.SocketGuide.GetSocketProtocolList',
     index=2,
     containing_service=None,
     input_type=_SOCKETTYPEANDFAMILY,
