@@ -86,7 +86,8 @@ func socket_get_family_list(client_id *pb.SocketTree, client pb.SocketGuideClien
 			ClientId: client_id})
 	}
 	log.Printf("[%s][GetFamilyList] len=%d cap=%d\n", client_id.Name, len(socketFamilyList), cap(socketFamilyList))
-	// Get choice from TUI
+
+	// TUI: ask for family choice
 	return &socketFamilyList[1]
 }
 
@@ -115,6 +116,7 @@ func socket_get_type_list(client_id *pb.SocketTree, socketFamilyChoice *pb.Socke
 	}
 	log.Printf("[%s][GetTypeList] len=%d cap=%d\n", client_id.Name, len(socketTypeList), cap(socketTypeList))
 
+	// TUI: Ask for type choice
 	return &socketTypeList[0]
 }
 
@@ -147,6 +149,7 @@ func socket_get_protocol_list(socketTypeAndFamilyChoice *pb.SocketTypeAndFamily,
 	}
 	log.Printf("[%s][GetProtocolList] len=%d cap=%d\n", client_id, len(socketProtocolList), cap(socketProtocolList))
 
+	//TUI: Ask for protocol choice
 	return &socketProtocolList[0]
 
 }
