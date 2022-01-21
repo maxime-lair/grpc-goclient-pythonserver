@@ -91,8 +91,9 @@ func socket_get_family_list(client_id *pb.SocketTree, client pb.SocketGuideClien
 
 func socket_get_type_list(client_id *pb.SocketTree, socketFamilyChoice *pb.SocketFamily, client pb.SocketGuideClient) *pb.SocketType {
 
-	var socketTypeChoice pb.SocketType
+	log.Printf("[%s][GetTypeList] Entering with family: %d %s\n", client_id.Name, socketFamilyChoice.Value, socketFamilyChoice.Name)
 
+	var socketTypeChoice pb.SocketType
 	return &socketTypeChoice
 }
 
