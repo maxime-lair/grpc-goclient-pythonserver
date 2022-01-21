@@ -120,9 +120,34 @@ func socket_get_type_list(client_id *pb.SocketTree, socketFamilyChoice *pb.Socke
 
 func socket_get_protocol_list(socketTypeAndFamilyChoice *pb.SocketTypeAndFamily, client pb.SocketGuideClient) *pb.SocketProtocol {
 
-	var socketProtocolChoice pb.SocketProtocol
+	client_id := socketTypeAndFamilyChoice.ClientId.Name
+	log.Printf("[%s][GetProtocolList] Entering with family: [%d] %s -- [%d] %s\n",
+		client_id,
+		socketTypeAndFamilyChoice.Family.Value, socketTypeAndFamilyChoice.Family.Name,
+		socketTypeAndFamilyChoice.Type.Value, socketTypeAndFamilyChoice.Type.Name)
 
-	return &socketProtocolChoice
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	socketProtocolStream, req_err := client.GetSocketProtocolList(ctx, socketTypeAndFamilyChoice)
+	check(req_err)
+
+	var socketProtocolList []pb.SocketProtocol
+	for {
+		socketProtocol, stream_err := socketProtocolStream.Recv()
+		if stream_err == io.EOF {
+			break
+		}
+		check(stream_err)
+		log.Printf("[%s][GetProtocolList] Received protocol: %s\n", client_id, socketProtocol)
+		socketProtocolList = append(socketProtocolList, pb.SocketProtocol{
+			Name:     socketProtocol.Name,
+			Value:    socketProtocol.Value,
+			ClientId: socketProtocol.ClientId})
+	}
+	log.Printf("[%s][GetProtocolList] len=%d cap=%d\n", client_id, len(socketProtocolList), cap(socketProtocolList))
+
+	return &socketProtocolList[0]
 
 }
 
