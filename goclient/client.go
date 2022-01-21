@@ -69,18 +69,24 @@ func socket_get_family_list(client_id *pb.SocketTree, client pb.SocketGuideClien
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	socketFamilyList, req_err := client.GetSocketFamilyList(ctx, client_id)
+	socketFamilyStream, req_err := client.GetSocketFamilyList(ctx, client_id)
 	check(req_err)
 
+	var socketFamilyList []pb.SocketFamily
 	for {
-		family, stream_err := socketFamilyList.Recv()
+		family, stream_err := socketFamilyStream.Recv()
 		if stream_err == io.EOF {
 			break
 		}
 		check(stream_err)
-		log.Printf("Received family: %s", family)
+		log.Printf("Received family: %s\n", family)
+		socketFamilyList = append(socketFamilyList, pb.SocketFamily{
+			Name:     family.Name,
+			Value:    family.Value,
+			ClientId: client_id})
 	}
 
+	log.Printf("len=%d cap=%d %v\n", len(socketFamilyList), cap(socketFamilyList), socketFamilyList)
 	var socketFamilyChoice pb.SocketFamily
 	return &socketFamilyChoice
 }
