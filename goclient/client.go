@@ -1,13 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"context"
 	"flag"
 	"fmt"
 	"io"
 	"log"
-	"math/rand"
 	"os"
 	"time"
 
@@ -23,151 +21,11 @@ var (
 	serverAddr = flag.String("addr", "localhost:50051", "The server address in the format of host:port")
 )
 
-type model struct {
-	choices  []string         // items on the to-do list
-	cursor   int              // which to-do list item our cursor is pointing at
-	selected map[int]struct{} // which to-do items are selected
-}
-
-/*************
-Bubbletea part
-*************/
-
-func initialModel() model {
-	return model{
-		// Our shopping list is a grocery list
-		choices: []string{"Buy carrots", "Buy celery", "Buy kohlrabi"},
-
-		// A map which indicates which choices are selected. We're using
-		// the  map like a mathematical set. The keys refer to the indexes
-		// of the `choices` slice, above.
-		selected: make(map[int]struct{}),
-	}
-}
-
-func (m model) Init() tea.Cmd {
-	// Just return `nil`, which means "no I/O right now, please."
-	return nil
-}
-
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	switch msg := msg.(type) {
-
-	// Is it a key press?
-	case tea.KeyMsg:
-
-		// Cool, what was the actual key pressed?
-		switch msg.String() {
-
-		// These keys should exit the program.
-		case "ctrl+c", "q":
-			return m, tea.Quit
-
-		// The "up" and "k" keys move the cursor up
-		case "up", "k":
-			if m.cursor > 0 {
-				m.cursor--
-			}
-
-		// The "down" and "j" keys move the cursor down
-		case "down", "j":
-			if m.cursor < len(m.choices)-1 {
-				m.cursor++
-			}
-
-		// The "enter" key and the spacebar (a literal space) toggle
-		// the selected state for the item that the cursor is pointing at.
-		case "enter", " ":
-			_, ok := m.selected[m.cursor]
-			if ok {
-				delete(m.selected, m.cursor)
-			} else {
-				m.selected[m.cursor] = struct{}{}
-			}
-		}
-	}
-
-	// Return the updated model to the Bubble Tea runtime for processing.
-	// Note that we're not returning a command.
-	return m, nil
-}
-
-func (m model) View() string {
-	// The header
-	s := "What should we buy at the market?\n\n"
-
-	// Iterate over our choices
-	for i, choice := range m.choices {
-
-		// Is the cursor pointing at this choice?
-		cursor := " " // no cursor
-		if m.cursor == i {
-			cursor = ">" // cursor!
-		}
-
-		// Is this choice selected?
-		checked := " " // not selected
-		if _, ok := m.selected[i]; ok {
-			checked = "x" // selected!
-		}
-
-		// Render the row
-		s += fmt.Sprintf("%s [%s] %s\n", cursor, checked, choice)
-	}
-
-	// The footer
-	s += "\nPress q to quit.\n"
-
-	// Send the UI for rendering
-	return s
-}
-
 /*************
 GRPC part
 *************/
 
-func check(e error) {
-	if e != nil {
-		log.Fatal(e)
-	}
-}
-
-func get_random_line(open_file *os.File) string {
-
-	// Load it all into memory,
-	// a better way would be to have the same byte count on each line and just get a multiple
-	var lines []string
-	scanner := bufio.NewScanner(open_file)
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-
-	random_seed := rand.New(rand.NewSource(time.Now().UnixNano()))
-
-	line_number := random_seed.Intn(len(lines))
-
-	log.Printf("Picking line %s at line %d among total %d\n", lines[line_number], line_number, len(lines))
-
-	return lines[line_number]
-}
-
-func define_client_id() string {
-	// Get random line from a color wordlist
-	color_file, color_err := os.Open("../wordlist/color.txt")
-	check(color_err)
-	defer color_file.Close()
-	color_picked := get_random_line(color_file)
-	// Get random line from an animal wordlist
-	animal_file, animal_err := os.Open("../wordlist/animal.txt")
-	check(animal_err)
-	defer animal_file.Close()
-	animal_picked := get_random_line(animal_file)
-
-	// return both string concat
-	log.Printf("Created new client id : %s_%s\n", color_picked, animal_picked)
-	return color_picked + "_" + animal_picked
-}
-
+// TODO Factorize get part
 func socket_get_family_list(client_id *pb.SocketTree, client pb.SocketGuideClient) *pb.SocketFamily {
 
 	log.Printf("[%s][GetFamilyList] Entering.", client_id.Name)
