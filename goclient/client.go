@@ -2,7 +2,9 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"flag"
+	"io"
 	"log"
 	"math/rand"
 	"os"
@@ -62,8 +64,24 @@ func define_client_id() string {
 
 func socket_get_family_list(client_id *pb.SocketTree, client pb.SocketGuideClient) *pb.SocketFamily {
 
-	var socketFamilyChoice pb.SocketFamily
+	log.Printf("[%s][GetFamilyList] Entering.", client_id.Name)
 
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	socketFamilyList, req_err := client.GetSocketFamilyList(ctx, client_id)
+	check(req_err)
+
+	for {
+		family, stream_err := socketFamilyList.Recv()
+		if stream_err == io.EOF {
+			break
+		}
+		check(stream_err)
+		log.Printf("Received family: %s", family)
+	}
+
+	var socketFamilyChoice pb.SocketFamily
 	return &socketFamilyChoice
 }
 
