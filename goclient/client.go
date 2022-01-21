@@ -146,13 +146,13 @@ func main() {
 
 	log.Printf("Created client %v with id %s", &client, client_id.Name)
 
-	log.Printf("-------------- SendSocketTree --------------\n")
+	log.Printf("[%s] -------------- SendSocketTree --------------\n", client_id)
 	socketFamilyChoice := socket_get_family_list(client_id, client)
-	log.Printf("-------------- GetSocketTypeList --------------\n")
+	log.Printf("[%s] -------------- GetSocketTypeList --------------\n", client_id)
 	socketTypeChoice := socket_get_type_list(client_id, socketFamilyChoice, client)
-	log.Printf("-------------- GetSocketProtocolList --------------\n")
+	log.Printf("[%s] -------------- GetSocketProtocolList --------------\n", client_id)
 	if socketTypeChoice.Name != "" {
-		log.Printf("Socket type choice is not empty, choosing protocol\n")
+		log.Printf("[%s] Socket type choice is not empty, choosing protocol\n", client_id)
 		socketTypeAndFamilyChoice := &pb.SocketTypeAndFamily{
 			Family:   socketFamilyChoice,
 			Type:     socketTypeChoice,
@@ -163,7 +163,7 @@ func main() {
 		log.Printf("[%s] Chosen socket: %s - %s - %s", client_id.Name, socketFamilyChoice.Name, socketTypeChoice.Name, socketProtocolChoice.Name)
 
 	} else {
-		log.Printf("Socket type choice is empty, no protocols available\n")
+		log.Printf("[%s] Socket type choice is empty, no protocols available\n", client_id)
 	}
-	log.Printf("Finished requesting socket family, type and protocol\n")
+	log.Printf("[%s] Finished requesting socket family, type and protocol\n", client_id)
 }
