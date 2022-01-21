@@ -32,7 +32,10 @@ if go list ./... | grep -i "protoc-gen-go-grpc@" >/dev/null; then
     printf "protoc-gen-go-grpc already installed\n"
 else
     go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
+    go get github.com/charmbracelet/bubbletea
 fi
+
+
 
 # Export go path to include GOPATH
 if [[ *"$(go env GOPATH)/bin"* == "$PATH" ]]; then
