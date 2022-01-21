@@ -85,10 +85,8 @@ func socket_get_family_list(client_id *pb.SocketTree, client pb.SocketGuideClien
 			Value:    family.Value,
 			ClientId: client_id})
 	}
-
-	log.Printf("len=%d cap=%d %v\n", len(socketFamilyList), cap(socketFamilyList), socketFamilyList)
-	var socketFamilyChoice pb.SocketFamily
-	return &socketFamilyChoice
+	log.Printf("len=%d cap=%d\n", len(socketFamilyList), cap(socketFamilyList))
+	return &socketFamilyList[1]
 }
 
 func socket_get_type_list(client_id *pb.SocketTree, socketFamilyChoice *pb.SocketFamily, client pb.SocketGuideClient) *pb.SocketType {
