@@ -8,7 +8,11 @@ import (
 func (m model) printHeader() string {
 
 	var s string
-	s += fmt.Sprintf("------- %s -------", m.clientID)
+	if m.clientID == nil {
+		s += fmt.Sprintf("------- Client ID undefined %p -------\n", m.client)
+	} else {
+		s += fmt.Sprintf("------- %s -------\n", m.clientID)
+	}
 	switch m.state {
 	case stateConnect:
 		s += "Request process starting..\n\n"
