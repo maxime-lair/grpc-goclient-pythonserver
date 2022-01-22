@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"log"
 	"math/rand"
 	"os"
 	"time"
@@ -22,7 +21,7 @@ func get_random_line(open_file *os.File) string {
 
 	line_number := random_seed.Intn(len(lines))
 
-	log.Printf("Picking line %s at line %d among total %d\n", lines[line_number], line_number, len(lines))
+	//log.Printf("Picking line %s at line %d among total %d\n", lines[line_number], line_number, len(lines))
 
 	return lines[line_number]
 }
@@ -40,6 +39,6 @@ func define_client_id() string {
 	animal_picked := get_random_line(animal_file)
 
 	// return both string concat
-	log.Printf("Created new client id : %s_%s\n", color_picked, animal_picked)
+	//log.Printf("Created new client id : %s_%s\n", color_picked, animal_picked)
 	return color_picked + "_" + animal_picked
 }

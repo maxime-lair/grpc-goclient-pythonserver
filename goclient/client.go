@@ -17,6 +17,14 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
+const (
+	stateConnect     = 0
+	stateGetFamily   = 1
+	stateGetType     = 2
+	stateGetProtocol = 3
+	stateDone        = 4
+)
+
 var (
 	serverAddr = flag.String("addr", "localhost:50051", "The server address in the format of host:port")
 )
@@ -26,20 +34,34 @@ type conn_info struct {
 	serverAddr string
 }
 
+type socket_choice struct {
+	Name  string
+	Value int32
+}
+
 type model struct {
 	choices  []string         // items on the to-do list
 	cursor   int              // which to-do list item our cursor is pointing at
 	selected map[int]struct{} // which to-do items are selected
 
-	socketFamilyChoices   []*pb.SocketFamily   // socket family choices list
-	socketTypeChoices     []*pb.SocketType     // socket type choices list
-	socketProtocolChoices []*pb.SocketProtocol // socket protocol choices list
-	selectedFamily        *pb.SocketFamily     // selected family
-	selectedType          *pb.SocketType       // selected type
-	selectedProtocol      *pb.SocketProtocol   // selected protocol
+	socketFamilyChoices   []socket_choice      // socket family choices list
+	socketTypeChoices     *[]socket_choice     // socket type choices list
+	socketProtocolChoices *[]socket_choice     // socket protocol choices list
+	selectedFamily        *socket_choice       // selected family
+	selectedType          *socket_choice       // selected type
+	selectedProtocol      *socket_choice       // selected protocol
+	clientID              *pb.SocketTree       // client id for the transaction
+	connInfo              conn_info            // conn info
+	client                pb.SocketGuideClient // client
 
 	logJournal []string // log journal
+	err        errMsg   // possible error message
+	state      int      // Current state (connect, getXX, done..) - see const for values
 }
+
+type errMsg struct{ err error }
+
+func (e errMsg) Error() string { return e.err.Error() }
 
 /*************
 Bubbletea part
@@ -47,17 +69,29 @@ Bubbletea part
 
 func initialModel(connInfo conn_info) model {
 
-	log.Printf("Connected to server, proceeding..")
+	var initModel model
+	initModel.state = stateConnect
+	/* Connect to server message (loading bar) */
+	initModel.logJournal = append(initModel.logJournal, "Client up, proceeding..")
 
-	return model{
-		// Our shopping list is a grocery list
-		choices: []string{"Buy carrots", "Buy celery", "Buy kohlrabi"},
+	initModel.logJournal = append(initModel.logJournal, "Connecting to: "+connInfo.serverAddr)
 
-		// A map which indicates which choices are selected. We're using
-		// the  map like a mathematical set. The keys refer to the indexes
-		// of the `choices` slice, above.
-		selected: make(map[int]struct{}),
+	conn, err := grpc.Dial(connInfo.serverAddr, connInfo.opts...)
+	if err != nil {
+		log.Fatalf("fail to dial: %v", err)
 	}
+	defer conn.Close()
+	initModel.logJournal = append(initModel.logJournal, "Connected to server, proceeding..")
+	initModel.connInfo = connInfo
+
+	client := pb.NewSocketGuideClient(conn)
+	initModel.client = client
+
+	client_id := &pb.SocketTree{Name: define_client_id()}
+
+	initModel.logJournal = append(initModel.logJournal, "Created client "+fmt.Sprintf("%p", &client)+" with id "+client_id.Name)
+
+	return initModel
 }
 
 func (m model) Init() tea.Cmd {
@@ -66,75 +100,39 @@ func (m model) Init() tea.Cmd {
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	switch msg := msg.(type) {
 
-	// Is it a key press?
-	case tea.KeyMsg:
-
-		// Cool, what was the actual key pressed?
-		switch msg.String() {
-
-		// These keys should exit the program.
-		case "ctrl+c", "q":
-			return m, tea.Quit
-
-		// The "up" and "k" keys move the cursor up
-		case "up", "k":
-			if m.cursor > 0 {
-				m.cursor--
-			}
-
-		// The "down" and "j" keys move the cursor down
-		case "down", "j":
-			if m.cursor < len(m.choices)-1 {
-				m.cursor++
-			}
-
-		// The "enter" key and the spacebar (a literal space) toggle
-		// the selected state for the item that the cursor is pointing at.
-		case "enter", " ":
-			_, ok := m.selected[m.cursor]
-			if ok {
-				delete(m.selected, m.cursor)
-			} else {
-				m.selected[m.cursor] = struct{}{}
-			}
-		}
+	switch m.state {
+	case stateConnect:
+		return m.UpdateConnect(msg)
+	case stateGetFamily:
+		return m.UpdateGetFamily(msg)
+	case stateGetType:
+		return m.UpdateGetType(msg)
+	case stateGetProtocol:
+		return m.UpdateGetProtocol(msg)
+	case stateDone:
+		return m.UpdateDone(msg)
+	default:
+		return m, nil
 	}
-
-	// Return the updated model to the Bubble Tea runtime for processing.
-	// Note that we're not returning a command.
-	return m, nil
 }
 
 func (m model) View() string {
-	// The header
-	s := "Select your choice.\n\n"
 
-	// Iterate over our choices
-	for i, choice := range m.choices {
-
-		// Is the cursor pointing at this choice?
-		cursor := " " // no cursor
-		if m.cursor == i {
-			cursor = ">" // cursor!
-		}
-
-		// Is this choice selected?
-		checked := " " // not selected
-		if _, ok := m.selected[i]; ok {
-			checked = "x" // selected!
-		}
-
-		// Render the row
-		s += fmt.Sprintf("%s [%s] %s\n", cursor, checked, choice)
+	switch m.state {
+	case stateConnect:
+		return m.ViewConnect()
+	case stateGetFamily:
+		return m.ViewGetFamily()
+	case stateGetType:
+		return m.ViewGetType()
+	case stateGetProtocol:
+		return m.ViewGetProtocol()
+	case stateDone:
+		return m.ViewDone()
+	default:
+		return "Unknown state\n"
 	}
-
-	// The footer
-	s += "\nPress q to quit.\n"
-
-	// Send the UI for rendering
-	return s
 }
 
 /*************
@@ -142,9 +140,9 @@ GRPC part
 *************/
 
 // TODO Factorize get part
-func socket_get_family_list(client_id *pb.SocketTree, client pb.SocketGuideClient) *pb.SocketFamily {
+func socket_get_family_list(client_id *pb.SocketTree, client pb.SocketGuideClient, logJournal []string) ([]socket_choice, []string) {
 
-	log.Printf("[%s][GetFamilyList] Entering.", client_id.Name)
+	logJournal = append(logJournal, fmt.Sprintf("[%s][GetFamilyList] Entering.", client_id.Name))
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -152,23 +150,22 @@ func socket_get_family_list(client_id *pb.SocketTree, client pb.SocketGuideClien
 	socketFamilyStream, req_err := client.GetSocketFamilyList(ctx, client_id)
 	check(req_err)
 
-	var socketFamilyList []pb.SocketFamily
+	var socketFamilyList []socket_choice
 	for {
 		family, stream_err := socketFamilyStream.Recv()
 		if stream_err == io.EOF {
 			break
 		}
 		check(stream_err)
-		log.Printf("[%s][GetFamilyList] Received family: %s\n", client_id.Name, family)
-		socketFamilyList = append(socketFamilyList, pb.SocketFamily{
-			Name:     family.Name,
-			Value:    family.Value,
-			ClientId: client_id})
+		logJournal = append(logJournal, fmt.Sprintf("[%s][GetFamilyList] Received family: %s\n", client_id.Name, family))
+		socketFamilyList = append(socketFamilyList, socket_choice{
+			Name:  family.Name,
+			Value: family.Value,
+		})
 	}
-	log.Printf("[%s][GetFamilyList] len=%d cap=%d\n", client_id.Name, len(socketFamilyList), cap(socketFamilyList))
+	logJournal = append(logJournal, fmt.Sprintf("[%s][GetFamilyList] len=%d cap=%d\n", client_id.Name, len(socketFamilyList), cap(socketFamilyList)))
 
-	// TUI: ask for family choice
-	return &socketFamilyList[1]
+	return socketFamilyList, logJournal
 }
 
 func socket_get_type_list(client_id *pb.SocketTree, socketFamilyChoice *pb.SocketFamily, client pb.SocketGuideClient) *pb.SocketType {
@@ -248,48 +245,29 @@ func main() {
 	}
 	/* End of TUI */
 
-	/* Connect to server message (loading bar) */
-
 	/* Update with family list */
 
 	/* Show family choice, update with type list */
+	/*
+		log.Printf("[%s] -------------- GetSocketTypeList --------------\n", client_id)
+		socketTypeChoice := socket_get_type_list(client_id, socketFamilyChoice, client)
+		// Show family/type choice, update with protocol list
+		log.Printf("[%s] -------------- GetSocketProtocolList --------------\n", client_id)
+		if socketTypeChoice.Name != "" {
+			log.Printf("[%s] Socket type choice is not empty, choosing protocol\n", client_id)
+			socketTypeAndFamilyChoice := &pb.SocketTypeAndFamily{
+				Family:   socketFamilyChoice,
+				Type:     socketTypeChoice,
+				ClientId: client_id,
+			}
+			socketProtocolChoice := socket_get_protocol_list(socketTypeAndFamilyChoice, client)
 
-	/* Show family/type choice, update with protocol list */
+			log.Printf("[%s] Chosen socket: %s - %s - %s", client_id.Name, socketFamilyChoice.Name, socketTypeChoice.Name, socketProtocolChoice.Name)
 
-	/* Show family/type/protocol choice */
-
-	log.Printf("Connecting to: %s", *serverAddr)
-	conn, err := grpc.Dial(*serverAddr, opts...)
-	if err != nil {
-		log.Fatalf("fail to dial: %v", err)
-	}
-	defer conn.Close()
-	log.Printf("Connected to server, proceeding..")
-
-	client := pb.NewSocketGuideClient(conn)
-
-	client_id := &pb.SocketTree{Name: define_client_id()}
-
-	log.Printf("Created client %v with id %s", &client, client_id.Name)
-
-	log.Printf("[%s] -------------- SendSocketTree --------------\n", client_id)
-	socketFamilyChoice := socket_get_family_list(client_id, client)
-	log.Printf("[%s] -------------- GetSocketTypeList --------------\n", client_id)
-	socketTypeChoice := socket_get_type_list(client_id, socketFamilyChoice, client)
-	log.Printf("[%s] -------------- GetSocketProtocolList --------------\n", client_id)
-	if socketTypeChoice.Name != "" {
-		log.Printf("[%s] Socket type choice is not empty, choosing protocol\n", client_id)
-		socketTypeAndFamilyChoice := &pb.SocketTypeAndFamily{
-			Family:   socketFamilyChoice,
-			Type:     socketTypeChoice,
-			ClientId: client_id,
+		} else {
+			log.Printf("[%s] Socket type choice is empty, no protocols available\n", client_id)
 		}
-		socketProtocolChoice := socket_get_protocol_list(socketTypeAndFamilyChoice, client)
-
-		log.Printf("[%s] Chosen socket: %s - %s - %s", client_id.Name, socketFamilyChoice.Name, socketTypeChoice.Name, socketProtocolChoice.Name)
-
-	} else {
-		log.Printf("[%s] Socket type choice is empty, no protocols available\n", client_id)
-	}
-	log.Printf("[%s] Finished requesting socket family, type and protocol\n", client_id)
+		// Show family/type/protocol choice
+		log.Printf("[%s] Finished requesting socket family, type and protocol\n", client_id)
+	*/
 }
