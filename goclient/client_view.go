@@ -69,7 +69,7 @@ func (m model) ViewConnect() string {
 	// TODO add loading bar
 	s += fmt.Sprintf("Press enter to start %s..\n", m.connInfo.serverAddr)
 	s += m.printFooter()
-	return "connect\n"
+	return s
 }
 
 func (m model) ViewGetFamily() string {
