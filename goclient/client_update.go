@@ -69,7 +69,8 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case " ":
 			selected := m.clientChoice.socketChoicesList[m.cursor]
 			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] User tries to select %s.", m.clientEnv.clientID.Name, selected.Name))
-			if m.clientChoice.selectedFamily == &selected {
+			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] Currently selected value %v", m.clientEnv.clientID.Name, m.clientChoice.selectedFamily))
+			if m.clientChoice.selectedFamily != nil && *m.clientChoice.selectedFamily == selected {
 				m.clientChoice.selectedFamily = nil
 			} else {
 				if m.clientChoice.selectedFamily == nil {
@@ -77,14 +78,14 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] User selected %s - selectedFamily: %v - selected addr %v",
 						m.clientEnv.clientID.Name, selected.Name,
 						m.clientChoice.selectedFamily, &selected))
-
 				} else {
 					m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] W: User tried to add more than one selection.", m.clientEnv.clientID.Name))
 				}
 			}
 		// The "enter" key to validate
 		case "enter":
-			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("selected entry %d - which is choice: %d %s", m.cursor,
+			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] selected entry %d - which is choice: %d %s",
+				m.clientEnv.clientID.Name, m.cursor,
 				m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name))
 		}
 	}
