@@ -85,7 +85,7 @@ func initialModel(connInfo connInfo) model {
 	/* Connect to server message (loading bar) */
 	initModel.clientEnv.logJournal = append(initModel.clientEnv.logJournal, "Client up, proceeding..")
 
-	initModel.clientEnv.logJournal = append(initModel.clientEnv.logJournal, "Connecting to: "+connInfo.serverAddr)
+	initModel.clientEnv.logJournal = append(initModel.clientEnv.logJournal, fmt.Sprintf("Connecting to: %s", connInfo.serverAddr))
 
 	conn, err := grpc.Dial(connInfo.serverAddr, connInfo.opts...)
 	if err != nil {
@@ -153,8 +153,15 @@ func socket_get_family_list(clientEnv clientEnv) ([]socketChoice, clientEnv) {
 
 	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetFamilyList] Entering.", clientEnv.clientID.Name))
 
-	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
+
+	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetFamilyList] Connection info - addr %s - client %p - client struct %+v - clientEnv %+v",
+		clientEnv.clientID.Name,
+		clientEnv.connInfo.serverAddr,
+		&clientEnv.client,
+		clientEnv.client,
+		clientEnv))
 
 	socketFamilyStream, req_err := clientEnv.client.GetSocketFamilyList(ctx, clientEnv.clientID)
 	if req_err != nil {
