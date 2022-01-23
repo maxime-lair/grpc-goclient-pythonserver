@@ -46,11 +46,11 @@ type errMsg struct{ err error }
 
 // Struct for error/log handling when requesting to client
 type clientEnv struct {
-	clientID   *pb.SocketTree       // client ID for the transaction
-	connInfo   connInfo             // connection info
-	client     pb.SocketGuideClient // client
-	logJournal []string             // log journal
-	err        errMsg               // possible error message
+	clientID   *pb.SocketTree        // client ID for the transaction
+	connInfo   connInfo              // connection info
+	client     *pb.SocketGuideClient // client
+	logJournal []string              // log journal
+	err        errMsg                // possible error message
 }
 
 // All client choices made
@@ -95,7 +95,7 @@ func initialModel(connInfo connInfo) model {
 	initModel.clientEnv.logJournal = append(initModel.clientEnv.logJournal, "Connected to server, proceeding..")
 
 	client := pb.NewSocketGuideClient(conn)
-	initModel.clientEnv.client = client
+	initModel.clientEnv.client = &client
 	client_id := &pb.SocketTree{Name: define_client_id()}
 	initModel.clientEnv.clientID = client_id
 
@@ -156,14 +156,7 @@ func socket_get_family_list(clientEnv clientEnv) ([]socketChoice, clientEnv) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetFamilyList] Connection info - addr %s - client %p - client struct %+v - clientEnv %+v",
-		clientEnv.clientID.Name,
-		clientEnv.connInfo.serverAddr,
-		&clientEnv.client,
-		clientEnv.client,
-		clientEnv))
-
-	socketFamilyStream, req_err := clientEnv.client.GetSocketFamilyList(ctx, clientEnv.clientID)
+	socketFamilyStream, req_err := (*clientEnv.client).GetSocketFamilyList(ctx, clientEnv.clientID)
 	if req_err != nil {
 		clientEnv.err = errMsg{req_err}
 		clientEnv.logJournal = append(clientEnv.logJournal, clientEnv.err.Error())
@@ -198,7 +191,7 @@ func socket_get_type_list(clientEnv clientEnv, clientChoice clientChoice) ([]soc
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	socketTypeStream, req_err := clientEnv.client.GetSocketTypeList(ctx, &pb.SocketFamily{
+	socketTypeStream, req_err := (*clientEnv.client).GetSocketTypeList(ctx, &pb.SocketFamily{
 		Name:     clientChoice.selectedFamily.Name,
 		Value:    clientChoice.selectedFamily.Value,
 		ClientId: clientEnv.clientID,
@@ -241,7 +234,7 @@ func socket_get_protocol_list(clientEnv clientEnv, clientChoice clientChoice) ([
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	socketProtocolStream, req_err := clientEnv.client.GetSocketProtocolList(ctx, &pb.SocketTypeAndFamily{
+	socketProtocolStream, req_err := (*clientEnv.client).GetSocketProtocolList(ctx, &pb.SocketTypeAndFamily{
 		Family: &pb.SocketFamily{
 			Name:  clientChoice.selectedFamily.Name,
 			Value: clientChoice.selectedFamily.Value,
