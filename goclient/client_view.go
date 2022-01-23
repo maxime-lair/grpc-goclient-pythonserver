@@ -41,7 +41,7 @@ func (m model) printChoices(i int, choiceValue int32, choiceName string) string 
 
 	// Is this choice selected?
 	checked := " " // not selected
-	if _, ok := m.selected[i]; ok {
+	if m.clientChoice.socketChoicesList[i].Name == choiceName && m.clientChoice.socketChoicesList[i].Value == choiceValue {
 		checked = "x" // selected!
 	}
 
