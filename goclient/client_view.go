@@ -41,8 +41,8 @@ func (m model) printChoices(i int, selectedValue *socketChoice, possibleChoice s
 
 	// Is this choice selected?
 	checked := " " // not selected
-	log.Printf("Selected value : %-v ; choice %-v\n", selectedValue, &possibleChoice)
 	if selectedValue != nil && selectedValue == &possibleChoice {
+		log.Printf("This value was selected\n")
 		checked = "x" // selected!
 	}
 	return fmt.Sprintf("%s [%s] %d - %s \n", cursor, checked, possibleChoice.Value, possibleChoice.Name)
