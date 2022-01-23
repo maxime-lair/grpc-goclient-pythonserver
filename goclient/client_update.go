@@ -25,7 +25,7 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// The "enter" key and the spacebar (a literal space) toggle
 		// the selected state for the item that the cursor is pointing at.
 		case "enter", " ":
-			m.logJournal = append(m.logJournal, fmt.Sprintf("[%s] -------------- SendSocketTree --------------", m.clientID))
+			m.logJournal = append(m.logJournal, fmt.Sprintf("[%s] -------------- SendSocketTree --------------", m.clientID.Name))
 			m.socketFamilyChoices, m.logJournal = socket_get_family_list(m.clientID, m.client, m.logJournal)
 			m.state = stateGetFamily
 		}
