@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 )
 
 // The header
@@ -40,7 +41,7 @@ func (m model) printChoices(i int, selectedValue *socketChoice, possibleChoice s
 
 	// Is this choice selected?
 	checked := " " // not selected
-	fmt.Sprintf("Selected value : %-v ; choice %-v", selectedValue, &possibleChoice)
+	log.Printf("Selected value : %-v ; choice %-v\n", selectedValue, &possibleChoice)
 	if selectedValue == &possibleChoice {
 		checked = "x" // selected!
 	}
