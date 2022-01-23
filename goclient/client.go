@@ -56,9 +56,8 @@ type clientChoice struct {
 
 // TUI model used to print and show informations
 type model struct {
-	state    int              // Current state (connect, getXX, done..) - see const for values
-	cursor   int              // which to-do list item our cursor is pointing at
-	selected map[int]struct{} // which to-do items are selected
+	state  int // Current state (connect, getXX, done..) - see const for values
+	cursor int // which to-do list item our cursor is pointing at
 
 	clientChoice clientChoice // all client choices for the socket
 	clientEnv    clientEnv    // all client informations

@@ -72,9 +72,11 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if m.clientChoice.selectedFamily == &selected {
 				m.clientChoice.selectedFamily = nil
 			} else {
-				if len(m.selected) == 0 {
+				if m.clientChoice.selectedFamily == nil {
 					m.clientChoice.selectedFamily = &selected
-					m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] User selected %s.", m.clientEnv.clientID, selected.Name))
+					m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] User selected %s - selectedFamily: %v - selected addr %v",
+						m.clientEnv.clientID, selected.Name,
+						m.clientChoice.selectedFamily, &selected))
 
 				} else {
 					m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] W: User tried to add more than one selection.", m.clientEnv.clientID))
