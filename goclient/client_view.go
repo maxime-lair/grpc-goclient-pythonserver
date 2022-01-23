@@ -18,7 +18,7 @@ func (m model) printHeader() string {
 		s += "Request process starting..\n\n"
 	case stateGetFamily:
 		if m.clientChoice.selectedFamily != nil {
-			s += fmt.Sprintf("Currently selected value : [%d] %s", m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name)
+			s += fmt.Sprintf("\nCurrently selected value : [%d] %s\n", m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name)
 		}
 		s += "Please select your socket family..\n"
 	case stateGetType:
@@ -127,7 +127,7 @@ func (m model) ViewLogs() string {
 	var recentLogs []string
 	s += "------ logs ------\n"
 	if len(m.clientEnv.logJournal) > 5 {
-		recentLogs = m.clientEnv.logJournal[:5]
+		recentLogs = m.clientEnv.logJournal[5:]
 	} else {
 		recentLogs = m.clientEnv.logJournal
 	}
