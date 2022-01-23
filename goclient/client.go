@@ -26,11 +26,13 @@ var (
 	serverAddr = flag.String("addr", "localhost:50051", "The server address in the format of host:port")
 )
 
-func (e errMsg) Error() string { return e.err.Error() }
-
 /*************
 Bubbletea part
 *************/
+
+// For messages that contain errors it's often handy to also implement the
+// error interface on the message.
+func (e errMsg) Error() string { return e.err.Error() }
 
 func initialModel(conn grpc.ClientConnInterface) model {
 
