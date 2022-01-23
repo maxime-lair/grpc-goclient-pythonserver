@@ -68,8 +68,7 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// the selected state for the item that the cursor is pointing at.
 		case " ":
 			selected := m.clientChoice.socketChoicesList[m.cursor]
-			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] User tries to select %s.", m.clientEnv.clientID.Name, selected.Name))
-			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] Currently selected value %v", m.clientEnv.clientID.Name, m.clientChoice.selectedFamily))
+			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] User tries to select %s - currently selected %v", m.clientEnv.clientID.Name, selected.Name, m.clientChoice.selectedFamily))
 			if m.clientChoice.selectedFamily != nil && *m.clientChoice.selectedFamily == selected {
 				m.clientChoice.selectedFamily = nil
 			} else {
