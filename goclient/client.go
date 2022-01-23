@@ -88,7 +88,7 @@ func initialModel(connInfo conn_info) model {
 	initModel.client = client
 
 	client_id := &pb.SocketTree{Name: define_client_id()}
-
+	initModel.clientID = client_id
 	initModel.logJournal = append(initModel.logJournal, fmt.Sprintf("Created client %p with id %s", &client, client_id.Name))
 
 	return initModel
