@@ -129,7 +129,7 @@ func (m model) ViewLogs() string {
 	var recentLogs []string
 	s += fmt.Sprintf("------ logs (total %d) ------\n", len(m.clientEnv.logJournal))
 	if len(m.clientEnv.logJournal) > 5 {
-		recentLogs = m.clientEnv.logJournal[5:]
+		recentLogs = m.clientEnv.logJournal[:5]
 	} else {
 		recentLogs = m.clientEnv.logJournal
 	}
