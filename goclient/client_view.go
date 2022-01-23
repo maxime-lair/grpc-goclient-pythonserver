@@ -54,12 +54,6 @@ func (m model) printFooter() string {
 	s += "Press q to quit.\n"
 	s += "Only one selection at a time possible.\n"
 
-	// print log journal
-	s += "------ logs ------\n"
-	for _, line := range m.clientEnv.logJournal {
-		s += fmt.Sprintf("%s\n", line)
-	}
-
 	return s
 }
 
@@ -118,5 +112,17 @@ func (m model) ViewDone() string {
 	s += fmt.Sprintf("\t---> Protocol: %d - %s\n", m.clientChoice.selectedProtocol.Value, m.clientChoice.selectedProtocol.Name)
 
 	s += m.printFooter()
+	s += m.ViewLogs()
+	return s
+}
+
+func (m model) ViewLogs() string {
+	// print log journal
+	var s string
+	s += "------ logs ------\n"
+	recentLogs := m.clientEnv.logJournal[:5]
+	for _, line := range recentLogs {
+		s += fmt.Sprintf("%s\n", line)
+	}
 	return s
 }
