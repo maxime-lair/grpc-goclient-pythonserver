@@ -11,7 +11,7 @@ func (m model) printHeader() string {
 	if m.clientEnv.clientID == nil {
 		s += fmt.Sprintf("------- Client ID undefined %p -------\n", m.clientEnv.client)
 	} else {
-		s += fmt.Sprintf("------- %s -------\n", m.clientEnv.clientID)
+		s += fmt.Sprintf("------- %s -------\n", m.clientEnv.clientID.Name)
 	}
 	switch m.state {
 	case stateConnect:

@@ -153,7 +153,7 @@ func socket_get_family_list(clientEnv clientEnv) ([]socketChoice, clientEnv) {
 
 	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetFamilyList] Entering.", clientEnv.clientID.Name))
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
 
 	socketFamilyStream, req_err := clientEnv.client.GetSocketFamilyList(ctx, clientEnv.clientID)
