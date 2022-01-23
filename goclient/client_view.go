@@ -124,8 +124,14 @@ func (m model) ViewDone() string {
 func (m model) ViewLogs() string {
 	// print log journal
 	var s string
+	var recentLogs []string
 	s += "------ logs ------\n"
-	recentLogs := m.clientEnv.logJournal[:5]
+	if len(m.clientEnv.logJournal) < 5 {
+		recentLogs = m.clientEnv.logJournal[:5]
+	} else {
+		recentLogs = m.clientEnv.logJournal
+	}
+
 	for _, line := range recentLogs {
 		s += fmt.Sprintf("%s\n", line)
 	}
