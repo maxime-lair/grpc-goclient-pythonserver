@@ -93,6 +93,7 @@ func (m model) ViewGetType() string {
 	}
 
 	s += m.printFooter()
+	s += m.ViewLogs()
 	return s
 }
 
@@ -104,6 +105,7 @@ func (m model) ViewGetProtocol() string {
 		s += m.printChoices(i, m.clientChoice.selectedProtocol, choice)
 	}
 	s += m.printFooter()
+	s += m.ViewLogs()
 	return s
 }
 
