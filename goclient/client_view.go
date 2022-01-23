@@ -138,3 +138,21 @@ func (m model) ViewLogs() string {
 	}
 	return s
 }
+
+func (m model) View() string {
+
+	switch m.state {
+	case stateConnect:
+		return m.ViewConnect()
+	case stateGetFamily:
+		return m.ViewGetFamily()
+	case stateGetType:
+		return m.ViewGetType()
+	case stateGetProtocol:
+		return m.ViewGetProtocol()
+	case stateDone:
+		return m.ViewDone()
+	default:
+		return "Unknown state\n"
+	}
+}
