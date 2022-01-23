@@ -31,8 +31,7 @@ func (m model) printHeader() string {
 	return s
 }
 
-func (m model) printChoices(i int, choiceValue int32, choiceName string) string {
-
+func (m model) printChoices(i int, selectedValue *socketChoice, possibleChoice socketChoice) string {
 	// Is the cursor pointing at this choice?
 	cursor := " " // no cursor
 	if m.cursor == i {
@@ -41,13 +40,10 @@ func (m model) printChoices(i int, choiceValue int32, choiceName string) string 
 
 	// Is this choice selected?
 	checked := " " // not selected
-	if m.clientChoice.socketChoicesList[i].Name == choiceName && m.clientChoice.socketChoicesList[i].Value == choiceValue {
+	if m.clientChoice.selectedFamily == &possibleChoice {
 		checked = "x" // selected!
 	}
-
-	// Render the row
-	return fmt.Sprintf("%s [%s] %d - %s \n", cursor, checked, choiceValue, choiceName)
-
+	return fmt.Sprintf("%s [%s] %d - %s \n", cursor, checked, possibleChoice.Value, possibleChoice.Name)
 }
 
 func (m model) printFooter() string {
@@ -82,8 +78,7 @@ func (m model) ViewGetFamily() string {
 
 	// Iterate over our choices
 	for i, choice := range m.clientChoice.socketChoicesList {
-		// print choices
-		s += m.printChoices(i, choice.Value, choice.Name)
+		s += m.printChoices(i, m.clientChoice.selectedFamily, choice)
 	}
 
 	s += m.printFooter()
@@ -95,12 +90,11 @@ func (m model) ViewGetType() string {
 	s += m.printHeader()
 	// Iterate over our choices
 	for i, choice := range m.clientChoice.socketChoicesList {
-		// print choices
-		s += m.printChoices(i, choice.Value, choice.Name)
+		s += m.printChoices(i, m.clientChoice.selectedType, choice)
 	}
 
 	s += m.printFooter()
-	return "getType\n"
+	return s
 }
 
 func (m model) ViewGetProtocol() string {
@@ -108,11 +102,10 @@ func (m model) ViewGetProtocol() string {
 	s += m.printHeader()
 	// Iterate over our choices
 	for i, choice := range m.clientChoice.socketChoicesList {
-		// print choices
-		s += m.printChoices(i, choice.Value, choice.Name)
+		s += m.printChoices(i, m.clientChoice.selectedProtocol, choice)
 	}
 	s += m.printFooter()
-	return "getProtocol\n"
+	return s
 }
 
 func (m model) ViewDone() string {
@@ -125,5 +118,5 @@ func (m model) ViewDone() string {
 	s += fmt.Sprintf("\t---> Protocol: %d - %s\n", m.clientChoice.selectedProtocol.Value, m.clientChoice.selectedProtocol.Name)
 
 	s += m.printFooter()
-	return "done\n"
+	return s
 }
