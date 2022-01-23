@@ -166,13 +166,13 @@ func socket_get_family_list(clientEnv clientEnv) ([]socketChoice, clientEnv) {
 			clientEnv.logJournal = append(clientEnv.logJournal, clientEnv.err.Error())
 			return nil, clientEnv
 		}
-		clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetFamilyList] Received family: %s\n", clientEnv.clientID.Name, family))
+		//clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetFamilyList] Received family: %s", clientEnv.clientID.Name, family))
 		socketFamilyList = append(socketFamilyList, socketChoice{
 			Name:  family.Name,
 			Value: family.Value,
 		})
 	}
-	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetFamilyList] len=%d cap=%d\n", clientEnv.clientID.Name, len(socketFamilyList), cap(socketFamilyList)))
+	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetFamilyList] len=%d cap=%d", clientEnv.clientID.Name, len(socketFamilyList), cap(socketFamilyList)))
 
 	return socketFamilyList, clientEnv
 }
