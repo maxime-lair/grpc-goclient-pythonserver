@@ -47,7 +47,6 @@ type errMsg struct{ err error }
 // Struct for error/log handling when requesting to client
 type clientEnv struct {
 	clientID   *pb.SocketTree        // client ID for the transaction
-	connInfo   connInfo              // connection info
 	client     *pb.SocketGuideClient // client
 	logJournal []string              // log journal
 	err        errMsg                // possible error message
@@ -77,21 +76,15 @@ func (e errMsg) Error() string { return e.err.Error() }
 Bubbletea part
 *************/
 
-func initialModel(connInfo connInfo) model {
+func initialModel(conn grpc.ClientConnInterface) model {
 
 	var initModel model
 	initModel.state = stateConnect
-	initModel.clientEnv.connInfo = connInfo
 	/* Connect to server message (loading bar) */
 	initModel.clientEnv.logJournal = append(initModel.clientEnv.logJournal, "Client up, proceeding..")
 
-	initModel.clientEnv.logJournal = append(initModel.clientEnv.logJournal, fmt.Sprintf("Connecting to: %s", connInfo.serverAddr))
+	initModel.clientEnv.logJournal = append(initModel.clientEnv.logJournal, fmt.Sprintf("Connecting to: %s", *serverAddr))
 
-	conn, err := grpc.Dial(connInfo.serverAddr, connInfo.opts...)
-	if err != nil {
-		log.Fatalf("fail to dial: %v", err)
-	}
-	defer conn.Close()
 	initModel.clientEnv.logJournal = append(initModel.clientEnv.logJournal, "Connected to server, proceeding..")
 
 	client := pb.NewSocketGuideClient(conn)
@@ -281,8 +274,14 @@ func main() {
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
+	conn, err := grpc.Dial(*serverAddr, opts...)
+	if err != nil {
+		log.Fatalf("fail to dial: %v", err)
+	}
+	defer conn.Close()
+
 	/* Start TUI */
-	if err := tea.NewProgram(initialModel(connInfo{serverAddr: *serverAddr, opts: opts})).Start(); err != nil {
+	if err := tea.NewProgram(initialModel(conn)).Start(); err != nil {
 		log.Printf("Alas, there's been an error: %v", err)
 		os.Exit(1)
 	}

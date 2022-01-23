@@ -71,7 +71,7 @@ func (m model) ViewConnect() string {
 	var s string
 	s += m.printHeader()
 	// TODO add loading bar
-	s += fmt.Sprintf("Press enter to start %s..\n", m.clientEnv.connInfo.serverAddr)
+	s += "Press enter to start ..\n"
 	s += m.printFooter()
 	return s
 }
