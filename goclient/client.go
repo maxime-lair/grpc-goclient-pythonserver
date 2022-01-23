@@ -142,8 +142,6 @@ GRPC part
 // TODO Factorize get part
 func socket_get_family_list(client_id *pb.SocketTree, client pb.SocketGuideClient, logJournal []string) ([]socket_choice, []string) {
 
-	// BAD
-	fmt.Printf("len=%d cap=%d %v\n", len(logJournal), cap(logJournal), logJournal)
 	logJournal = append(logJournal, fmt.Sprintf("[%s][GetFamilyList] Entering.", client_id.Name))
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -151,7 +149,7 @@ func socket_get_family_list(client_id *pb.SocketTree, client pb.SocketGuideClien
 
 	socketFamilyStream, req_err := client.GetSocketFamilyList(ctx, client_id)
 	check(req_err)
-
+	fmt.Printf("hello")
 	var socketFamilyList []socket_choice
 	for {
 		family, stream_err := socketFamilyStream.Recv()
