@@ -125,14 +125,12 @@ func (m model) ViewLogs() string {
 	// print log journal
 	var s string
 	var recentLogs []string
-	var nbrcopied int
 	s += fmt.Sprintf("------ logs (total %d) ------\n", len(m.clientEnv.logJournal))
 	if len(m.clientEnv.logJournal) > 5 {
-		nbrcopied = copy(recentLogs, m.clientEnv.logJournal[5:])
+		recentLogs = m.clientEnv.logJournal[5:]
 	} else {
-		nbrcopied = copy(recentLogs, m.clientEnv.logJournal)
+		recentLogs = m.clientEnv.logJournal
 	}
-	s += fmt.Sprintf("nbrcopied %d\n", nbrcopied)
 	s += fmt.Sprintf("------ recent logs (total %d) ------\n", len(recentLogs))
 
 	for _, line := range recentLogs {
