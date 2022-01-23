@@ -17,6 +17,9 @@ func (m model) printHeader() string {
 	case stateConnect:
 		s += "Request process starting..\n\n"
 	case stateGetFamily:
+		if m.clientChoice.selectedFamily != nil {
+			s += fmt.Sprintf("Currently selected value : [%d] %s", m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name)
+		}
 		s += "Please select your socket family..\n"
 	case stateGetType:
 		s += fmt.Sprintf("Requesting socket type list for family %s \n\n", m.clientChoice.selectedFamily.Name)
@@ -63,6 +66,7 @@ func (m model) ViewConnect() string {
 	// TODO add loading bar
 	s += "Press enter to start ..\n"
 	s += m.printFooter()
+	s += m.ViewLogs()
 	return s
 }
 
@@ -76,6 +80,7 @@ func (m model) ViewGetFamily() string {
 	}
 
 	s += m.printFooter()
+	s += m.ViewLogs()
 	return s
 }
 
