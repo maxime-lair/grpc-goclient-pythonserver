@@ -80,7 +80,7 @@ func (m model) ViewGetFamily() string {
 	var s string
 	s += m.printHeader()
 
-	// Iterate over our choices - we need to instanciate them first
+	// Iterate over our choices
 	for i, choice := range m.clientChoice.socketChoicesList {
 		// print choices
 		s += m.printChoices(i, choice.Value, choice.Name)

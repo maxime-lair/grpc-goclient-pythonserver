@@ -29,12 +29,6 @@ var (
 	serverAddr = flag.String("addr", "localhost:50051", "The server address in the format of host:port")
 )
 
-// Info used to create the client connection
-type connInfo struct {
-	opts       []grpc.DialOption
-	serverAddr string
-}
-
 // Info for family/type/protocol, always a string and value
 // We have to create it like this since GRPC struct are mutex protected and we can not loop over them
 type socketChoice struct {

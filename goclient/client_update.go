@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -69,6 +68,8 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// the selected state for the item that the cursor is pointing at.
 		case " ":
 			_, ok := m.selected[m.cursor]
+			test := m.clientChoice.socketChoicesList[m.cursor]
+			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] User selected %s.", m.clientEnv.clientID, test.Name))
 			if ok {
 				delete(m.selected, m.cursor)
 			} else {
@@ -81,8 +82,8 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		// The "enter" key to validate
 		case "enter":
-			log.Printf("selected: %d", m.selected[m.cursor])
-
+			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("selected entry %d - which is choice: %d %s", m.selected[m.cursor],
+				m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name))
 		}
 	}
 
