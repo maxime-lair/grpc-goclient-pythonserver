@@ -74,7 +74,7 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 				delete(m.selected, m.cursor)
 			} else {
 				if len(m.selected) == 0 {
-					m.selected[m.cursor] = struct{}{}
+					m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("Selected\n"))
 
 				} else {
 					m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] W: User tried to add more than one selection.", m.clientEnv.clientID))
