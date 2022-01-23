@@ -131,6 +131,7 @@ func (m model) ViewLogs() string {
 	} else {
 		recentLogs = m.clientEnv.logJournal
 	}
+	s += fmt.Sprintf("------ recent logs (total %d) ------\n", len(recentLogs))
 
 	for _, line := range recentLogs {
 		s += fmt.Sprintf("%s\n", line)
