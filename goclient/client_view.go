@@ -8,10 +8,10 @@ import (
 func (m model) printHeader() string {
 
 	var s string
-	if m.clientID == nil {
-		s += fmt.Sprintf("------- Client ID undefined %p -------\n", m.client)
+	if m.clientEnv.clientID == nil {
+		s += fmt.Sprintf("------- Client ID undefined %p -------\n", m.clientEnv.client)
 	} else {
-		s += fmt.Sprintf("------- %s -------\n", m.clientID)
+		s += fmt.Sprintf("------- %s -------\n", m.clientEnv.clientID)
 	}
 	switch m.state {
 	case stateConnect:
@@ -19,9 +19,9 @@ func (m model) printHeader() string {
 	case stateGetFamily:
 		s += "Please select your socket family..\n"
 	case stateGetType:
-		s += fmt.Sprintf("Requesting socket type list for family %s \n\n", m.selectedFamily.Name)
+		s += fmt.Sprintf("Requesting socket type list for family %s \n\n", m.clientChoice.selectedFamily.Name)
 	case stateGetProtocol:
-		s += fmt.Sprintf("Requesting socket protocol list for family %s and type %s:\n\n", m.selectedFamily.Name, m.selectedType.Name)
+		s += fmt.Sprintf("Requesting socket protocol list for family %s and type %s:\n\n", m.clientChoice.selectedFamily.Name, m.clientChoice.selectedType.Name)
 	case stateDone:
 		s += "Request process done, your final choice will appear below:\n\n"
 	default:
@@ -60,7 +60,7 @@ func (m model) printFooter() string {
 
 	// print log journal
 	s += "------ logs ------\n"
-	for _, line := range m.logJournal {
+	for _, line := range m.clientEnv.logJournal {
 		s += fmt.Sprintf("%s\n", line)
 	}
 
@@ -71,7 +71,7 @@ func (m model) ViewConnect() string {
 	var s string
 	s += m.printHeader()
 	// TODO add loading bar
-	s += fmt.Sprintf("Press enter to start %s..\n", m.connInfo.serverAddr)
+	s += fmt.Sprintf("Press enter to start %s..\n", m.clientEnv.connInfo.serverAddr)
 	s += m.printFooter()
 	return s
 }
@@ -81,7 +81,7 @@ func (m model) ViewGetFamily() string {
 	s += m.printHeader()
 
 	// Iterate over our choices - we need to instanciate them first
-	for i, choice := range m.socketFamilyChoices {
+	for i, choice := range m.clientChoice.socketChoicesList {
 		// print choices
 		s += m.printChoices(i, choice.Value, choice.Name)
 	}
@@ -94,7 +94,7 @@ func (m model) ViewGetType() string {
 	var s string
 	s += m.printHeader()
 	// Iterate over our choices
-	for i, choice := range *m.socketTypeChoices {
+	for i, choice := range m.clientChoice.socketChoicesList {
 		// print choices
 		s += m.printChoices(i, choice.Value, choice.Name)
 	}
@@ -107,7 +107,7 @@ func (m model) ViewGetProtocol() string {
 	var s string
 	s += m.printHeader()
 	// Iterate over our choices
-	for i, choice := range *m.socketProtocolChoices {
+	for i, choice := range m.clientChoice.socketChoicesList {
 		// print choices
 		s += m.printChoices(i, choice.Value, choice.Name)
 	}
@@ -120,9 +120,9 @@ func (m model) ViewDone() string {
 	s += m.printHeader()
 
 	s += "You choose the following parameters for your socket:\n"
-	s += fmt.Sprintf("\t-> Family: %d - %s\n", m.selectedFamily.Value, m.selectedFamily.Name)
-	s += fmt.Sprintf("\t--> Type: %d - %s\n", m.selectedType.Value, m.selectedType.Name)
-	s += fmt.Sprintf("\t---> Protocol: %d - %s\n", m.selectedProtocol.Value, m.selectedProtocol.Name)
+	s += fmt.Sprintf("\t-> Family: %d - %s\n", m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name)
+	s += fmt.Sprintf("\t--> Type: %d - %s\n", m.clientChoice.selectedType.Value, m.clientChoice.selectedType.Name)
+	s += fmt.Sprintf("\t---> Protocol: %d - %s\n", m.clientChoice.selectedProtocol.Value, m.clientChoice.selectedProtocol.Name)
 
 	s += m.printFooter()
 	return "done\n"

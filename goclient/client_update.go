@@ -25,8 +25,11 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// The "enter" key and the spacebar (a literal space) toggle
 		// the selected state for the item that the cursor is pointing at.
 		case "enter", " ":
-			m.logJournal = append(m.logJournal, fmt.Sprintf("[%s] -------------- SendSocketTree --------------", m.clientID.Name))
-			m.socketFamilyChoices, m.logJournal = socket_get_family_list(m.clientID, m.client, m.logJournal)
+			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] -------------- SendSocketTree --------------", m.clientEnv.clientID.Name))
+			m.clientChoice.socketChoicesList, m.clientEnv = socket_get_family_list(m.clientEnv)
+			if m.clientEnv.err.err != nil {
+				return m, nil
+			}
 			m.state = stateGetFamily
 		}
 	}
@@ -58,7 +61,7 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// The "down" and "j" keys move the cursor down
 		case "down", "j":
-			if m.cursor < len(m.socketFamilyChoices)-1 {
+			if m.cursor < len(m.clientChoice.socketChoicesList)-1 {
 				m.cursor++
 			}
 
@@ -73,7 +76,7 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.selected[m.cursor] = struct{}{}
 
 				} else {
-					m.logJournal = append(m.logJournal, fmt.Sprintf("[%s] W: User tried to add more than one selection.", m.clientID))
+					m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] W: User tried to add more than one selection.", m.clientEnv.clientID))
 				}
 			}
 		// The "enter" key to validate
@@ -100,43 +103,5 @@ func (m model) UpdateGetProtocol(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) UpdateDone(msg tea.Msg) (tea.Model, tea.Cmd) {
 
-	switch msg := msg.(type) {
-
-	// Is it a key press?
-	case tea.KeyMsg:
-
-		// Cool, what was the actual key pressed?
-		switch msg.String() {
-
-		// These keys should exit the program.
-		case "ctrl+c", "q":
-			return m, tea.Quit
-
-		// The "up" and "k" keys move the cursor up
-		case "up", "k":
-			if m.cursor > 0 {
-				m.cursor--
-			}
-
-		// The "down" and "j" keys move the cursor down
-		case "down", "j":
-			if m.cursor < len(m.choices)-1 {
-				m.cursor++
-			}
-
-		// The "enter" key and the spacebar (a literal space) toggle
-		// the selected state for the item that the cursor is pointing at.
-		case "enter", " ":
-			_, ok := m.selected[m.cursor]
-			if ok {
-				delete(m.selected, m.cursor)
-			} else {
-				m.selected[m.cursor] = struct{}{}
-			}
-		}
-	}
-
-	// Return the updated model to the Bubble Tea runtime for processing.
-	// Note that we're not returning a command.
 	return m, nil
 }

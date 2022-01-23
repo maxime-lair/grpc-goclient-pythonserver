@@ -29,37 +29,47 @@ var (
 	serverAddr = flag.String("addr", "localhost:50051", "The server address in the format of host:port")
 )
 
-type conn_info struct {
+// Info used to create the client connection
+type connInfo struct {
 	opts       []grpc.DialOption
 	serverAddr string
 }
 
-type socket_choice struct {
+// Info for family/type/protocol, always a string and value
+// We have to create it like this since GRPC struct are mutex protected and we can not loop over them
+type socketChoice struct {
 	Name  string
 	Value int32
 }
 
+type errMsg struct{ err error }
+
+// Struct for error/log handling when requesting to client
+type clientEnv struct {
+	clientID   *pb.SocketTree       // client ID for the transaction
+	connInfo   connInfo             // connection info
+	client     pb.SocketGuideClient // client
+	logJournal []string             // log journal
+	err        errMsg               // possible error message
+}
+
+// All client choices made
+type clientChoice struct {
+	socketChoicesList []socketChoice // socket family choices list
+	selectedFamily    *socketChoice  // selected family
+	selectedType      *socketChoice  // selected type
+	selectedProtocol  *socketChoice  // selected protocol
+}
+
+// TUI model used to print and show informations
 type model struct {
-	choices  []string         // items on the to-do list
+	state    int              // Current state (connect, getXX, done..) - see const for values
 	cursor   int              // which to-do list item our cursor is pointing at
 	selected map[int]struct{} // which to-do items are selected
 
-	socketFamilyChoices   []socket_choice      // socket family choices list
-	socketTypeChoices     *[]socket_choice     // socket type choices list
-	socketProtocolChoices *[]socket_choice     // socket protocol choices list
-	selectedFamily        *socket_choice       // selected family
-	selectedType          *socket_choice       // selected type
-	selectedProtocol      *socket_choice       // selected protocol
-	clientID              *pb.SocketTree       // client id for the transaction
-	connInfo              conn_info            // conn info
-	client                pb.SocketGuideClient // client
-
-	logJournal []string // log journal
-	err        errMsg   // possible error message
-	state      int      // Current state (connect, getXX, done..) - see const for values
+	clientChoice clientChoice // all client choices for the socket
+	clientEnv    clientEnv    // all client informations
 }
-
-type errMsg struct{ err error }
 
 func (e errMsg) Error() string { return e.err.Error() }
 
@@ -67,29 +77,29 @@ func (e errMsg) Error() string { return e.err.Error() }
 Bubbletea part
 *************/
 
-func initialModel(connInfo conn_info) model {
+func initialModel(connInfo connInfo) model {
 
 	var initModel model
 	initModel.state = stateConnect
+	initModel.clientEnv.connInfo = connInfo
 	/* Connect to server message (loading bar) */
-	initModel.logJournal = append(initModel.logJournal, "Client up, proceeding..")
+	initModel.clientEnv.logJournal = append(initModel.clientEnv.logJournal, "Client up, proceeding..")
 
-	initModel.logJournal = append(initModel.logJournal, "Connecting to: "+connInfo.serverAddr)
+	initModel.clientEnv.logJournal = append(initModel.clientEnv.logJournal, "Connecting to: "+connInfo.serverAddr)
 
 	conn, err := grpc.Dial(connInfo.serverAddr, connInfo.opts...)
 	if err != nil {
 		log.Fatalf("fail to dial: %v", err)
 	}
 	defer conn.Close()
-	initModel.logJournal = append(initModel.logJournal, "Connected to server, proceeding..")
-	initModel.connInfo = connInfo
+	initModel.clientEnv.logJournal = append(initModel.clientEnv.logJournal, "Connected to server, proceeding..")
 
 	client := pb.NewSocketGuideClient(conn)
-	initModel.client = client
-
+	initModel.clientEnv.client = client
 	client_id := &pb.SocketTree{Name: define_client_id()}
-	initModel.clientID = client_id
-	initModel.logJournal = append(initModel.logJournal, fmt.Sprintf("Created client %p with id %s", &client, client_id.Name))
+	initModel.clientEnv.clientID = client_id
+
+	initModel.clientEnv.logJournal = append(initModel.clientEnv.logJournal, fmt.Sprintf("Created client %p with id %s", &client, client_id.Name))
 
 	return initModel
 }
@@ -139,95 +149,128 @@ func (m model) View() string {
 GRPC part
 *************/
 
-// TODO Factorize get part
-func socket_get_family_list(client_id *pb.SocketTree, client pb.SocketGuideClient, logJournal []string) ([]socket_choice, []string) {
+func socket_get_family_list(clientEnv clientEnv) ([]socketChoice, clientEnv) {
 
-	logJournal = append(logJournal, fmt.Sprintf("[%s][GetFamilyList] Entering.", client_id.Name))
+	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetFamilyList] Entering.", clientEnv.clientID.Name))
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	socketFamilyStream, req_err := client.GetSocketFamilyList(ctx, client_id)
-	check(req_err)
-	fmt.Printf("hello")
-	var socketFamilyList []socket_choice
+	socketFamilyStream, req_err := clientEnv.client.GetSocketFamilyList(ctx, clientEnv.clientID)
+	if req_err != nil {
+		clientEnv.err = errMsg{req_err}
+		clientEnv.logJournal = append(clientEnv.logJournal, clientEnv.err.Error())
+		return nil, clientEnv
+	}
+	var socketFamilyList []socketChoice
 	for {
 		family, stream_err := socketFamilyStream.Recv()
 		if stream_err == io.EOF {
 			break
 		}
-		check(stream_err)
-		logJournal = append(logJournal, fmt.Sprintf("[%s][GetFamilyList] Received family: %s\n", client_id.Name, family))
-		socketFamilyList = append(socketFamilyList, socket_choice{
+		if stream_err != nil {
+			clientEnv.err = errMsg{req_err}
+			clientEnv.logJournal = append(clientEnv.logJournal, clientEnv.err.Error())
+			return nil, clientEnv
+		}
+		clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetFamilyList] Received family: %s\n", clientEnv.clientID.Name, family))
+		socketFamilyList = append(socketFamilyList, socketChoice{
 			Name:  family.Name,
 			Value: family.Value,
 		})
 	}
-	logJournal = append(logJournal, fmt.Sprintf("[%s][GetFamilyList] len=%d cap=%d\n", client_id.Name, len(socketFamilyList), cap(socketFamilyList)))
+	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetFamilyList] len=%d cap=%d\n", clientEnv.clientID.Name, len(socketFamilyList), cap(socketFamilyList)))
 
-	return socketFamilyList, logJournal
+	return socketFamilyList, clientEnv
 }
 
-func socket_get_type_list(client_id *pb.SocketTree, socketFamilyChoice *pb.SocketFamily, client pb.SocketGuideClient) *pb.SocketType {
+func socket_get_type_list(clientEnv clientEnv, clientChoice clientChoice) ([]socketChoice, clientEnv) {
 
-	log.Printf("[%s][GetTypeList] Entering with family: %d --> %s\n", client_id.Name, socketFamilyChoice.Value, socketFamilyChoice.Name)
+	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetTypeList] Entering with family: %d --> %s\n", clientEnv.clientID.Name, clientChoice.selectedFamily.Value, clientChoice.selectedFamily.Name))
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	socketTypeStream, req_err := client.GetSocketTypeList(ctx, socketFamilyChoice)
-	check(req_err)
+	socketTypeStream, req_err := clientEnv.client.GetSocketTypeList(ctx, &pb.SocketFamily{
+		Name:     clientChoice.selectedFamily.Name,
+		Value:    clientChoice.selectedFamily.Value,
+		ClientId: clientEnv.clientID,
+	})
+	if req_err != nil {
+		clientEnv.err = errMsg{req_err}
+		clientEnv.logJournal = append(clientEnv.logJournal, clientEnv.err.Error())
+		return nil, clientEnv
+	}
 
-	var socketTypeList []pb.SocketType
+	var socketTypeList []socketChoice
 	for {
 		socketType, stream_err := socketTypeStream.Recv()
 		if stream_err == io.EOF {
 			break
 		}
-		check(stream_err)
-		log.Printf("[%s][GetTypeList] Received family: %s\n", client_id.Name, socketType)
-		socketTypeList = append(socketTypeList, pb.SocketType{
-			Name:     socketType.Name,
-			Value:    socketType.Value,
-			ClientId: client_id})
+		if stream_err != nil {
+			clientEnv.err = errMsg{req_err}
+			clientEnv.logJournal = append(clientEnv.logJournal, clientEnv.err.Error())
+			return nil, clientEnv
+		}
+		clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetTypeList] Received family: %s\n", clientEnv.clientID.Name, socketType))
+		socketTypeList = append(socketTypeList, socketChoice{
+			Name:  socketType.Name,
+			Value: socketType.Value,
+		})
 	}
-	log.Printf("[%s][GetTypeList] len=%d cap=%d\n", client_id.Name, len(socketTypeList), cap(socketTypeList))
+	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetTypeList] len=%d cap=%d\n", clientEnv.clientID.Name, len(socketTypeList), cap(socketTypeList)))
 
-	// TUI: Ask for type choice
-	return &socketTypeList[0]
+	return socketTypeList, clientEnv
 }
 
-func socket_get_protocol_list(socketTypeAndFamilyChoice *pb.SocketTypeAndFamily, client pb.SocketGuideClient) *pb.SocketProtocol {
+func socket_get_protocol_list(clientEnv clientEnv, clientChoice clientChoice) ([]socketChoice, clientEnv) {
 
-	client_id := socketTypeAndFamilyChoice.ClientId.Name
-	log.Printf("[%s][GetProtocolList] Entering with family: [%d] %s -- [%d] %s\n",
-		client_id,
-		socketTypeAndFamilyChoice.Family.Value, socketTypeAndFamilyChoice.Family.Name,
-		socketTypeAndFamilyChoice.Type.Value, socketTypeAndFamilyChoice.Type.Name)
+	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetProtocolList] Entering with family: [%d] %s -- [%d] %s\n",
+		clientEnv.clientID.Name,
+		clientChoice.selectedFamily.Value, clientChoice.selectedFamily.Name,
+		clientChoice.selectedType.Value, clientChoice.selectedType.Name))
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	socketProtocolStream, req_err := client.GetSocketProtocolList(ctx, socketTypeAndFamilyChoice)
-	check(req_err)
+	socketProtocolStream, req_err := clientEnv.client.GetSocketProtocolList(ctx, &pb.SocketTypeAndFamily{
+		Family: &pb.SocketFamily{
+			Name:  clientChoice.selectedFamily.Name,
+			Value: clientChoice.selectedFamily.Value,
+		},
+		Type: &pb.SocketType{
+			Name:  clientChoice.selectedType.Name,
+			Value: clientChoice.selectedType.Value,
+		},
+		ClientId: clientEnv.clientID,
+	})
+	if req_err != nil {
+		clientEnv.err = errMsg{req_err}
+		clientEnv.logJournal = append(clientEnv.logJournal, clientEnv.err.Error())
+		return nil, clientEnv
+	}
 
-	var socketProtocolList []pb.SocketProtocol
+	var socketProtocolList []socketChoice
 	for {
 		socketProtocol, stream_err := socketProtocolStream.Recv()
 		if stream_err == io.EOF {
 			break
 		}
-		check(stream_err)
-		log.Printf("[%s][GetProtocolList] Received protocol: %s\n", client_id, socketProtocol)
-		socketProtocolList = append(socketProtocolList, pb.SocketProtocol{
-			Name:     socketProtocol.Name,
-			Value:    socketProtocol.Value,
-			ClientId: socketProtocol.ClientId})
+		if stream_err != nil {
+			clientEnv.err = errMsg{req_err}
+			clientEnv.logJournal = append(clientEnv.logJournal, clientEnv.err.Error())
+			return nil, clientEnv
+		}
+		clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetProtocolList] Received protocol: %s\n", clientEnv.clientID.Name, socketProtocol))
+		socketProtocolList = append(socketProtocolList, socketChoice{
+			Name:  socketProtocol.Name,
+			Value: socketProtocol.Value,
+		})
 	}
-	log.Printf("[%s][GetProtocolList] len=%d cap=%d\n", client_id, len(socketProtocolList), cap(socketProtocolList))
+	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetProtocolList] len=%d cap=%d\n", clientEnv.clientID.Name, len(socketProtocolList), cap(socketProtocolList)))
 
-	//TUI: Ask for protocol choice
-	return &socketProtocolList[0]
+	return socketProtocolList, clientEnv
 
 }
 
@@ -239,7 +282,7 @@ func main() {
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	/* Start TUI */
-	if err := tea.NewProgram(initialModel(conn_info{serverAddr: *serverAddr, opts: opts})).Start(); err != nil {
+	if err := tea.NewProgram(initialModel(connInfo{serverAddr: *serverAddr, opts: opts})).Start(); err != nil {
 		log.Printf("Alas, there's been an error: %v", err)
 		os.Exit(1)
 	}
