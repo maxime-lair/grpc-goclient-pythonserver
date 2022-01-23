@@ -126,7 +126,7 @@ func (m model) ViewLogs() string {
 	var s string
 	var recentLogs []string
 	s += "------ logs ------\n"
-	if len(m.clientEnv.logJournal) < 5 {
+	if len(m.clientEnv.logJournal) > 5 {
 		recentLogs = m.clientEnv.logJournal[:5]
 	} else {
 		recentLogs = m.clientEnv.logJournal
