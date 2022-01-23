@@ -67,14 +67,14 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// the spacebar (a literal space) toggle
 		// the selected state for the item that the cursor is pointing at.
 		case " ":
-			_, ok := m.selected[m.cursor]
-			test := m.clientChoice.socketChoicesList[m.cursor]
-			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] User selected %s.", m.clientEnv.clientID, test.Name))
-			if ok {
-				delete(m.selected, m.cursor)
+			selected := m.clientChoice.socketChoicesList[m.cursor]
+			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] User tries to select %s.", m.clientEnv.clientID, selected.Name))
+			if m.clientChoice.selectedFamily == &selected {
+				m.clientChoice.selectedFamily = nil
 			} else {
 				if len(m.selected) == 0 {
-					m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("Selected\n"))
+					m.clientChoice.selectedFamily = &selected
+					m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] User selected %s.", m.clientEnv.clientID, selected.Name))
 
 				} else {
 					m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] W: User tried to add more than one selection.", m.clientEnv.clientID))
@@ -82,7 +82,7 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		// The "enter" key to validate
 		case "enter":
-			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("selected entry %d - which is choice: %d %s", m.selected[m.cursor],
+			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("selected entry %d - which is choice: %d %s", m.cursor,
 				m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name))
 		}
 	}
