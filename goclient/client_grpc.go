@@ -49,7 +49,7 @@ func socket_get_family_list(clientEnv clientEnv) ([]socketChoice, clientEnv) {
 
 func socket_get_type_list(clientEnv clientEnv, clientChoice clientChoice) ([]socketChoice, clientEnv) {
 
-	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetTypeList] Entering with family: %d --> %s\n", clientEnv.clientID.Name, clientChoice.selectedFamily.Value, clientChoice.selectedFamily.Name))
+	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetTypeList] Entering with family: %d --> %s", clientEnv.clientID.Name, clientChoice.selectedFamily.Value, clientChoice.selectedFamily.Name))
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -76,20 +76,20 @@ func socket_get_type_list(clientEnv clientEnv, clientChoice clientChoice) ([]soc
 			clientEnv.logJournal = append(clientEnv.logJournal, clientEnv.err.Error())
 			return nil, clientEnv
 		}
-		clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetTypeList] Received family: %s\n", clientEnv.clientID.Name, socketType))
+		clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetTypeList] Received family: %s", clientEnv.clientID.Name, socketType))
 		socketTypeList = append(socketTypeList, socketChoice{
 			Name:  socketType.Name,
 			Value: socketType.Value,
 		})
 	}
-	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetTypeList] len=%d cap=%d\n", clientEnv.clientID.Name, len(socketTypeList), cap(socketTypeList)))
+	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetTypeList] len=%d cap=%d", clientEnv.clientID.Name, len(socketTypeList), cap(socketTypeList)))
 
 	return socketTypeList, clientEnv
 }
 
 func socket_get_protocol_list(clientEnv clientEnv, clientChoice clientChoice) ([]socketChoice, clientEnv) {
 
-	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetProtocolList] Entering with family: [%d] %s -- [%d] %s\n",
+	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetProtocolList] Entering with family: [%d] %s -- [%d] %s",
 		clientEnv.clientID.Name,
 		clientChoice.selectedFamily.Value, clientChoice.selectedFamily.Name,
 		clientChoice.selectedType.Value, clientChoice.selectedType.Name))
@@ -125,13 +125,13 @@ func socket_get_protocol_list(clientEnv clientEnv, clientChoice clientChoice) ([
 			clientEnv.logJournal = append(clientEnv.logJournal, clientEnv.err.Error())
 			return nil, clientEnv
 		}
-		clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetProtocolList] Received protocol: %s\n", clientEnv.clientID.Name, socketProtocol))
+		clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetProtocolList] Received protocol: %s", clientEnv.clientID.Name, socketProtocol))
 		socketProtocolList = append(socketProtocolList, socketChoice{
 			Name:  socketProtocol.Name,
 			Value: socketProtocol.Value,
 		})
 	}
-	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetProtocolList] len=%d cap=%d\n", clientEnv.clientID.Name, len(socketProtocolList), cap(socketProtocolList)))
+	clientEnv.logJournal = append(clientEnv.logJournal, fmt.Sprintf("[%s][GetProtocolList] len=%d cap=%d", clientEnv.clientID.Name, len(socketProtocolList), cap(socketProtocolList)))
 
 	return socketProtocolList, clientEnv
 
