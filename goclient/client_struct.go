@@ -1,6 +1,11 @@
 package main
 
-import pb "main/pb_server"
+import (
+	pb "main/pb_server"
+
+	"github.com/charmbracelet/bubbles/help"
+	"github.com/charmbracelet/bubbles/key"
+)
 
 // Info for family/type/protocol, always a string and value
 // We have to create it like this since GRPC struct are mutex protected and we can not loop over them
@@ -31,7 +36,18 @@ type clientChoice struct {
 type model struct {
 	state  int // Current state (connect, getXX, done..) - see const for values
 	cursor int // which to-do list item our cursor is pointing at
+	help   help.Model
+	keys   keyMap
 
 	clientChoice clientChoice // all client choices for the socket
 	clientEnv    clientEnv    // all client informations
+}
+
+// Bubbles keymap
+type keyMap struct {
+	Up    key.Binding
+	Down  key.Binding
+	Enter key.Binding
+	Space key.Binding
+	Quit  key.Binding
 }

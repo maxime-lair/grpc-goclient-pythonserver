@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"os"
 
@@ -11,6 +10,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
+	"github.com/charmbracelet/bubbles/help"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -30,27 +30,16 @@ var (
 Bubbletea part
 *************/
 
-// For messages that contain errors it's often handy to also implement the
-// error interface on the message.
-func (e errMsg) Error() string { return e.err.Error() }
-
-func initialModel(conn grpc.ClientConnInterface) model {
-
-	var initModel model
-	initModel.state = stateConnect
-	/* Connect to server message (loading bar) */
-	initModel.clientEnv.logJournal = append(initModel.clientEnv.logJournal, fmt.Sprintf("Connecting to: %s", *serverAddr))
-
-	// Create the client
-	client := pb.NewSocketGuideClient(conn)
-	initModel.clientEnv.client = &client
-	// Define a client ID we will use (random)
-	client_id := &pb.SocketTree{Name: define_client_id()}
-	initModel.clientEnv.clientID = client_id
-
-	initModel.clientEnv.logJournal = append(initModel.clientEnv.logJournal, fmt.Sprintf("Created client %p with id %s", &client, client_id.Name))
-
-	return initModel
+func initialModel(client *pb.SocketGuideClient) model {
+	return model{
+		state: stateConnect,
+		help:  help.New(),
+		keys:  DefaultKeyMap,
+		clientEnv: clientEnv{
+			client:   client,
+			clientID: &pb.SocketTree{Name: define_client_id()},
+		},
+	}
 }
 
 func (m model) Init() tea.Cmd {
@@ -60,6 +49,7 @@ func (m model) Init() tea.Cmd {
 
 func main() {
 
+	/* Create connection */
 	// Retrieve connections options (TLS, etc..)
 	flag.Parse()
 	var opts []grpc.DialOption
@@ -70,9 +60,11 @@ func main() {
 		log.Fatalf("fail to dial: %v", err)
 	}
 	defer conn.Close() // This needs to be done in main() as TUI is threaded
+	client := pb.NewSocketGuideClient(conn)
+	/* Connection created, let's start TUI */
 
 	/* Start TUI */
-	if err := tea.NewProgram(initialModel(conn)).Start(); err != nil {
+	if err := tea.NewProgram(initialModel(&client)).Start(); err != nil {
 		log.Printf("Alas, there's been an error: %v", err)
 		os.Exit(1)
 	}

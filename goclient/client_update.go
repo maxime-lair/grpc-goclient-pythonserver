@@ -3,8 +3,36 @@ package main
 import (
 	"fmt"
 
+	key "github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 )
+
+var DefaultKeyMap = keyMap{
+	Up: key.NewBinding(
+		key.WithKeys("k", "up"),        // actual keybindings
+		key.WithHelp("↑/k", "move up"), // corresponding help text
+	),
+	Down: key.NewBinding(
+		key.WithKeys("j", "down"),
+		key.WithHelp("↓/j", "move down"),
+	),
+	Enter: key.NewBinding(
+		key.WithKeys("enter"),
+		key.WithHelp("Enter", "Validate entry"),
+	),
+	Space: key.NewBinding(
+		key.WithKeys(" "),
+		key.WithHelp("<spacebar>", "Select entry"),
+	),
+	Quit: key.NewBinding(
+		key.WithKeys("q", "ctrl+c"),
+		key.WithHelp("ctrl+c/q", "Quit client"),
+	),
+}
+
+// For messages that contain errors it's often handy to also implement the
+// error interface on the message.
+func (e errMsg) Error() string { return e.err.Error() }
 
 // state connect, we request "enter" to send the request to the server
 func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -15,15 +43,16 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 
 		// Cool, what was the actual key pressed?
-		switch msg.String() {
+		switch {
 
 		// These keys should exit the program.
-		case "ctrl+c", "q":
+		case key.Matches(msg, DefaultKeyMap.Quit):
 			return m, tea.Quit
 
 		// The "enter" key and the spacebar (a literal space) toggle
 		// the selected state for the item that the cursor is pointing at.
-		case "enter", " ":
+		case key.Matches(msg, DefaultKeyMap.Enter):
+			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("Created client %p with id %s", &m.clientEnv.client, m.clientEnv.clientID.Name))
 			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] -------------- SendSocketTree --------------", m.clientEnv.clientID.Name))
 			m.clientChoice.socketChoicesList, m.clientEnv = socket_get_family_list(m.clientEnv)
 			if m.clientEnv.err.err != nil {
@@ -46,27 +75,27 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 
 		// Cool, what was the actual key pressed?
-		switch msg.String() {
+		switch {
 
 		// These keys should exit the program.
-		case "ctrl+c", "q":
+		case key.Matches(msg, DefaultKeyMap.Quit):
 			return m, tea.Quit
 
 		// The "up" and "k" keys move the cursor up
-		case "up", "k":
+		case key.Matches(msg, DefaultKeyMap.Up):
 			if m.cursor > 0 {
 				m.cursor--
 			}
 
 		// The "down" and "j" keys move the cursor down
-		case "down", "j":
+		case key.Matches(msg, DefaultKeyMap.Down):
 			if m.cursor < len(m.clientChoice.socketChoicesList)-1 {
 				m.cursor++
 			}
 
 		// the spacebar (a literal space) toggle
 		// the selected state for the item that the cursor is pointing at.
-		case " ":
+		case key.Matches(msg, DefaultKeyMap.Space):
 			selected := m.clientChoice.socketChoicesList[m.cursor]
 			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] User tries to select family %s - currently selected %v", m.clientEnv.clientID.Name, selected.Name, m.clientChoice.selectedFamily))
 			if m.clientChoice.selectedFamily != nil && *m.clientChoice.selectedFamily == selected {
@@ -82,7 +111,7 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 			}
 		// The "enter" key to validate
-		case "enter":
+		case key.Matches(msg, DefaultKeyMap.Enter):
 			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] selected entry %d - which is choice: %d %s",
 				m.clientEnv.clientID.Name, m.cursor,
 				m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name))
@@ -111,27 +140,27 @@ func (m model) UpdateGetType(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 
 		// Cool, what was the actual key pressed?
-		switch msg.String() {
+		switch {
 
 		// These keys should exit the program.
-		case "ctrl+c", "q":
+		case key.Matches(msg, DefaultKeyMap.Quit):
 			return m, tea.Quit
 
 		// The "up" and "k" keys move the cursor up
-		case "up", "k":
+		case key.Matches(msg, DefaultKeyMap.Up):
 			if m.cursor > 0 {
 				m.cursor--
 			}
 
 		// The "down" and "j" keys move the cursor down
-		case "down", "j":
+		case key.Matches(msg, DefaultKeyMap.Down):
 			if m.cursor < len(m.clientChoice.socketChoicesList)-1 {
 				m.cursor++
 			}
 
 		// the spacebar (a literal space) toggle
 		// the selected state for the item that the cursor is pointing at.
-		case " ":
+		case key.Matches(msg, DefaultKeyMap.Space):
 			selected := m.clientChoice.socketChoicesList[m.cursor]
 			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] User tries to select type %s - currently selected %v", m.clientEnv.clientID.Name, selected.Name, m.clientChoice.selectedFamily))
 			if m.clientChoice.selectedType != nil && *m.clientChoice.selectedType == selected {
@@ -147,7 +176,7 @@ func (m model) UpdateGetType(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 			}
 		// The "enter" key to validate
-		case "enter":
+		case key.Matches(msg, DefaultKeyMap.Enter):
 			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] selected entry %d - which is choice: %d %s",
 				m.clientEnv.clientID.Name, m.cursor,
 				m.clientChoice.selectedType.Value, m.clientChoice.selectedType.Name))
@@ -174,27 +203,27 @@ func (m model) UpdateGetProtocol(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 
 		// Cool, what was the actual key pressed?
-		switch msg.String() {
+		switch {
 
 		// These keys should exit the program.
-		case "ctrl+c", "q":
+		case key.Matches(msg, DefaultKeyMap.Quit):
 			return m, tea.Quit
 
 		// The "up" and "k" keys move the cursor up
-		case "up", "k":
+		case key.Matches(msg, DefaultKeyMap.Up):
 			if m.cursor > 0 {
 				m.cursor--
 			}
 
 		// The "down" and "j" keys move the cursor down
-		case "down", "j":
+		case key.Matches(msg, DefaultKeyMap.Down):
 			if m.cursor < len(m.clientChoice.socketChoicesList)-1 {
 				m.cursor++
 			}
 
 		// the spacebar (a literal space) toggle
 		// the selected state for the item that the cursor is pointing at.
-		case " ":
+		case key.Matches(msg, DefaultKeyMap.Space):
 			selected := m.clientChoice.socketChoicesList[m.cursor]
 			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] User tries to select protocol %s - currently selected %v", m.clientEnv.clientID.Name, selected.Name, m.clientChoice.selectedFamily))
 			if m.clientChoice.selectedProtocol != nil && *m.clientChoice.selectedProtocol == selected {
@@ -210,7 +239,7 @@ func (m model) UpdateGetProtocol(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 			}
 		// The "enter" key to validate
-		case "enter":
+		case key.Matches(msg, DefaultKeyMap.Enter):
 			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] selected entry %d - which is choice: %d %s",
 				m.clientEnv.clientID.Name, m.cursor,
 				m.clientChoice.selectedProtocol.Value, m.clientChoice.selectedProtocol.Name))
@@ -234,23 +263,11 @@ func (m model) UpdateDone(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 
 		// Cool, what was the actual key pressed?
-		switch msg.String() {
+		switch {
 
 		// These keys should exit the program.
-		case "ctrl+c", "q":
+		case key.Matches(msg, DefaultKeyMap.Quit):
 			return m, tea.Quit
-
-		// The "up" and "k" keys move the cursor up
-		case "up", "k":
-			if m.cursor > 0 {
-				m.cursor--
-			}
-
-		// The "down" and "j" keys move the cursor down
-		case "down", "j":
-			if m.cursor < len(m.clientChoice.socketChoicesList)-1 {
-				m.cursor++
-			}
 		}
 	}
 

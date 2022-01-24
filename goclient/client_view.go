@@ -2,7 +2,25 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/charmbracelet/bubbles/key"
 )
+
+// ShortHelp returns keybindings to be shown in the mini help view. It's part
+// of the key.Map interface.
+func (k keyMap) ShortHelp() []key.Binding {
+	return []key.Binding{k.Quit}
+}
+
+// FullHelp returns keybindings for the expanded help view. It's part of the
+// key.Map interface.
+func (k keyMap) FullHelp() [][]key.Binding {
+	return [][]key.Binding{
+		{k.Up, k.Down},     // first column
+		{k.Space, k.Enter}, // second column
+		{k.Quit},           // third column
+	}
+}
 
 // The header
 func (m model) printHeader() string {
@@ -52,7 +70,9 @@ func (m model) printChoices(i int, selectedValue *socketChoice, possibleChoice s
 func (m model) printFooter() string {
 
 	// The footer
+
 	var s string
+	s += m.help.View(m.keys)
 	s += "\nPress <space> to add a value\nPress <enter> to validate\n"
 	s += "Press q to quit.\n"
 	s += "Only one selection at a time possible.\n"
