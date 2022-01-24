@@ -19,7 +19,7 @@ func (m model) printHeader() string {
 			lipgloss.Top,
 			activeTab.Render("GO Client"),
 		)
-		gap := tabGap.Render(strings.Repeat("─", max(0, 96-lipgloss.Width(row)-2)))
+		gap := tabGap.Render(strings.Repeat("", max(0, 96-lipgloss.Width(row)-2)))
 		row = lipgloss.JoinHorizontal(lipgloss.Bottom, row, gap)
 		s += fmt.Sprintf("%s\n\n", row)
 
@@ -29,7 +29,7 @@ func (m model) printHeader() string {
 			infoStyle.Render("Built with"+divider+url("GRPC")+divider+url("BubbleTea")+divider+url("Bubbles")+divider+url("LipGloss")),
 		)
 
-		row = lipgloss.JoinHorizontal(lipgloss.Top, desc)
+		row = lipgloss.JoinHorizontal(lipgloss.Top, activeTab.Render(desc), gap)
 		s += fmt.Sprintf("%s\n\n", row)
 	}
 
