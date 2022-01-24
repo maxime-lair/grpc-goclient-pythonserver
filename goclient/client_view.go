@@ -23,6 +23,28 @@ func (m model) printHeader() string {
 		s += fmt.Sprintf("%s\n\n", row)
 	}
 
+	// Status bar
+	{
+		status := "Connected state"
+		w := lipgloss.Width
+
+		statusKey := statusStyle.Render("Status")
+		clientIDKey := clientIDKeyStyle.Render("ClientID")
+		clientIDName := clientIDStyle.Render(m.clientEnv.clientID.Name)
+		statusVal := statusText.Copy().
+			Width(60 - w(statusKey) - w(clientIDKey) - w(clientIDName)).
+			Render(status)
+
+		bar := lipgloss.JoinHorizontal(lipgloss.Top,
+			statusKey,
+			statusVal,
+			clientIDKey,
+			clientIDName,
+		)
+
+		s += statusBarStyle.Width(60).Render(bar)
+	}
+
 	if m.clientEnv.clientID == nil {
 		s += fmt.Sprintf("------- Client ID undefined %p -------\n", m.clientEnv.client)
 	} else {
