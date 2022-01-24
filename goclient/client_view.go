@@ -151,7 +151,7 @@ func (m model) printLogs() string {
 	{
 		var logList string
 		for _, line := range recentLogs {
-			logList = lipgloss.JoinHorizontal(lipgloss.Top,
+			logList = lipgloss.JoinVertical(lipgloss.Top,
 				logList,
 				statusText.Copy().
 					Width(96).
