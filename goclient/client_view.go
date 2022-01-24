@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/lipgloss"
@@ -15,26 +14,13 @@ func (m model) printHeader() string {
 
 	// Title
 	{
-		var (
-			colors = colorGrid(1, 5)
-			title  strings.Builder
-		)
 
-		for i, v := range colors {
-			const offset = 2
-			c := lipgloss.Color(v[0])
-			fmt.Fprint(&title, titleStyle.Copy().MarginLeft(i*offset).Background(c))
-			if i < len(colors)-1 {
-				title.WriteRune('\n')
-			}
-		}
-
-		desc := lipgloss.JoinVertical(lipgloss.Left,
+		desc := lipgloss.JoinVertical(lipgloss.Center,
 			descStyle.Render("Go client to request sockets through grpc"),
 			infoStyle.Render("Built with"+divider+url("GRPC")+divider+url("BubbleTea")+divider+url("Bubbles")+divider+url("LipGloss")),
 		)
 
-		row := lipgloss.JoinHorizontal(lipgloss.Top, title.String(), desc)
+		row := lipgloss.JoinHorizontal(lipgloss.Top, desc)
 		s += fmt.Sprintf("%s\n\n", row)
 	}
 
