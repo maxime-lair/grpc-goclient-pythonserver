@@ -148,8 +148,18 @@ func (m model) printLogs() string {
 	}
 
 	// Logs line
-	for _, line := range recentLogs {
-		s += fmt.Sprintf("%s\n", line)
+	{
+		var logList string
+		for _, line := range recentLogs {
+			logList = lipgloss.JoinHorizontal(lipgloss.Top,
+				logList,
+				statusText.Copy().
+					Width(96).
+					Render(line),
+			)
+
+		}
+		s += logList
 	}
 	return s
 }
