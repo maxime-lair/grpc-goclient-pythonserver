@@ -117,6 +117,10 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] W: User tried to add more than one selection.", m.clientEnv.clientID.Name))
 				}
 			}
+			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("Stopwatch: %v, test %v", m.stopwatch, m.stopwatch.Running()))
+			if !m.stopwatch.Running() {
+				return m, m.stopwatch.Toggle()
+			}
 		// The "enter" key to validate
 		case key.Matches(msg, DefaultKeyMap.Enter):
 			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] selected entry %d - which is choice: %d %s",
