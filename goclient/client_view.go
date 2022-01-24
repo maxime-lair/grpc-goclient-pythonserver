@@ -134,7 +134,7 @@ func (m model) printLogs() string {
 
 		statusKey := statusStyle.Render(m.spinner.View())
 		clientIDKey := clientIDKeyStyle.Render("Time spent")
-		clientIDName := clientIDStyle.Render(m.timer.View())
+		clientIDName := clientIDStyle.Render(m.stopwatch.View())
 		statusVal := statusText.Copy().
 			Width(96 - w(statusKey) - w(clientIDKey) - w(clientIDName)).
 			Render(status)

@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	key "github.com/charmbracelet/bubbles/key"
-	"github.com/charmbracelet/bubbles/timer"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -40,11 +39,6 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
 
-	case timer.TickMsg:
-		var cmd tea.Cmd
-		m.timer, cmd = m.timer.Update(msg)
-		return m, cmd
-
 	// Is it a key press?
 	case tea.KeyMsg:
 
@@ -71,18 +65,14 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	// Return the updated model to the Bubble Tea runtime for processing.
-	// Note that we're not returning a command.
-	return m, nil
+	var cmd tea.Cmd
+	m.stopwatch, cmd = m.stopwatch.Update(msg)
+	return m, cmd
 }
 
 func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
-
-	case timer.TickMsg:
-		var cmd tea.Cmd
-		m.timer, cmd = m.timer.Update(msg)
-		return m, cmd
 
 	// Is it a key press?
 	case tea.KeyMsg:
@@ -146,18 +136,14 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	// Return the updated model to the Bubble Tea runtime for processing.
-	// Note that we're not returning a command.
-	return m, nil
+	var cmd tea.Cmd
+	m.stopwatch, cmd = m.stopwatch.Update(msg)
+	return m, cmd
 }
 
 func (m model) UpdateGetType(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
-
-	case timer.TickMsg:
-		var cmd tea.Cmd
-		m.timer, cmd = m.timer.Update(msg)
-		return m, cmd
 
 	// Is it a key press?
 	case tea.KeyMsg:
@@ -220,17 +206,14 @@ func (m model) UpdateGetType(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, cmd
 	}
 
-	return m, nil
+	var cmd tea.Cmd
+	m.stopwatch, cmd = m.stopwatch.Update(msg)
+	return m, cmd
 }
 
 func (m model) UpdateGetProtocol(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
-
-	case timer.TickMsg:
-		var cmd tea.Cmd
-		m.timer, cmd = m.timer.Update(msg)
-		return m, cmd
 
 	// Is it a key press?
 	case tea.KeyMsg:
@@ -290,7 +273,9 @@ func (m model) UpdateGetProtocol(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, cmd
 	}
 
-	return m, nil
+	var cmd tea.Cmd
+	m.stopwatch, cmd = m.stopwatch.Update(msg)
+	return m, cmd
 }
 
 func (m model) UpdateDone(msg tea.Msg) (tea.Model, tea.Cmd) {
