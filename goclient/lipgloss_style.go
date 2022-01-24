@@ -72,7 +72,6 @@ var (
 		Border(lipgloss.NormalBorder(), false, true, false, false).
 		BorderForeground(subtle).
 		MarginRight(2).
-		Height(8).
 		Width(96 + 1)
 
 	listHeader = lipgloss.NewStyle().
