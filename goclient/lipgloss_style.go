@@ -22,7 +22,7 @@ var (
 			MarginRight(5).
 			Padding(0, 1).
 			Italic(true).
-			Foreground(lipgloss.Color("#FFF7DB")).
+			Foreground(lipgloss.Color("#faff63")).
 			SetString("Go client")
 
 	descStyle = lipgloss.NewStyle().MarginTop(1)

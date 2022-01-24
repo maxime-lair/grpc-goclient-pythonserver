@@ -31,7 +31,7 @@ func (m model) printHeader() string {
 
 		desc := lipgloss.JoinVertical(lipgloss.Left,
 			descStyle.Render("Go client to request sockets through grpc"),
-			infoStyle.Render("Built with"+divider+url("GRPC")+divider+url("BubbleTea")+divider+url("Bubbles")+divider+("LipGloss")),
+			infoStyle.Render("Built with"+divider+url("GRPC")+divider+url("BubbleTea")+divider+url("Bubbles")+divider+url("LipGloss")),
 		)
 
 		row := lipgloss.JoinHorizontal(lipgloss.Top, title.String(), desc)
