@@ -6,6 +6,7 @@ import (
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/spinner"
+	"github.com/charmbracelet/bubbles/timer"
 )
 
 // Info for family/type/protocol, always a string and value
@@ -40,6 +41,7 @@ type model struct {
 	help    help.Model
 	keys    keyMap
 	spinner spinner.Model
+	timer   timer.Model
 
 	clientChoice clientChoice // all client choices for the socket
 	clientEnv    clientEnv    // all client informations

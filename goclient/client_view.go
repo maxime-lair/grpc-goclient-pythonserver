@@ -133,8 +133,8 @@ func (m model) printLogs() string {
 		w := lipgloss.Width
 
 		statusKey := statusStyle.Render(m.spinner.View())
-		clientIDKey := clientIDKeyStyle.Render("ClientID")
-		clientIDName := clientIDStyle.Render(m.clientEnv.clientID.Name)
+		clientIDKey := clientIDKeyStyle.Render("Time spent")
+		clientIDName := clientIDStyle.Render(m.timer.View())
 		statusVal := statusText.Copy().
 			Width(96 - w(statusKey) - w(clientIDKey) - w(clientIDName)).
 			Render(status)

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	key "github.com/charmbracelet/bubbles/key"
+	"github.com/charmbracelet/bubbles/timer"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -61,9 +62,7 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.state = stateGetFamily
 		}
 	default:
-		var cmd tea.Cmd
-		m.spinner, cmd = m.spinner.Update(msg)
-		return m, cmd
+		return m, m.spinner.Tick
 	}
 
 	// Return the updated model to the Bubble Tea runtime for processing.
@@ -212,6 +211,11 @@ func (m model) UpdateGetType(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) UpdateGetProtocol(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
+
+	case timer.TickMsg:
+		var cmd tea.Cmd
+		m.timer, cmd = m.timer.Update(msg)
+		return m, cmd
 
 	// Is it a key press?
 	case tea.KeyMsg:
