@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"os"
+	"time"
 
 	pb "main/pb_server"
 
@@ -33,7 +34,10 @@ Bubbletea part
 
 func initialModel(client *pb.SocketGuideClient) model {
 	s := spinner.New()
-	s.Spinner = spinner.Dot
+	s.Spinner = spinner.Spinner{
+		Frames: []string{"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏", "🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘", "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"},
+		FPS:    time.Second / 24, //nolint:gomnd
+	}
 	s.Style = spinnerStyle
 	return model{
 		state:   stateConnect,

@@ -132,7 +132,7 @@ func (m model) printLogs() string {
 		status := fmt.Sprintf("Last %d logs", len(recentLogs))
 		w := lipgloss.Width
 		statusKey := statusStyle.Render(m.spinner.View())
-		clientIDKey := clientIDKeyStyle.Render("Total")
+		clientIDKey := clientIDKeyStyle.Render("Total logs")
 		clientIDName := clientIDStyle.Render(fmt.Sprintf("%d", len(m.clientEnv.logJournal)))
 		statusVal := statusText.Copy().
 			Width(96 - w(statusKey) - w(clientIDKey) - w(clientIDName)).
