@@ -9,7 +9,7 @@ import (
 // ShortHelp returns keybindings to be shown in the mini help view. It's part
 // of the key.Map interface.
 func (k keyMap) ShortHelp() []key.Binding {
-	return []key.Binding{k.Quit}
+	return []key.Binding{k.Up, k.Down, k.Space, k.Enter, k.Quit}
 }
 
 // FullHelp returns keybindings for the expanded help view. It's part of the
@@ -69,14 +69,10 @@ func (m model) printChoices(i int, selectedValue *socketChoice, possibleChoice s
 func (m model) printFooter() string {
 
 	// The footer
-	m.help.ShowAll = true // show all help
+	//m.help.ShowAll = true // show all help
 	var s string
 	s += "\n"
 	s += m.help.View(m.keys)
-	s += m.help.FullHelpView([][]key.Binding{
-		{DefaultKeyMap.Up, DefaultKeyMap.Down},                         // first column
-		{DefaultKeyMap.Space, DefaultKeyMap.Enter, DefaultKeyMap.Quit}, // second column
-	})
 	s += "Only one selection at a time possible.\n"
 
 	return s
