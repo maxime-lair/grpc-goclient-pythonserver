@@ -42,7 +42,7 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case tickMsg:
 		if m.progress.Percent() == 0.2 {
-			return m, tea.Quit
+			return m, nil
 		}
 
 		// Note that you can also use progress.Model.SetPercent to set the
@@ -95,7 +95,7 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case tickMsg:
 		if m.progress.Percent() == 0.4 {
-			return m, tea.Quit
+			return m, nil
 		}
 
 		// Note that you can also use progress.Model.SetPercent to set the
@@ -181,7 +181,7 @@ func (m model) UpdateGetType(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case tickMsg:
 		if m.progress.Percent() == 0.6 {
-			return m, tea.Quit
+			return m, nil
 		}
 
 		// Note that you can also use progress.Model.SetPercent to set the
@@ -266,7 +266,7 @@ func (m model) UpdateGetProtocol(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case tickMsg:
 		if m.progress.Percent() == 0.8 {
-			return m, tea.Quit
+			return m, nil
 		}
 
 		// Note that you can also use progress.Model.SetPercent to set the
@@ -348,7 +348,7 @@ func (m model) UpdateDone(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case tickMsg:
 		if m.progress.Percent() == 1.0 {
-			return m, tea.Quit
+			return m, nil
 		}
 
 		// Note that you can also use progress.Model.SetPercent to set the
