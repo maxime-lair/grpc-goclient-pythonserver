@@ -44,7 +44,6 @@ func initialModel(client *pb.SocketGuideClient) model {
 
 func (m model) Init() tea.Cmd {
 	// Just return `nil`, which means "no I/O right now, please."
-	m.help.ShowAll = !m.help.ShowAll // show all help
 	return nil
 }
 

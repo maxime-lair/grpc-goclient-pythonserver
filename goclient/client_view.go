@@ -70,6 +70,7 @@ func (m model) printChoices(i int, selectedValue *socketChoice, possibleChoice s
 func (m model) printFooter() string {
 
 	// The footer
+	m.help.ShowAll = true // show all help
 
 	var s string
 	s += m.help.View(m.keys)
