@@ -59,6 +59,7 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 			m.state = stateGetFamily
+			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("Stopwatch: %v, test %v\n", m.stopwatch, m.stopwatch.Running()))
 			if !m.stopwatch.Running() {
 				return m, m.stopwatch.Start()
 			}
