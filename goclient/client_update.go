@@ -60,6 +60,10 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			m.state = stateGetFamily
 		}
+	default:
+		var cmd tea.Cmd
+		m.spinner, cmd = m.spinner.Update(msg)
+		return m, cmd
 	}
 
 	// Return the updated model to the Bubble Tea runtime for processing.
@@ -125,6 +129,10 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.state = stateGetType
 			}
 		}
+	default:
+		var cmd tea.Cmd
+		m.spinner, cmd = m.spinner.Update(msg)
+		return m, cmd
 	}
 
 	// Return the updated model to the Bubble Tea runtime for processing.
@@ -288,8 +296,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case stateDone:
 		return m.UpdateDone(msg)
 	default:
-		var cmd tea.Cmd
-		m.spinner, cmd = m.spinner.Update(msg)
-		return m, cmd
+		return m, nil
 	}
 }
