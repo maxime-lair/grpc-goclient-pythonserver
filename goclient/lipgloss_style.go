@@ -16,8 +16,8 @@ var (
 		Right:       "│",
 		TopLeft:     "╭",
 		TopRight:    "╮",
-		BottomLeft:  "┘",
-		BottomRight: "└",
+		BottomLeft:  "└",
+		BottomRight: "┘",
 	}
 
 	tab = lipgloss.NewStyle().
