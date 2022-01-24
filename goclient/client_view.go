@@ -69,10 +69,12 @@ func (m model) printChoices(i int, selectedValue *socketChoice, possibleChoice s
 func (m model) printFooter() string {
 
 	// The footer
-	//m.help.ShowAll = true // show all help
+	m.help.ShowAll = true // show all help
 	var s string
+	s += fmt.Sprintf("%v", m.keys)
+	s += fmt.Sprintf("%v", m.help)
 	s += "\n"
-	s += m.help.View(m.keys)
+	s += fmt.Sprintf("%s\n", m.help.View(m.keys))
 	s += "Only one selection at a time possible.\n"
 
 	return s
