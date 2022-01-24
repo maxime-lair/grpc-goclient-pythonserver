@@ -127,6 +127,7 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 					return m, nil
 				}
 				m.state = stateGetType
+				m.cursor = 0 // reset cursor
 			}
 		}
 	default:
@@ -196,6 +197,7 @@ func (m model) UpdateGetType(msg tea.Msg) (tea.Model, tea.Cmd) {
 					return m, nil
 				}
 				m.state = stateGetProtocol
+				m.cursor = 0 // reset cursor
 			}
 		}
 	default:
@@ -260,6 +262,7 @@ func (m model) UpdateGetProtocol(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.clientChoice.socketChoicesList = nil // reset choiceList
 
 				m.state = stateDone
+				m.cursor = 0 // reset cursor
 			}
 		}
 	default:
