@@ -150,7 +150,7 @@ func (m model) ViewGetFamily() string {
 	// Iterate over our choices
 	for i, choice := range m.clientChoice.socketChoicesList {
 		templist = lipgloss.JoinVertical(lipgloss.Left,
-			m.printChoices(i, m.clientChoice.selectedFamily, choice),
+			templist, m.printChoices(i, m.clientChoice.selectedFamily, choice),
 		)
 	}
 
