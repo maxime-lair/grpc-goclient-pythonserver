@@ -15,6 +15,7 @@ func (k keyMap) ShortHelp() []key.Binding {
 // FullHelp returns keybindings for the expanded help view. It's part of the
 // key.Map interface.
 func (k keyMap) FullHelp() [][]key.Binding {
+
 	return [][]key.Binding{
 		{k.Up, k.Down},             // first column
 		{k.Space, k.Enter, k.Quit}, // second column
@@ -70,10 +71,21 @@ func (m model) printFooter() string {
 
 	// The footer
 	m.help.ShowAll = true // show all help
+
+	helpList := [][]key.Binding{
+		{DefaultKeyMap.Up, DefaultKeyMap.Down},     // first column
+		{DefaultKeyMap.Space, DefaultKeyMap.Enter}, // second column
+		{DefaultKeyMap.Quit},                       // third column
+	}
+
 	var s string
-	s += fmt.Sprintf("%v\n", m.keys)
-	s += fmt.Sprintf("%v\n", m.help)
 	s += "\n"
+	// print help, idk why fullHelpView does not work here, so had to do it dirty
+
+	for _, group := range helpList {
+		s += fmt.Sprintf("%s\n", m.help.ShortHelpView(group))
+	}
+
 	s += fmt.Sprintf("%s\n", m.help.View(m.keys))
 	s += "Only one selection at a time possible.\n"
 
