@@ -59,9 +59,9 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 			m.state = stateGetFamily
-			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("Stopwatch: %v, test %v\n", m.stopwatch, m.stopwatch.Running()))
+			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("Stopwatch: %v, test %v", m.stopwatch, m.stopwatch.Running()))
 			if !m.stopwatch.Running() {
-				return m, m.stopwatch.Start()
+				return m, m.stopwatch.Toggle()
 			}
 		}
 	default:
@@ -75,7 +75,7 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 
-	m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("After Stopwatch: %v, test %v\n", m.stopwatch, m.stopwatch.Running()))
+	m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("After Stopwatch: %v, test %v", m.stopwatch, m.stopwatch.Running()))
 	switch msg := msg.(type) {
 
 	// Is it a key press?
