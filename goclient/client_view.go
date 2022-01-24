@@ -32,7 +32,7 @@ func (m model) printHeader() string {
 			status = "Request process starting.."
 		case stateGetFamily:
 			if m.clientChoice.selectedFamily != nil {
-				status = fmt.Sprintf("\nCurrently selected value : [%d] %s", m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name)
+				status = fmt.Sprintf("Currently selected value : [%d] %s", m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name)
 			}
 		case stateGetType:
 			status = fmt.Sprintf("Requesting socket type list for family %s", m.clientChoice.selectedFamily.Name)
@@ -60,7 +60,7 @@ func (m model) printHeader() string {
 			clientIDName,
 		)
 
-		s += statusBarStyle.Width(90).Render(bar) + "\n"
+		s += statusBarStyle.Width(90).Render(bar) + "\n\n"
 	}
 
 	return s
