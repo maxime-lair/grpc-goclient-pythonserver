@@ -61,7 +61,7 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.state = stateGetFamily
 			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("Stopwatch: %v, test %v", m.stopwatch, m.stopwatch.Running()))
 			if !m.stopwatch.Running() {
-				return m, m.stopwatch.Toggle()
+				return m, m.stopwatch.Reset()
 			}
 		}
 	default:
@@ -117,9 +117,10 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] W: User tried to add more than one selection.", m.clientEnv.clientID.Name))
 				}
 			}
-			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("Stopwatch: %v, test %v", m.stopwatch, m.stopwatch.Running()))
+			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("Stopwatch: %v, test %v, elapsed %s", m.stopwatch, m.stopwatch.Running(), m.stopwatch.View()))
 			if !m.stopwatch.Running() {
-				return m, m.stopwatch.Toggle()
+
+				return m, m.stopwatch.Start()
 			}
 		// The "enter" key to validate
 		case key.Matches(msg, DefaultKeyMap.Enter):
