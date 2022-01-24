@@ -20,7 +20,7 @@ func (m model) printHeader() string {
 			activeTab.Render("GO Client"),
 		)
 		gap := tabGap.Render(strings.Repeat(" ", max(0, 96-lipgloss.Width(row)-2)))
-		row = lipgloss.JoinHorizontal(lipgloss.Bottom, row, gap)
+		row = lipgloss.JoinHorizontal(lipgloss.Bottom, gap, row, gap)
 		s += fmt.Sprintf("%s\n\n", row)
 
 		// Title
