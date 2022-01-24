@@ -75,6 +75,7 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 
+	m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("After Stopwatch: %v, test %v\n", m.stopwatch, m.stopwatch.Running()))
 	switch msg := msg.(type) {
 
 	// Is it a key press?
