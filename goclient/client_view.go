@@ -4,23 +4,8 @@ import (
 	"fmt"
 
 	"github.com/charmbracelet/bubbles/key"
+	"github.com/charmbracelet/lipgloss"
 )
-
-// ShortHelp returns keybindings to be shown in the mini help view. It's part
-// of the key.Map interface.
-func (k keyMap) ShortHelp() []key.Binding {
-	return []key.Binding{k.Up, k.Down, k.Space, k.Enter, k.Quit}
-}
-
-// FullHelp returns keybindings for the expanded help view. It's part of the
-// key.Map interface.
-func (k keyMap) FullHelp() [][]key.Binding {
-
-	return [][]key.Binding{
-		{k.Up, k.Down},             // first column
-		{k.Space, k.Enter, k.Quit}, // second column
-	}
-}
 
 // The header
 func (m model) printHeader() string {
@@ -74,10 +59,19 @@ func (m model) printFooter() string {
 	// The footer
 	m.help.ShowAll = true // show all help
 
+	var anotherStyle = lipgloss.NewStyle().
+		BorderStyle(lipgloss.RoundedBorder()).
+		BorderForeground(lipgloss.Color("228")).
+		BorderBackground(lipgloss.Color("63")).
+		BorderTop(true).
+		BorderLeft(true)
+
+	m.help.Styles.ShortDesc = anotherStyle
+
 	helpList := [][]key.Binding{
-		{DefaultKeyMap.Up, DefaultKeyMap.Down},     // first column
-		{DefaultKeyMap.Space, DefaultKeyMap.Enter}, // second column
-		{DefaultKeyMap.Quit},                       // third column
+		{DefaultKeyMap.Up, DefaultKeyMap.Space},   // first column
+		{DefaultKeyMap.Down, DefaultKeyMap.Enter}, // second column
+		{DefaultKeyMap.Quit},                      // third column
 	}
 
 	var s string
