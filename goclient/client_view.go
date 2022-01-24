@@ -32,12 +32,23 @@ func (m model) printHeader() string {
 			status = "Request process starting.."
 		case stateGetFamily:
 			if m.clientChoice.selectedFamily != nil {
-				status = fmt.Sprintf("Currently selected value : [%d] %s", m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name)
+				status = fmt.Sprintf("Selected family value : [%d] %s", m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name)
+			} else {
+				status = "No selected family value"
 			}
 		case stateGetType:
-			status = fmt.Sprintf("Requesting socket type list for family %s", m.clientChoice.selectedFamily.Name)
+			if m.clientChoice.selectedType != nil {
+				status = fmt.Sprintf("Family selected %s, selected type [%d] %s", m.clientChoice.selectedFamily.Name, m.clientChoice.selectedType.Value, m.clientChoice.selectedType.Name)
+			} else {
+				status = fmt.Sprintf("Family selected %s, no selected type", m.clientChoice.selectedFamily.Name)
+			}
 		case stateGetProtocol:
-			status = fmt.Sprintf("Requesting socket protocol list for family %s and type %s:", m.clientChoice.selectedFamily.Name, m.clientChoice.selectedType.Name)
+			if m.clientChoice.selectedProtocol != nil {
+				status = fmt.Sprintf("Family selected %s, type %s, selected protocol [%d] %s", m.clientChoice.selectedFamily.Name, m.clientChoice.selectedType.Name,
+					m.clientChoice.selectedProtocol.Value, m.clientChoice.selectedProtocol.Name)
+			} else {
+				status = fmt.Sprintf("Family selected %s, type %s, no selected protocol", m.clientChoice.selectedFamily.Name, m.clientChoice.selectedType.Name)
+			}
 		case stateDone:
 			status = "Request process done, your final choice will appear below:"
 		default:
