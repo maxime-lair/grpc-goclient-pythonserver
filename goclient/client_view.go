@@ -16,9 +16,8 @@ func (k keyMap) ShortHelp() []key.Binding {
 // key.Map interface.
 func (k keyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
-		{k.Up, k.Down},     // first column
-		{k.Space, k.Enter}, // second column
-		{k.Quit},           // third column
+		{k.Up, k.Down},             // first column
+		{k.Space, k.Enter, k.Quit}, // second column
 	}
 }
 
@@ -71,12 +70,9 @@ func (m model) printFooter() string {
 
 	// The footer
 	m.help.ShowAll = true // show all help
-
 	var s string
-	s += fmt.Sprintf("Show view %+v", m.help.View(m.keys))
+	s += "\n"
 	s += m.help.View(m.keys)
-	s += "\nPress <space> to add a value\nPress <enter> to validate\n"
-	s += "Press q to quit.\n"
 	s += "Only one selection at a time possible.\n"
 
 	return s
