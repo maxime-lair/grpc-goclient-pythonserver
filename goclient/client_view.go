@@ -191,10 +191,21 @@ func (m model) ViewGetFamily() string {
 func (m model) ViewGetType() string {
 	var s string
 	s += m.printHeader()
+
+	var templist string
+	templist = lipgloss.JoinVertical(lipgloss.Left,
+		listHeader("Types choices"),
+	)
 	// Iterate over our choices
 	for i, choice := range m.clientChoice.socketChoicesList {
-		s += m.printChoices(i, m.clientChoice.selectedType, choice)
+		templist = lipgloss.JoinVertical(lipgloss.Left,
+			templist, m.printChoices(i, m.clientChoice.selectedFamily, choice),
+		)
 	}
+
+	lists := list.Render(templist)
+
+	s += lipgloss.JoinHorizontal(lipgloss.Top, lists)
 
 	s += m.printHelp()
 	s += m.printLogs()
@@ -204,10 +215,22 @@ func (m model) ViewGetType() string {
 func (m model) ViewGetProtocol() string {
 	var s string
 	s += m.printHeader()
+
+	var templist string
+	templist = lipgloss.JoinVertical(lipgloss.Left,
+		listHeader("Protocols choices"),
+	)
 	// Iterate over our choices
 	for i, choice := range m.clientChoice.socketChoicesList {
-		s += m.printChoices(i, m.clientChoice.selectedProtocol, choice)
+		templist = lipgloss.JoinVertical(lipgloss.Left,
+			templist, m.printChoices(i, m.clientChoice.selectedProtocol, choice),
+		)
 	}
+
+	lists := list.Render(templist)
+
+	s += lipgloss.JoinHorizontal(lipgloss.Top, lists)
+
 	s += m.printHelp()
 	s += m.printLogs()
 	return s
