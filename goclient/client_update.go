@@ -61,6 +61,7 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.state = stateGetFamily
 			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("Stopwatch: %v, test %v", m.stopwatch, m.stopwatch.Running()))
 			if !m.stopwatch.Running() {
+				m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("Stopwatch not running, toggling: %v, test %v", m.stopwatch, m.stopwatch.Running()))
 				return m, m.stopwatch.Toggle()
 			}
 		}
@@ -70,7 +71,6 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	// Return the updated model to the Bubble Tea runtime for processing.
 	return m, nil
-
 }
 
 func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
