@@ -37,10 +37,6 @@ func (e errMsg) Error() string { return e.err.Error() }
 // state connect, we request "enter" to send the request to the server
 func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 
-	if !m.stopwatch.Running() {
-		return m, m.stopwatch.Start()
-	}
-
 	switch msg := msg.(type) {
 
 	// Is it a key press?
@@ -69,7 +65,12 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	// Return the updated model to the Bubble Tea runtime for processing.
-	return m, nil
+	if !m.stopwatch.Running() {
+		return m, m.stopwatch.Start()
+	} else {
+		return m, nil
+	}
+
 }
 
 func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
