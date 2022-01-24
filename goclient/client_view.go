@@ -8,6 +8,7 @@ import (
 )
 
 // The header
+// TODO add progress bar depending on state
 func (m model) printHeader() string {
 
 	var s string
@@ -120,6 +121,7 @@ func (m model) printLogs() string {
 	var recentLogs []string
 
 	// Status bar showing number of logs
+	// TODO add Timer at the end
 	{
 		if len(m.clientEnv.logJournal) > 5 {
 			recentLogs = m.clientEnv.logJournal[len(m.clientEnv.logJournal)-5:]
@@ -246,6 +248,7 @@ func (m model) ViewGetProtocol() string {
 	return s
 }
 
+// TODO add a nice final view
 func (m model) ViewDone() string {
 	var s string
 	s += m.printHeader()
