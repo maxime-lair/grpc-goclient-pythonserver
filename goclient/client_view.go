@@ -25,14 +25,32 @@ func (m model) printHeader() string {
 
 	// Status bar
 	{
-		status := "Connected state"
+		status := ""
+
+		switch m.state {
+		case stateConnect:
+			status = "Request process starting.."
+		case stateGetFamily:
+			if m.clientChoice.selectedFamily != nil {
+				status = fmt.Sprintf("\nCurrently selected value : [%d] %s", m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name)
+			}
+		case stateGetType:
+			status = fmt.Sprintf("Requesting socket type list for family %s", m.clientChoice.selectedFamily.Name)
+		case stateGetProtocol:
+			status = fmt.Sprintf("Requesting socket protocol list for family %s and type %s:", m.clientChoice.selectedFamily.Name, m.clientChoice.selectedType.Name)
+		case stateDone:
+			status = "Request process done, your final choice will appear below:"
+		default:
+			status = "Unknown state, exiting.."
+		}
+
 		w := lipgloss.Width
 
 		statusKey := statusStyle.Render("Status")
 		clientIDKey := clientIDKeyStyle.Render("ClientID")
 		clientIDName := clientIDStyle.Render(m.clientEnv.clientID.Name)
 		statusVal := statusText.Copy().
-			Width(60 - w(statusKey) - w(clientIDKey) - w(clientIDName)).
+			Width(90 - w(statusKey) - w(clientIDKey) - w(clientIDName)).
 			Render(status)
 
 		bar := lipgloss.JoinHorizontal(lipgloss.Top,
@@ -42,32 +60,7 @@ func (m model) printHeader() string {
 			clientIDName,
 		)
 
-		s += statusBarStyle.Width(60).Render(bar)
-	}
-
-	if m.clientEnv.clientID == nil {
-		s += fmt.Sprintf("------- Client ID undefined %p -------\n", m.clientEnv.client)
-	} else {
-		s += fmt.Sprintf("------- %s -------\n", m.clientEnv.clientID.Name)
-	}
-	switch m.state {
-	case stateConnect:
-		s += "Request process starting..\n\n"
-	case stateGetFamily:
-		if m.clientChoice.selectedFamily != nil {
-			s += fmt.Sprintf("\nCurrently selected value : [%d] %s\n", m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name)
-		}
-		s += "Please select your socket family (only one selection possible)\n"
-	case stateGetType:
-		s += fmt.Sprintf("Requesting socket type list for family %s \n\n", m.clientChoice.selectedFamily.Name)
-		s += "Please select your socket type (only one selection possible)\n"
-	case stateGetProtocol:
-		s += fmt.Sprintf("Requesting socket protocol list for family %s and type %s:\n\n", m.clientChoice.selectedFamily.Name, m.clientChoice.selectedType.Name)
-		s += "Please select your socket protocol (only one selection possible)\n"
-	case stateDone:
-		s += "Request process done, your final choice will appear below:\n\n"
-	default:
-		s += "Unknown state, exiting..\n\n"
+		s += statusBarStyle.Width(90).Render(bar) + "\n"
 	}
 
 	return s
