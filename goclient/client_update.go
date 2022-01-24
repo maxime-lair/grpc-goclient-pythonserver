@@ -37,6 +37,10 @@ func (e errMsg) Error() string { return e.err.Error() }
 // state connect, we request "enter" to send the request to the server
 func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 
+	if !m.stopwatch.Running() {
+		return m, m.stopwatch.Start()
+	}
+
 	switch msg := msg.(type) {
 
 	// Is it a key press?
@@ -59,7 +63,6 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 			m.state = stateGetFamily
-			return m, m.stopwatch.Toggle()
 		}
 	default:
 		return m, m.spinner.Tick
