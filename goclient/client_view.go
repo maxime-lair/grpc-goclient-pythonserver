@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/lipgloss"
@@ -12,15 +13,23 @@ func (m model) printHeader() string {
 
 	var s string
 
-	// Title
 	{
+		// Tabs
+		row := lipgloss.JoinHorizontal(
+			lipgloss.Top,
+			activeTab.Render("GO Client"),
+		)
+		gap := tabGap.Render(strings.Repeat(" ", max(0, 96-lipgloss.Width(row)-2)))
+		row = lipgloss.JoinHorizontal(lipgloss.Bottom, row, gap)
+		s += fmt.Sprintf("%s\n\n", row)
 
+		// Title
 		desc := lipgloss.JoinVertical(lipgloss.Center,
 			descStyle.Render("Go client to request sockets through grpc"),
 			infoStyle.Render("Built with"+divider+url("GRPC")+divider+url("BubbleTea")+divider+url("Bubbles")+divider+url("LipGloss")),
 		)
 
-		row := lipgloss.JoinHorizontal(lipgloss.Top, desc)
+		row = lipgloss.JoinHorizontal(lipgloss.Top, desc)
 		s += fmt.Sprintf("%s\n\n", row)
 	}
 
