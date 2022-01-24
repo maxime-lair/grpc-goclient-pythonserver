@@ -40,6 +40,11 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
 
+	case timer.TickMsg:
+		var cmd tea.Cmd
+		m.timer, cmd = m.timer.Update(msg)
+		return m, cmd
+
 	// Is it a key press?
 	case tea.KeyMsg:
 
@@ -73,6 +78,11 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
+
+	case timer.TickMsg:
+		var cmd tea.Cmd
+		m.timer, cmd = m.timer.Update(msg)
+		return m, cmd
 
 	// Is it a key press?
 	case tea.KeyMsg:
@@ -143,6 +153,11 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) UpdateGetType(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
+
+	case timer.TickMsg:
+		var cmd tea.Cmd
+		m.timer, cmd = m.timer.Update(msg)
+		return m, cmd
 
 	// Is it a key press?
 	case tea.KeyMsg:
