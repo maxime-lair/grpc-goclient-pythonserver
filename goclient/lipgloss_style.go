@@ -65,4 +65,34 @@ var (
 	statusText = lipgloss.NewStyle().Inherit(statusBarStyle)
 
 	clientIDStyle = statusNugget.Copy().Background(lipgloss.Color("#6124DF"))
+
+	// List.
+
+	list = lipgloss.NewStyle().
+		Border(lipgloss.NormalBorder(), false, true, false, false).
+		BorderForeground(subtle).
+		MarginRight(2).
+		Height(8).
+		Width(96 + 1)
+
+	listHeader = lipgloss.NewStyle().
+			BorderStyle(lipgloss.NormalBorder()).
+			BorderBottom(true).
+			BorderForeground(subtle).
+			MarginRight(2).
+			Render
+
+	listItem = lipgloss.NewStyle().PaddingLeft(2).Render
+
+	checkMark = lipgloss.NewStyle().SetString("✓").
+			Foreground(special).
+			PaddingRight(1).
+			String()
+
+	listDone = func(s string) string {
+		return checkMark + lipgloss.NewStyle().
+			Strikethrough(true).
+			Foreground(lipgloss.AdaptiveColor{Light: "#969B86", Dark: "#696969"}).
+			Render(s)
+	}
 )

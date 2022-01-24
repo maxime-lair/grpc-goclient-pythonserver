@@ -38,19 +38,19 @@ func (m model) printHeader() string {
 			}
 		case stateGetType:
 			if m.clientChoice.selectedType != nil {
-				status = fmt.Sprintf("Family selected %s, selected type [%d] %s", m.clientChoice.selectedFamily.Name, m.clientChoice.selectedType.Value, m.clientChoice.selectedType.Name)
+				status = fmt.Sprintf("Family %s, type [%d] %s", m.clientChoice.selectedFamily.Name, m.clientChoice.selectedType.Value, m.clientChoice.selectedType.Name)
 			} else {
-				status = fmt.Sprintf("Family selected %s, no selected type", m.clientChoice.selectedFamily.Name)
+				status = fmt.Sprintf("Family %s, no selected type", m.clientChoice.selectedFamily.Name)
 			}
 		case stateGetProtocol:
 			if m.clientChoice.selectedProtocol != nil {
-				status = fmt.Sprintf("Family selected %s, type %s, selected protocol [%d] %s", m.clientChoice.selectedFamily.Name, m.clientChoice.selectedType.Name,
+				status = fmt.Sprintf("Family %s, type %s, selected protocol [%d] %s", m.clientChoice.selectedFamily.Name, m.clientChoice.selectedType.Name,
 					m.clientChoice.selectedProtocol.Value, m.clientChoice.selectedProtocol.Name)
 			} else {
-				status = fmt.Sprintf("Family selected %s, type %s, no selected protocol", m.clientChoice.selectedFamily.Name, m.clientChoice.selectedType.Name)
+				status = fmt.Sprintf("Family %s, type %s, no selected protocol", m.clientChoice.selectedFamily.Name, m.clientChoice.selectedType.Name)
 			}
 		case stateDone:
-			status = "Request process done, your final choice will appear below:"
+			status = "Request process done, your selection:"
 		default:
 			status = "Unknown state, exiting.."
 		}
@@ -61,7 +61,7 @@ func (m model) printHeader() string {
 		clientIDKey := clientIDKeyStyle.Render("ClientID")
 		clientIDName := clientIDStyle.Render(m.clientEnv.clientID.Name)
 		statusVal := statusText.Copy().
-			Width(90 - w(statusKey) - w(clientIDKey) - w(clientIDName)).
+			Width(96 - w(statusKey) - w(clientIDKey) - w(clientIDName)).
 			Render(status)
 
 		bar := lipgloss.JoinHorizontal(lipgloss.Top,
@@ -71,7 +71,7 @@ func (m model) printHeader() string {
 			clientIDName,
 		)
 
-		s += statusBarStyle.Width(90).Render(bar) + "\n\n"
+		s += statusBarStyle.Width(96).Render(bar) + "\n\n"
 	}
 
 	return s
@@ -85,11 +85,11 @@ func (m model) printChoices(i int, selectedValue *socketChoice, possibleChoice s
 	}
 
 	// Is this choice selected?
-	checked := " " // not selected
 	if selectedValue != nil && *selectedValue == possibleChoice {
-		checked = "x" // selected!
+		return cursor + " " + listDone(fmt.Sprintf("%d - %s", possibleChoice.Value, possibleChoice.Name))
+	} else {
+		return cursor + " " + listItem(fmt.Sprintf("%d - %s", possibleChoice.Value, possibleChoice.Name))
 	}
-	return fmt.Sprintf("%s [%s] %d - %s \n", cursor, checked, possibleChoice.Value, possibleChoice.Name)
 }
 
 func (m model) printHelp() string {
@@ -143,10 +143,20 @@ func (m model) ViewGetFamily() string {
 	var s string
 	s += m.printHeader()
 
+	var templist string
+	templist = lipgloss.JoinVertical(lipgloss.Left,
+		listHeader("Family choices"),
+	)
 	// Iterate over our choices
 	for i, choice := range m.clientChoice.socketChoicesList {
-		s += m.printChoices(i, m.clientChoice.selectedFamily, choice)
+		templist = lipgloss.JoinVertical(lipgloss.Left,
+			m.printChoices(i, m.clientChoice.selectedFamily, choice),
+		)
 	}
+
+	lists := list.Render(templist)
+
+	s += lipgloss.JoinHorizontal(lipgloss.Top, lists)
 
 	s += m.printHelp()
 	s += m.printLogs()
