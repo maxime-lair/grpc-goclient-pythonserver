@@ -132,7 +132,6 @@ func (m model) printLogs() string {
 		status := fmt.Sprintf("Last %d logs (total %d)", len(recentLogs), len(m.clientEnv.logJournal))
 		w := lipgloss.Width
 		s += fmt.Sprintf("Stopwatch: %v, test %v\n", m.stopwatch, m.stopwatch.Running())
-		m.stopwatch.Toggle()
 		statusKey := statusStyle.Render(m.spinner.View())
 		clientIDKey := clientIDKeyStyle.Render("Time spent")
 		clientIDName := clientIDStyle.Render(m.stopwatch.View())

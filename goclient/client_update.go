@@ -59,17 +59,16 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 			m.state = stateGetFamily
+			if !m.stopwatch.Running() {
+				return m, m.stopwatch.Start()
+			}
 		}
 	default:
 		return m, m.spinner.Tick
 	}
 
 	// Return the updated model to the Bubble Tea runtime for processing.
-	if !m.stopwatch.Running() {
-		return m, m.stopwatch.Start()
-	} else {
-		return m, nil
-	}
+	return m, nil
 
 }
 
