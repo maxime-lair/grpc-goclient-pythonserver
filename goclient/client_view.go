@@ -38,11 +38,13 @@ func (m model) printHeader() string {
 		if m.clientChoice.selectedFamily != nil {
 			s += fmt.Sprintf("\nCurrently selected value : [%d] %s\n", m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name)
 		}
-		s += "Please select your socket family..\n"
+		s += "Please select your socket family (only one selection possible)\n"
 	case stateGetType:
 		s += fmt.Sprintf("Requesting socket type list for family %s \n\n", m.clientChoice.selectedFamily.Name)
+		s += "Please select your socket type (only one selection possible)\n"
 	case stateGetProtocol:
 		s += fmt.Sprintf("Requesting socket protocol list for family %s and type %s:\n\n", m.clientChoice.selectedFamily.Name, m.clientChoice.selectedType.Name)
+		s += "Please select your socket protocol (only one selection possible)\n"
 	case stateDone:
 		s += "Request process done, your final choice will appear below:\n\n"
 	default:
@@ -81,13 +83,9 @@ func (m model) printFooter() string {
 	var s string
 	s += "\n"
 	// print help, idk why fullHelpView does not work here, so had to do it dirty
-
 	for _, group := range helpList {
 		s += fmt.Sprintf("%s\n", m.help.ShortHelpView(group))
 	}
-
-	s += fmt.Sprintf("%s\n", m.help.View(m.keys))
-	s += "Only one selection at a time possible.\n"
 
 	return s
 }
