@@ -40,12 +40,6 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
 
-	case tickMsg:
-		// Note that you can also use progress.Model.SetPercent to set the
-		// percentage value explicitly, too.
-		cmd := m.progress.IncrPercent(0.2)
-		return m, tea.Batch(tickCmd(), cmd)
-
 	// FrameMsg is sent when the progress bar wants to animate itself
 	case progress.FrameMsg:
 		progressModel, cmd := m.progress.Update(msg)
@@ -72,6 +66,7 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 			m.state = stateGetFamily
+			return m, m.progress.SetPercent(0.25)
 		}
 	default:
 		return m, m.spinner.Tick
@@ -84,12 +79,6 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
-
-	case tickMsg:
-		// Note that you can also use progress.Model.SetPercent to set the
-		// percentage value explicitly, too.
-		cmd := m.progress.IncrPercent(0.2)
-		return m, tea.Batch(tickCmd(), cmd)
 
 	// FrameMsg is sent when the progress bar wants to animate itself
 	case progress.FrameMsg:
@@ -150,6 +139,7 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 				m.state = stateGetType
 				m.cursor = 0 // reset cursor
+				return m, m.progress.SetPercent(0.5)
 			}
 		}
 	default:
@@ -165,12 +155,6 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) UpdateGetType(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
-
-	case tickMsg:
-		// Note that you can also use progress.Model.SetPercent to set the
-		// percentage value explicitly, too.
-		cmd := m.progress.IncrPercent(0.2)
-		return m, tea.Batch(tickCmd(), cmd)
 
 	// FrameMsg is sent when the progress bar wants to animate itself
 	case progress.FrameMsg:
@@ -231,6 +215,7 @@ func (m model) UpdateGetType(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 				m.state = stateGetProtocol
 				m.cursor = 0 // reset cursor
+				return m, m.progress.SetPercent(0.75)
 			}
 		}
 	default:
@@ -245,12 +230,6 @@ func (m model) UpdateGetType(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) UpdateGetProtocol(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
-
-	case tickMsg:
-		// Note that you can also use progress.Model.SetPercent to set the
-		// percentage value explicitly, too.
-		cmd := m.progress.IncrPercent(0.2)
-		return m, tea.Batch(tickCmd(), cmd)
 
 	// FrameMsg is sent when the progress bar wants to animate itself
 	case progress.FrameMsg:
@@ -308,6 +287,7 @@ func (m model) UpdateGetProtocol(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 				m.state = stateDone
 				m.cursor = 0 // reset cursor
+				return m, m.progress.SetPercent(1)
 			}
 		}
 	default:
@@ -322,12 +302,6 @@ func (m model) UpdateGetProtocol(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) UpdateDone(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
-
-	case tickMsg:
-		// Note that you can also use progress.Model.SetPercent to set the
-		// percentage value explicitly, too.
-		cmd := m.progress.IncrPercent(0.2)
-		return m, tea.Batch(tickCmd(), cmd)
 
 	// FrameMsg is sent when the progress bar wants to animate itself
 	case progress.FrameMsg:
