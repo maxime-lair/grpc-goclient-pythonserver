@@ -34,6 +34,7 @@ else
     go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
     go get github.com/charmbracelet/bubbletea
     go get github.com/charmbracelet/bubbles
+    go get github.com/charmbracelet/lipgloss
 fi
 
 
