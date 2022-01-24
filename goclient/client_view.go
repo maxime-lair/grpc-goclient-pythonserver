@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/charmbracelet/bubbles/key"
-	"github.com/charmbracelet/lipgloss"
 )
 
 // The header
@@ -59,19 +58,12 @@ func (m model) printFooter() string {
 	// The footer
 	m.help.ShowAll = true // show all help
 
-	var anotherStyle = lipgloss.NewStyle().
-		BorderStyle(lipgloss.RoundedBorder()).
-		BorderForeground(lipgloss.Color("228")).
-		BorderBackground(lipgloss.Color("63")).
-		BorderTop(true).
-		BorderLeft(true)
-
-	m.help.Styles.ShortDesc = anotherStyle
-
 	helpList := [][]key.Binding{
-		{DefaultKeyMap.Up, DefaultKeyMap.Space},   // first column
-		{DefaultKeyMap.Down, DefaultKeyMap.Enter}, // second column
-		{DefaultKeyMap.Quit},                      // third column
+		{DefaultKeyMap.Up},
+		{DefaultKeyMap.Down},
+		{DefaultKeyMap.Space},
+		{DefaultKeyMap.Enter},
+		{DefaultKeyMap.Quit},
 	}
 
 	var s string
