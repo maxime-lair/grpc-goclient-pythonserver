@@ -56,6 +56,8 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case key.Matches(msg, DefaultKeyMap.Quit):
 			return m, tea.Quit
 
+		case key.Matches(msg, DefaultKeyMap.Space):
+			return m, m.progress.IncrPercent(0.25)
 		// The "enter" key and the spacebar (a literal space) toggle
 		// the selected state for the item that the cursor is pointing at.
 		case key.Matches(msg, DefaultKeyMap.Enter):
