@@ -25,11 +25,6 @@ var (
 		BorderForeground(highlight).
 		Padding(0, 1)
 
-	tabGap = tab.Copy().
-		BorderTop(false).
-		BorderLeft(false).
-		BorderRight(false)
-
 	activeTab = tab.Copy().Border(activeTabBorder, true)
 
 	subtle  = lipgloss.AdaptiveColor{Light: "#D9DCCF", Dark: "#383838"}
@@ -46,10 +41,3 @@ var (
 			BorderTop(true).
 			BorderForeground(subtle)
 )
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
