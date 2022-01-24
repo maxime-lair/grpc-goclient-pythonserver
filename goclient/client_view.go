@@ -76,7 +76,7 @@ func (m model) printHeader() string {
 	}
 
 	// Progress bar
-	s += m.progress.View()
+	s += m.progress.View() + "\n"
 
 	return s
 }
