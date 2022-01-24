@@ -86,9 +86,9 @@ func (m model) printChoices(i int, selectedValue *socketChoice, possibleChoice s
 
 	// Is this choice selected?
 	if selectedValue != nil && *selectedValue == possibleChoice {
-		return cursor + " " + listDone(fmt.Sprintf("%d - %s", possibleChoice.Value, possibleChoice.Name))
+		return cursor + " " + listDone(fmt.Sprintf("[%d] %s", possibleChoice.Value, possibleChoice.Name))
 	} else {
-		return cursor + " " + listItem(fmt.Sprintf("%d - %s", possibleChoice.Value, possibleChoice.Name))
+		return cursor + " " + listItem(fmt.Sprintf("[%d] %s", possibleChoice.Value, possibleChoice.Name))
 	}
 }
 
@@ -103,7 +103,7 @@ func (m model) printHelp() string {
 	}
 
 	var s string
-	s += "\n"
+	s += "\n\n"
 	// print help, idk why fullHelpView does not work here, so had to do it dirty
 	for _, group := range helpList {
 		s += fmt.Sprintf("%s\n", m.help.ShortHelpView(group))
@@ -116,13 +116,36 @@ func (m model) printLogs() string {
 	// print log journal
 	var s string
 	var recentLogs []string
-	if len(m.clientEnv.logJournal) > 5 {
-		recentLogs = m.clientEnv.logJournal[len(m.clientEnv.logJournal)-5:]
-	} else {
-		recentLogs = m.clientEnv.logJournal
-	}
-	s += fmt.Sprintf("\n------ last %d logs (total %d)------\n", len(m.clientEnv.logJournal), len(recentLogs))
 
+	// Status bar showing number of logs
+	{
+		if len(m.clientEnv.logJournal) > 5 {
+			recentLogs = m.clientEnv.logJournal[len(m.clientEnv.logJournal)-5:]
+		} else {
+			recentLogs = m.clientEnv.logJournal
+		}
+
+		status := fmt.Sprintf("Last %d logs (total %d)", len(m.clientEnv.logJournal), len(recentLogs))
+		w := lipgloss.Width
+
+		statusKey := statusStyle.Render(m.spinner.View())
+		clientIDKey := clientIDKeyStyle.Render("ClientID")
+		clientIDName := clientIDStyle.Render(m.clientEnv.clientID.Name)
+		statusVal := statusText.Copy().
+			Width(96 - w(statusKey) - w(clientIDKey) - w(clientIDName)).
+			Render(status)
+
+		bar := lipgloss.JoinHorizontal(lipgloss.Top,
+			statusKey,
+			statusVal,
+			clientIDKey,
+			clientIDName,
+		)
+
+		s += statusBarStyle.Width(96).Render(bar) + "\n\n"
+	}
+
+	// Logs line
 	for _, line := range recentLogs {
 		s += fmt.Sprintf("%s\n", line)
 	}

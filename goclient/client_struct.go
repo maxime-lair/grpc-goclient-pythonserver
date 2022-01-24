@@ -5,6 +5,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
+	"github.com/charmbracelet/bubbles/spinner"
 )
 
 // Info for family/type/protocol, always a string and value
@@ -34,10 +35,11 @@ type clientChoice struct {
 
 // TUI model used to print and show informations
 type model struct {
-	state  int // Current state (connect, getXX, done..) - see const for values
-	cursor int // which to-do list item our cursor is pointing at
-	help   help.Model
-	keys   keyMap
+	state   int // Current state (connect, getXX, done..) - see const for values
+	cursor  int // which to-do list item our cursor is pointing at
+	help    help.Model
+	keys    keyMap
+	spinner spinner.Model
 
 	clientChoice clientChoice // all client choices for the socket
 	clientEnv    clientEnv    // all client informations

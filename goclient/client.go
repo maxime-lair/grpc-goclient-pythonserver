@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/charmbracelet/bubbles/help"
+	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -31,10 +32,14 @@ Bubbletea part
 *************/
 
 func initialModel(client *pb.SocketGuideClient) model {
+	s := spinner.New()
+	s.Spinner = spinner.Dot
+	s.Style = spinnerStyle
 	return model{
-		state: stateConnect,
-		help:  help.New(),
-		keys:  DefaultKeyMap,
+		state:   stateConnect,
+		help:    help.New(),
+		keys:    DefaultKeyMap,
+		spinner: s,
 		clientEnv: clientEnv{
 			client:   client,
 			clientID: &pb.SocketTree{Name: define_client_id()},
@@ -44,7 +49,7 @@ func initialModel(client *pb.SocketGuideClient) model {
 
 func (m model) Init() tea.Cmd {
 	// Just return `nil`, which means "no I/O right now, please."
-	return nil
+	return m.spinner.Tick
 }
 
 func main() {

@@ -94,4 +94,6 @@ var (
 			Foreground(lipgloss.AdaptiveColor{Light: "#969B86", Dark: "#696969"}).
 			Render(s)
 	}
+
+	spinnerStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
 )
