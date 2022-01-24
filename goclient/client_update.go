@@ -59,19 +59,13 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 			m.state = stateGetFamily
-			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("Stopwatch: %v, test %v", m.stopwatch, m.stopwatch.Running()))
-			if !m.stopwatch.Running() {
-				return m, m.stopwatch.Reset()
-			}
 		}
 	default:
 		return m, m.spinner.Tick
 	}
 
 	// Return the updated model to the Bubble Tea runtime for processing.
-	var cmd tea.Cmd
-	m.stopwatch, cmd = m.stopwatch.Update(msg)
-	return m, cmd
+	return m, nil
 }
 
 func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -117,11 +111,6 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] W: User tried to add more than one selection.", m.clientEnv.clientID.Name))
 				}
 			}
-			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("Stopwatch: %v, test %v, elapsed %s", m.stopwatch, m.stopwatch.Running(), m.stopwatch.View()))
-			if !m.stopwatch.Running() {
-				m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("Stopwatch start: %v", m.stopwatch.Start()))
-				return m, m.stopwatch.Start()
-			}
 		// The "enter" key to validate
 		case key.Matches(msg, DefaultKeyMap.Enter):
 			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("[%s] selected entry %d - which is choice: %d %s",
@@ -145,9 +134,7 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	// Return the updated model to the Bubble Tea runtime for processing.
-	var cmd tea.Cmd
-	m.stopwatch, cmd = m.stopwatch.Update(msg)
-	return m, cmd
+	return m, nil
 }
 
 func (m model) UpdateGetType(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -215,9 +202,7 @@ func (m model) UpdateGetType(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, cmd
 	}
 
-	var cmd tea.Cmd
-	m.stopwatch, cmd = m.stopwatch.Update(msg)
-	return m, cmd
+	return m, nil
 }
 
 func (m model) UpdateGetProtocol(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -282,9 +267,7 @@ func (m model) UpdateGetProtocol(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, cmd
 	}
 
-	var cmd tea.Cmd
-	m.stopwatch, cmd = m.stopwatch.Update(msg)
-	return m, cmd
+	return m, nil
 }
 
 func (m model) UpdateDone(msg tea.Msg) (tea.Model, tea.Cmd) {

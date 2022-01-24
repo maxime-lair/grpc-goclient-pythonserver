@@ -4,7 +4,6 @@ import (
 	"flag"
 	"log"
 	"os"
-	"time"
 
 	pb "main/pb_server"
 
@@ -13,7 +12,6 @@ import (
 
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/spinner"
-	"github.com/charmbracelet/bubbles/stopwatch"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -38,11 +36,10 @@ func initialModel(client *pb.SocketGuideClient) model {
 	s.Spinner = spinner.Dot
 	s.Style = spinnerStyle
 	return model{
-		state:     stateConnect,
-		help:      help.New(),
-		keys:      DefaultKeyMap,
-		spinner:   s,
-		stopwatch: stopwatch.NewWithInterval(time.Millisecond),
+		state:   stateConnect,
+		help:    help.New(),
+		keys:    DefaultKeyMap,
+		spinner: s,
 		clientEnv: clientEnv{
 			client:   client,
 			clientID: &pb.SocketTree{Name: define_client_id()},
@@ -52,7 +49,7 @@ func initialModel(client *pb.SocketGuideClient) model {
 
 func (m model) Init() tea.Cmd {
 	// Just return `nil`, which means "no I/O right now, please."
-	return m.stopwatch.Init()
+	return nil
 }
 
 func main() {
