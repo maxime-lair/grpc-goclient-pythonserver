@@ -41,7 +41,7 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 
 	case tickMsg:
-		if m.progress.Percent() == 0.25 {
+		if m.progress.Percent() == 0.2 {
 			return m, tea.Quit
 		}
 
@@ -94,7 +94,7 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 
 	case tickMsg:
-		if m.progress.Percent() == 0.5 {
+		if m.progress.Percent() == 0.4 {
 			return m, tea.Quit
 		}
 
@@ -180,7 +180,7 @@ func (m model) UpdateGetType(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 
 	case tickMsg:
-		if m.progress.Percent() == 0.75 {
+		if m.progress.Percent() == 0.6 {
 			return m, tea.Quit
 		}
 
