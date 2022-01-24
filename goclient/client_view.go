@@ -106,8 +106,10 @@ func (m model) printHelp() string {
 	s += "\n\n"
 	// print help, idk why fullHelpView does not work here, so had to do it dirty
 	for _, group := range helpList {
-		s += fmt.Sprintf("%s\n\n", m.help.ShortHelpView(group))
+		s += fmt.Sprintf("%s\n", m.help.ShortHelpView(group))
 	}
+
+	s += "\n"
 
 	return s
 }
