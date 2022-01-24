@@ -71,8 +71,8 @@ func (m model) printFooter() string {
 	// The footer
 	m.help.ShowAll = true // show all help
 	var s string
-	s += fmt.Sprintf("%v", m.keys)
-	s += fmt.Sprintf("%v", m.help)
+	s += fmt.Sprintf("%v\n", m.keys)
+	s += fmt.Sprintf("%v\n", m.help)
 	s += "\n"
 	s += fmt.Sprintf("%s\n", m.help.View(m.keys))
 	s += "Only one selection at a time possible.\n"
