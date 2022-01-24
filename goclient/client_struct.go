@@ -2,9 +2,11 @@ package main
 
 import (
 	pb "main/pb_server"
+	"time"
 
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
+	"github.com/charmbracelet/bubbles/progress"
 	"github.com/charmbracelet/bubbles/spinner"
 )
 
@@ -16,6 +18,8 @@ type socketChoice struct {
 }
 
 type errMsg struct{ err error }
+
+type tickMsg time.Time
 
 // Struct for error/log handling when requesting to client
 type clientEnv struct {
@@ -35,11 +39,12 @@ type clientChoice struct {
 
 // TUI model used to print and show informations
 type model struct {
-	state   int // Current state (connect, getXX, done..) - see const for values
-	cursor  int // which to-do list item our cursor is pointing at
-	help    help.Model
-	keys    keyMap
-	spinner spinner.Model
+	state    int // Current state (connect, getXX, done..) - see const for values
+	cursor   int // which to-do list item our cursor is pointing at
+	help     help.Model
+	keys     keyMap
+	spinner  spinner.Model
+	progress progress.Model
 
 	clientChoice clientChoice // all client choices for the socket
 	clientEnv    clientEnv    // all client informations

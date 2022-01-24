@@ -1,6 +1,9 @@
 package main
 
 import (
+	"time"
+
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
@@ -96,4 +99,10 @@ var (
 	}
 
 	spinnerStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#00b4d8"))
+
+	tickCmd = func() tea.Cmd {
+		return tea.Tick(time.Second*1, func(t time.Time) tea.Msg {
+			return tickMsg(t)
+		})
+	}
 )

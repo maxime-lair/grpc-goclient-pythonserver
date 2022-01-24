@@ -75,6 +75,9 @@ func (m model) printHeader() string {
 		s += statusBarStyle.Width(96).Render(bar) + "\n\n"
 	}
 
+	// Progress bar
+	s += m.progress.View()
+
 	return s
 }
 

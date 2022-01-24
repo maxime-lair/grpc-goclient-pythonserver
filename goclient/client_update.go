@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	key "github.com/charmbracelet/bubbles/key"
+	"github.com/charmbracelet/bubbles/progress"
 	tea "github.com/charmbracelet/bubbletea"
 )
 
@@ -39,6 +40,18 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
 
+	case tickMsg:
+		// Note that you can also use progress.Model.SetPercent to set the
+		// percentage value explicitly, too.
+		cmd := m.progress.IncrPercent(0.2)
+		return m, tea.Batch(tickCmd(), cmd)
+
+	// FrameMsg is sent when the progress bar wants to animate itself
+	case progress.FrameMsg:
+		progressModel, cmd := m.progress.Update(msg)
+		m.progress = progressModel.(progress.Model)
+		return m, cmd
+
 	// Is it a key press?
 	case tea.KeyMsg:
 
@@ -71,6 +84,18 @@ func (m model) UpdateConnect(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
+
+	case tickMsg:
+		// Note that you can also use progress.Model.SetPercent to set the
+		// percentage value explicitly, too.
+		cmd := m.progress.IncrPercent(0.2)
+		return m, tea.Batch(tickCmd(), cmd)
+
+	// FrameMsg is sent when the progress bar wants to animate itself
+	case progress.FrameMsg:
+		progressModel, cmd := m.progress.Update(msg)
+		m.progress = progressModel.(progress.Model)
+		return m, cmd
 
 	// Is it a key press?
 	case tea.KeyMsg:
@@ -141,6 +166,18 @@ func (m model) UpdateGetType(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
 
+	case tickMsg:
+		// Note that you can also use progress.Model.SetPercent to set the
+		// percentage value explicitly, too.
+		cmd := m.progress.IncrPercent(0.2)
+		return m, tea.Batch(tickCmd(), cmd)
+
+	// FrameMsg is sent when the progress bar wants to animate itself
+	case progress.FrameMsg:
+		progressModel, cmd := m.progress.Update(msg)
+		m.progress = progressModel.(progress.Model)
+		return m, cmd
+
 	// Is it a key press?
 	case tea.KeyMsg:
 
@@ -209,6 +246,18 @@ func (m model) UpdateGetProtocol(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
 
+	case tickMsg:
+		// Note that you can also use progress.Model.SetPercent to set the
+		// percentage value explicitly, too.
+		cmd := m.progress.IncrPercent(0.2)
+		return m, tea.Batch(tickCmd(), cmd)
+
+	// FrameMsg is sent when the progress bar wants to animate itself
+	case progress.FrameMsg:
+		progressModel, cmd := m.progress.Update(msg)
+		m.progress = progressModel.(progress.Model)
+		return m, cmd
+
 	// Is it a key press?
 	case tea.KeyMsg:
 
@@ -273,6 +322,18 @@ func (m model) UpdateGetProtocol(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m model) UpdateDone(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch msg := msg.(type) {
+
+	case tickMsg:
+		// Note that you can also use progress.Model.SetPercent to set the
+		// percentage value explicitly, too.
+		cmd := m.progress.IncrPercent(0.2)
+		return m, tea.Batch(tickCmd(), cmd)
+
+	// FrameMsg is sent when the progress bar wants to animate itself
+	case progress.FrameMsg:
+		progressModel, cmd := m.progress.Update(msg)
+		m.progress = progressModel.(progress.Model)
+		return m, cmd
 
 	// Is it a key press?
 	case tea.KeyMsg:

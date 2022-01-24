@@ -12,6 +12,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/charmbracelet/bubbles/help"
+	"github.com/charmbracelet/bubbles/progress"
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -40,10 +41,11 @@ func initialModel(client *pb.SocketGuideClient) model {
 	}
 	s.Style = spinnerStyle
 	return model{
-		state:   stateConnect,
-		help:    help.New(),
-		keys:    DefaultKeyMap,
-		spinner: s,
+		state:    stateConnect,
+		help:     help.New(),
+		keys:     DefaultKeyMap,
+		spinner:  s,
+		progress: progress.New(progress.WithDefaultGradient()),
 		clientEnv: clientEnv{
 			client:   client,
 			clientID: &pb.SocketTree{Name: define_client_id()},
