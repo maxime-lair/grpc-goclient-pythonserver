@@ -106,7 +106,7 @@ func (m model) printHelp() string {
 	s += "\n\n"
 	// print help, idk why fullHelpView does not work here, so had to do it dirty
 	for _, group := range helpList {
-		s += fmt.Sprintf("%s\n", m.help.ShortHelpView(group))
+		s += fmt.Sprintf("%s\n\n", m.help.ShortHelpView(group))
 	}
 
 	return s
@@ -125,7 +125,7 @@ func (m model) printLogs() string {
 			recentLogs = m.clientEnv.logJournal
 		}
 
-		status := fmt.Sprintf("Last %d logs (total %d)", len(m.clientEnv.logJournal), len(recentLogs))
+		status := fmt.Sprintf("Last %d logs (total %d)", len(recentLogs), len(m.clientEnv.logJournal))
 		w := lipgloss.Width
 
 		statusKey := statusStyle.Render(m.spinner.View())

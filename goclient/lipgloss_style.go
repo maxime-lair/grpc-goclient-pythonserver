@@ -95,5 +95,5 @@ var (
 			Render(s)
 	}
 
-	spinnerStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
+	spinnerStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#00b4d8"))
 )
