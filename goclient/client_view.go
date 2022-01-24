@@ -73,6 +73,7 @@ func (m model) printFooter() string {
 	m.help.ShowAll = true // show all help
 
 	var s string
+	s += fmt.Sprintf("Show view %+v", m.help.View(m.keys))
 	s += m.help.View(m.keys)
 	s += "\nPress <space> to add a value\nPress <enter> to validate\n"
 	s += "Press q to quit.\n"
