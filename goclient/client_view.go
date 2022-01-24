@@ -2,14 +2,42 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/charmbracelet/bubbles/key"
+	"github.com/charmbracelet/lipgloss"
 )
 
 // The header
 func (m model) printHeader() string {
 
 	var s string
+
+	// Title
+	{
+		var (
+			colors = colorGrid(1, 5)
+			title  strings.Builder
+		)
+
+		for i, v := range colors {
+			const offset = 2
+			c := lipgloss.Color(v[0])
+			fmt.Fprint(&title, titleStyle.Copy().MarginLeft(i*offset).Background(c))
+			if i < len(colors)-1 {
+				title.WriteRune('\n')
+			}
+		}
+
+		desc := lipgloss.JoinVertical(lipgloss.Left,
+			descStyle.Render("Go client to request sockets through grpc"),
+			infoStyle.Render("Built with"+divider+url("GRPC")+divider+url("BubbleTea")+divider+url("Bubbles")+divider+("LipGloss")),
+		)
+
+		row := lipgloss.JoinHorizontal(lipgloss.Top, title.String(), desc)
+		s += fmt.Sprintf("%s\n\n", row)
+	}
+
 	if m.clientEnv.clientID == nil {
 		s += fmt.Sprintf("------- Client ID undefined %p -------\n", m.clientEnv.client)
 	} else {
@@ -53,10 +81,7 @@ func (m model) printChoices(i int, selectedValue *socketChoice, possibleChoice s
 	return fmt.Sprintf("%s [%s] %d - %s \n", cursor, checked, possibleChoice.Value, possibleChoice.Name)
 }
 
-func (m model) printFooter() string {
-
-	// The footer
-	m.help.ShowAll = true // show all help
+func (m model) printHelp() string {
 
 	helpList := [][]key.Binding{
 		{DefaultKeyMap.Up},
@@ -76,70 +101,7 @@ func (m model) printFooter() string {
 	return s
 }
 
-func (m model) ViewConnect() string {
-	var s string
-	s += m.printHeader()
-	// TODO add loading bar
-	s += "Press enter to start ..\n"
-	s += m.printFooter()
-	s += m.ViewLogs()
-	return s
-}
-
-func (m model) ViewGetFamily() string {
-	var s string
-	s += m.printHeader()
-
-	// Iterate over our choices
-	for i, choice := range m.clientChoice.socketChoicesList {
-		s += m.printChoices(i, m.clientChoice.selectedFamily, choice)
-	}
-
-	s += m.printFooter()
-	s += m.ViewLogs()
-	return s
-}
-
-func (m model) ViewGetType() string {
-	var s string
-	s += m.printHeader()
-	// Iterate over our choices
-	for i, choice := range m.clientChoice.socketChoicesList {
-		s += m.printChoices(i, m.clientChoice.selectedType, choice)
-	}
-
-	s += m.printFooter()
-	s += m.ViewLogs()
-	return s
-}
-
-func (m model) ViewGetProtocol() string {
-	var s string
-	s += m.printHeader()
-	// Iterate over our choices
-	for i, choice := range m.clientChoice.socketChoicesList {
-		s += m.printChoices(i, m.clientChoice.selectedProtocol, choice)
-	}
-	s += m.printFooter()
-	s += m.ViewLogs()
-	return s
-}
-
-func (m model) ViewDone() string {
-	var s string
-	s += m.printHeader()
-
-	s += "You choose the following parameters for your socket:\n"
-	s += fmt.Sprintf("\t-> Family: %d - %s\n", m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name)
-	s += fmt.Sprintf("\t--> Type: %d - %s\n", m.clientChoice.selectedType.Value, m.clientChoice.selectedType.Name)
-	s += fmt.Sprintf("\t---> Protocol: %d - %s\n", m.clientChoice.selectedProtocol.Value, m.clientChoice.selectedProtocol.Name)
-
-	s += m.printFooter()
-	s += m.ViewLogs()
-	return s
-}
-
-func (m model) ViewLogs() string {
+func (m model) printLogs() string {
 	// print log journal
 	var s string
 	var recentLogs []string
@@ -153,6 +115,69 @@ func (m model) ViewLogs() string {
 	for _, line := range recentLogs {
 		s += fmt.Sprintf("%s\n", line)
 	}
+	return s
+}
+
+func (m model) ViewConnect() string {
+	var s string
+	s += m.printHeader()
+	// TODO add loading bar
+	s += "Press enter to start ..\n"
+	s += m.printHelp()
+	s += m.printLogs()
+	return s
+}
+
+func (m model) ViewGetFamily() string {
+	var s string
+	s += m.printHeader()
+
+	// Iterate over our choices
+	for i, choice := range m.clientChoice.socketChoicesList {
+		s += m.printChoices(i, m.clientChoice.selectedFamily, choice)
+	}
+
+	s += m.printHelp()
+	s += m.printLogs()
+	return s
+}
+
+func (m model) ViewGetType() string {
+	var s string
+	s += m.printHeader()
+	// Iterate over our choices
+	for i, choice := range m.clientChoice.socketChoicesList {
+		s += m.printChoices(i, m.clientChoice.selectedType, choice)
+	}
+
+	s += m.printHelp()
+	s += m.printLogs()
+	return s
+}
+
+func (m model) ViewGetProtocol() string {
+	var s string
+	s += m.printHeader()
+	// Iterate over our choices
+	for i, choice := range m.clientChoice.socketChoicesList {
+		s += m.printChoices(i, m.clientChoice.selectedProtocol, choice)
+	}
+	s += m.printHelp()
+	s += m.printLogs()
+	return s
+}
+
+func (m model) ViewDone() string {
+	var s string
+	s += m.printHeader()
+
+	s += "You choose the following parameters for your socket:\n"
+	s += fmt.Sprintf("\t-> Family: %d - %s\n", m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name)
+	s += fmt.Sprintf("\t--> Type: %d - %s\n", m.clientChoice.selectedType.Value, m.clientChoice.selectedType.Name)
+	s += fmt.Sprintf("\t---> Protocol: %d - %s\n", m.clientChoice.selectedProtocol.Value, m.clientChoice.selectedProtocol.Name)
+
+	s += m.printHelp()
+	s += m.printLogs()
 	return s
 }
 
