@@ -62,7 +62,7 @@ func (m model) printHeader() string {
 		clientIDKey := clientIDKeyStyle.Render("ClientID")
 		clientIDName := clientIDStyle.Render(m.clientEnv.clientID.Name)
 		statusVal := statusText.Copy().
-			Width(96 - w(statusKey) - w(clientIDKey) - w(clientIDName)).
+			Width(width - w(statusKey) - w(clientIDKey) - w(clientIDName)).
 			Render(status)
 
 		bar := lipgloss.JoinHorizontal(lipgloss.Top,
@@ -72,11 +72,11 @@ func (m model) printHeader() string {
 			clientIDName,
 		)
 
-		s += statusBarStyle.Width(96).Render(bar) + "\n\n"
+		s += statusBarStyle.Width(width).Render(bar) + "\n\n"
 	}
 
 	// Progress bar
-	s += m.progress.View() + "\n"
+	s += lipgloss.NewStyle().Width(width).Render(m.progress.View()) + "\n"
 
 	return s
 }
@@ -138,7 +138,7 @@ func (m model) printLogs() string {
 		clientIDKey := clientIDKeyStyle.Render("Total logs")
 		clientIDName := clientIDStyle.Render(fmt.Sprintf("%d", len(m.clientEnv.logJournal)))
 		statusVal := statusText.Copy().
-			Width(96 - w(statusKey) - w(clientIDKey) - w(clientIDName)).
+			Width(width - w(statusKey) - w(clientIDKey) - w(clientIDName)).
 			Render(status)
 
 		bar := lipgloss.JoinHorizontal(lipgloss.Top,
@@ -148,7 +148,7 @@ func (m model) printLogs() string {
 			clientIDName,
 		)
 
-		s += statusBarStyle.Width(96).Render(bar)
+		s += statusBarStyle.Width(width).Render(bar)
 	}
 
 	// Logs line
@@ -158,7 +158,7 @@ func (m model) printLogs() string {
 			logList = lipgloss.JoinVertical(lipgloss.Top,
 				logList,
 				statusText.Copy().
-					Width(96).
+					Width(width).
 					Render(line),
 			)
 
@@ -171,8 +171,7 @@ func (m model) printLogs() string {
 func (m model) ViewConnect() string {
 	var s string
 	s += m.printHeader()
-	// TODO add loading bar
-	s += "Press enter to start ..\n"
+	s += "\nPress enter to start ..\n"
 	s += m.printHelp()
 	s += m.printLogs()
 	return s
@@ -265,7 +264,7 @@ func (m model) ViewDone() string {
 		buttons := lipgloss.JoinVertical(lipgloss.Top, familyButton, typeButton, protocolButton)
 		ui := lipgloss.JoinVertical(lipgloss.Center, question, buttons)
 
-		dialog := lipgloss.Place(96, 18,
+		dialog := lipgloss.Place(width, 18,
 			lipgloss.Center, lipgloss.Center,
 			dialogBoxStyle.Render(ui),
 			lipgloss.WithWhitespaceChars("猫咪"),

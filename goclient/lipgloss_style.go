@@ -118,17 +118,19 @@ var (
 
 	typeButtonStyle = lipgloss.NewStyle().
 			Foreground(lipgloss.Color("#FFF7DB")).
-			Background(lipgloss.Color("#888B7E")).
+			Background(lipgloss.Color("#e76f51")).
 			Padding(0, 3).
 			MarginTop(1)
 
 	familyButtonStyle = typeButtonStyle.Copy().
 				Foreground(lipgloss.Color("#FFF7DB")).
-				Background(lipgloss.Color("#F25D94")).
+				Background(lipgloss.Color("#90dbf4")).
 				MarginRight(2)
 
 	protocolButtonStyle = typeButtonStyle.Copy().
-				Foreground(lipgloss.Color("#e9c46a")).
+				Foreground(lipgloss.Color("#FFF7DB")).
 				Background(lipgloss.Color("#2a9d8f")).
 				MarginRight(2)
+
+	width = 94
 )
