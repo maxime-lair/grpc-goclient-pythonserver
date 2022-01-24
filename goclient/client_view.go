@@ -257,12 +257,12 @@ func (m model) ViewDone() string {
 
 	// Dialog
 	{
-		familyButton := familyButtonStyle.Render(fmt.Sprintf("Family [%d] %s", m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name))
-		typeButton := typeButtonStyle.Render(fmt.Sprintf("Type [%d] %s", m.clientChoice.selectedType.Value, m.clientChoice.selectedType.Name))
-		protocolButton := protocolButtonStyle.Render(fmt.Sprintf("Protocol [%d] %s", m.clientChoice.selectedProtocol.Value, m.clientChoice.selectedProtocol.Name))
+		familyButton := "Family " + familyButtonStyle.Render(fmt.Sprintf("[%d] %s", m.clientChoice.selectedFamily.Value, m.clientChoice.selectedFamily.Name))
+		typeButton := "Type  " + typeButtonStyle.Render(fmt.Sprintf("[%d] %s", m.clientChoice.selectedType.Value, m.clientChoice.selectedType.Name))
+		protocolButton := "Protocol " + protocolButtonStyle.Render(fmt.Sprintf("[%d] %s", m.clientChoice.selectedProtocol.Value, m.clientChoice.selectedProtocol.Name))
 
-		question := lipgloss.NewStyle().Width(50).Align(lipgloss.Center).Render("You choose the following parameters for your socket")
-		buttons := lipgloss.JoinVertical(lipgloss.Center, familyButton, typeButton, protocolButton)
+		question := lipgloss.NewStyle().Width(50).Align(lipgloss.Center).Render("You choose the following socket parameters")
+		buttons := lipgloss.JoinVertical(lipgloss.Top, familyButton, typeButton, protocolButton)
 		ui := lipgloss.JoinVertical(lipgloss.Center, question, buttons)
 
 		dialog := lipgloss.Place(96, 18,

@@ -125,11 +125,10 @@ var (
 	familyButtonStyle = typeButtonStyle.Copy().
 				Foreground(lipgloss.Color("#FFF7DB")).
 				Background(lipgloss.Color("#F25D94")).
-				MarginRight(2).
-				Underline(true)
+				MarginRight(2)
+
 	protocolButtonStyle = typeButtonStyle.Copy().
 				Foreground(lipgloss.Color("#e9c46a")).
 				Background(lipgloss.Color("#2a9d8f")).
-				MarginRight(2).
-				Underline(true)
+				MarginRight(2)
 )
