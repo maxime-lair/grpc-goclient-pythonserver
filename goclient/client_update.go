@@ -119,7 +119,7 @@ func (m model) UpdateGetFamily(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("Stopwatch: %v, test %v, elapsed %s", m.stopwatch, m.stopwatch.Running(), m.stopwatch.View()))
 			if !m.stopwatch.Running() {
-
+				m.clientEnv.logJournal = append(m.clientEnv.logJournal, fmt.Sprintf("Stopwatch start: %v", m.stopwatch.Start()))
 				return m, m.stopwatch.Start()
 			}
 		// The "enter" key to validate
