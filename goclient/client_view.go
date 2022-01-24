@@ -144,7 +144,7 @@ func (m model) printLogs() string {
 			clientIDName,
 		)
 
-		s += statusBarStyle.Width(96).Render(bar) + "\n\n"
+		s += statusBarStyle.Width(96).Render(bar)
 	}
 
 	// Logs line
