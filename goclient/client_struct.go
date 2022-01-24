@@ -2,6 +2,7 @@ package main
 
 import (
 	pb "main/pb_server"
+	"time"
 
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
@@ -17,6 +18,8 @@ type socketChoice struct {
 }
 
 type errMsg struct{ err error }
+
+type tickMsg time.Time
 
 // Struct for error/log handling when requesting to client
 type clientEnv struct {
