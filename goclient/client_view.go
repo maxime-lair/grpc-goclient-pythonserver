@@ -73,6 +73,10 @@ func (m model) printFooter() string {
 	var s string
 	s += "\n"
 	s += m.help.View(m.keys)
+	s += m.help.FullHelpView([][]key.Binding{
+		{DefaultKeyMap.Up, DefaultKeyMap.Down},                         // first column
+		{DefaultKeyMap.Space, DefaultKeyMap.Enter, DefaultKeyMap.Quit}, // second column
+	})
 	s += "Only one selection at a time possible.\n"
 
 	return s
