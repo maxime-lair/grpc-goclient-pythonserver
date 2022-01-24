@@ -11,7 +11,7 @@ var (
 	highlight       = lipgloss.AdaptiveColor{Light: "#874BFD", Dark: "#7D56F4"}
 	activeTabBorder = lipgloss.Border{
 		Top:         "─",
-		Bottom:      " ",
+		Bottom:      "─",
 		Left:        "│",
 		Right:       "│",
 		TopLeft:     "╭",
