@@ -18,7 +18,7 @@ var DefaultKeyMap = keyMap{
 	),
 	Enter: key.NewBinding(
 		key.WithKeys("enter"),
-		key.WithHelp("Enter", "Validate entry"),
+		key.WithHelp("<enter>", "Validate entry"),
 	),
 	Space: key.NewBinding(
 		key.WithKeys(" "),
@@ -26,7 +26,7 @@ var DefaultKeyMap = keyMap{
 	),
 	Quit: key.NewBinding(
 		key.WithKeys("q", "ctrl+c"),
-		key.WithHelp("ctrl+c/q", "Quit client"),
+		key.WithHelp("⌘+c/q", "Quit client"),
 	),
 }
 
