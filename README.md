@@ -82,3 +82,5 @@ The client generates a clientID (not unique, but as randomized as possible) made
 - animal.txt: contains 115 animals
 
 It just picks a random tuple from these file and use it to track the request made to the server (in case you use multiple clients), It is nice to retrace what happened in the logs
+
+See https://xkcd.com/936/
